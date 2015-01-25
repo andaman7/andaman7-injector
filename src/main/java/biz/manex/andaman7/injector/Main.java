@@ -10,7 +10,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.HashMap;
 
-
 /**
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://www.manex.biz)
@@ -31,9 +30,9 @@ public class Main {
     public static String PATIENT_PASSWORD = "aaaaaa";
 
     // UUIDs of registrars and devices
-    public static String LAB_ID = "7e698f06-f58a-446e-9488-f9824050c2e7";
-    public static String LAB_DEVICE_ID = "B4EE0D40-A35B-4DD6-AADC-4C3029219590";
-    public static String PATIENT_ID = "9eeec626-5b24-4b55-b588-4ec05c39c96a";
+    //public static String LAB_ID = "7e698f06-f58a-446e-9488-f9824050c2e7";
+    //public static String LAB_DEVICE_ID = "B4EE0D40-A35B-4DD6-AADC-4C3029219590";
+    //public static String PATIENT_ID = "9eeec626-5b24-4b55-b588-4ec05c39c96a";
     public static String PATIENT_DEVICE_ID = "B08286E0-A9FB-4D85-A673-B6A29F61ED97";
 
     // AMIs
@@ -52,27 +51,48 @@ public class Main {
             AndamanEhrService ehrService =
                     new AndamanEhrService(EHR_SERVICE_URL, API_KEY);
 
-            // Sending invitation to the patient
-            String[] newCommunityMembers = new String[] { PATIENT_ID };
-            RegistrarDTO[] registrars = contextService.sendCommunityRequest(
-                    LAB_DEVICE_ID, newCommunityMembers, LAB_LOGIN,
+            // Login as laboratory to get registrar and device UUIDs
+            RegistrarDTO labRegistrar = contextService.login(LAB_LOGIN,
                     LAB_PASSWORD);
+            String labId = labRegistrar.getUuid();
+
+            if(labRegistrar.getDevices().isEmpty()) {
+                System.err.println("A device is needed.");
+                System.exit(1);
+            }
+
+            String labDeviceId = labRegistrar.getDevices().get(0).getUuid();
+
+            // Search for the patient
+            RegistrarDTO[] patients = contextService.searchUsers("derbaix",
+                    LAB_LOGIN, LAB_PASSWORD);
+
+            if(patients.length == 0) {
+                System.err.println("No patients were found.");
+                System.exit(1);
+            }
+
+            String patientId = patients[0].getUuid();
+
+            // Sending invitation to the patient
+            String[] newCommunityMembers = new String[] { patientId };
+            RegistrarDTO[] registrars = contextService.sendCommunityRequest(
+                    labDeviceId, newCommunityMembers, LAB_LOGIN, LAB_PASSWORD);
 
             for(RegistrarDTO registrar : registrars) {
                 System.out.println("Name : " + registrar.getFirstName() + " " +
                         registrar.getLastName());
 
                 // Send medical data to the server
-                HttpResponse response =
-                        ehrService.sendAmiBasesToRegistrar(LAB_DEVICE_ID,
-                                LAB_ID, registrar, registrar.getUuid(), AMIS,
-                                LAB_LOGIN, LAB_PASSWORD);
+                HttpResponse response = ehrService.sendAmiBasesToRegistrar(
+                        labDeviceId, labId, registrar, registrar.getUuid(),
+                        AMIS, LAB_LOGIN, LAB_PASSWORD);
 
                 System.out.println("Status code : " + response.getStatusLine
                         ().getStatusCode());
 
                 // Simulate patient acceptation and retrieval of the data
-                contextService.setCommunityAcceptance(LAB_ID, true,
+                contextService.setCommunityAcceptance(labId, true,
                         PATIENT_LOGIN, PATIENT_PASSWORD);
                 response = ehrService.getMedicalRecordsInQueue(
                         PATIENT_DEVICE_ID, PATIENT_LOGIN, PATIENT_PASSWORD);

@@ -14,6 +14,38 @@ public class AndamanContextService extends CustomRestService {
         super(urlServer, apiKey);
     }
 
+    public RegistrarDTO login(String login, String password) {
+        try {
+            HttpResponse response = this.restTemplate.get("registrars/login/",
+                    login, password);
+            return this.jsonMapper.readValue(response.getEntity().getContent(),
+                    RegistrarDTO.class);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public RegistrarDTO[] searchUsers(String keyword, String login,
+            String password) {
+
+        try {
+            HttpResponse response = this.restTemplate.get(
+                    "andamanusers/search?keyword=" + keyword, login, password);
+            return this.jsonMapper.readValue(response.getEntity().getContent(),
+                    RegistrarDTO[].class);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public RegistrarDTO[] sendCommunityRequest(String senderDeviceId,
             String[] newCommunityMembers, String login, String password) {
 
