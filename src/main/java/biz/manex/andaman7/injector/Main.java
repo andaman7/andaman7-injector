@@ -42,6 +42,7 @@ public class Main {
         AMIS.put("vaccineName", "Influenza");
     }
 
+
     public static void main(String[] args) {
 
         try {

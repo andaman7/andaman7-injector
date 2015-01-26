@@ -6,6 +6,8 @@ import org.apache.http.HttpResponse;
 import java.util.*;
 
 /**
+ * This class contains methods to interact with the EHR service of Andaman7.
+ *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://www.manex.biz)
  * Date: 24/01/2015.
@@ -16,6 +18,18 @@ public class AndamanEhrService extends CustomRestService {
         super(urlServer, apiKey);
     }
 
+    /**
+     * Injects some AMIs into the EHR of a registrar.
+     *
+     * @param sourceDeviceId the UUID of the source device
+     * @param sourceRegistrarId the UUID of the source registrar
+     * @param destinationRegistrar the destination {@link RegistrarDTO}
+     * @param medicalRecordId the identifier of the medical record
+     * @param amis the AMIs to inject into the destination registrar's EHR
+     * @param login the login needed to authenticate
+     * @param password the password needed to authenticate
+     * @return the HTTP response to the request
+     */
     public HttpResponse sendAmiBasesToRegistrar(String sourceDeviceId,
             String sourceRegistrarId, RegistrarDTO destinationRegistrar,
             String  medicalRecordId, HashMap<String, String> amis, String login,
@@ -26,12 +40,8 @@ public class AndamanEhrService extends CustomRestService {
 
         // Build an AmiBaseDTO for each AMI
         HashSet<AmiBaseDTO> amiBaseDTOs = new HashSet<AmiBaseDTO>();
-        Iterator it = amis.entrySet().iterator();
 
-        while(it.hasNext()) {
-            HashMap.Entry<String, String> entry =
-                    (HashMap.Entry<String, String>) it.next();
-
+        for(HashMap.Entry<String, String> entry : amis.entrySet()) {
             AmiBaseDTO amiBaseDTO = buildAmiBaseDTO(destinationRegistrarId,
                     entry.getKey(), entry.getValue(), sourceDeviceId);
             amiBaseDTOs.add(amiBaseDTO);
@@ -68,6 +78,14 @@ public class AndamanEhrService extends CustomRestService {
         return null;
     }
 
+    /**
+     * Returns the medical data in queue for the specified device.
+     *
+     * @param deviceId the UUID of the device to retrieve medical data from
+     * @param login the login needed for authentication
+     * @param password the password needed for authentication
+     * @return the HTTP response to the request
+     */
     public HttpResponse getMedicalRecordsInQueue(String deviceId, String login,
             String password) {
 
@@ -83,6 +101,15 @@ public class AndamanEhrService extends CustomRestService {
         return null;
     }
 
+    /**
+     * Builds an {@link AmiBaseDTO}.
+     *
+     * @param destinationRegistrarId the UUID of the destination registrar
+     * @param tamiId the identifier of the TAMI
+     * @param value the value of the AMI
+     * @param sourceDeviceId the UUID of the source device
+     * @return the built {@link AmiBaseDTO}
+     */
     private AmiBaseDTO buildAmiBaseDTO(String destinationRegistrarId,
             String tamiId, String value, String sourceDeviceId) {
 
@@ -101,6 +128,15 @@ public class AndamanEhrService extends CustomRestService {
         return amiBaseDTO;
     }
 
+    /**
+     * Builds an {@link AmiContainerDTO}.
+     *
+     * @param amiBaseDTOs the AmiBaseDTOs to add into the AmiContainerDTO
+     * @param destinationRegistrar the destination RegistrarDTO
+     * @param contextMap the contextmap that maps the source device with the
+     *                   destination registrar
+     * @return the built AmiContainerDTO
+     */
     private AmiContainerDTO buildAmiContainerDTO(
             HashSet<AmiBaseDTO> amiBaseDTOs, RegistrarDTO destinationRegistrar,
             HashMap<String, String> contextMap) {
@@ -125,6 +161,16 @@ public class AndamanEhrService extends CustomRestService {
         return amiContainerDTO;
     }
 
+    /**
+     * Builds a {@link biz.manex.andaman7.injector.dto.RegistrarSyncContentDTO}.
+     *
+     * @param sourceRegistrarId the UUID of the source registrar
+     * @param sourceDeviceId the UUID of the source device
+     * @param destinationRegistrars the list of destination registrar's UUIDs
+     * @param medicalRecordId the identifier of the medical record
+     * @param amiContainerDTOs the list of AmiContainerDTOs
+     * @return the built RegistrarSyncContentDTO
+     */
     private RegistrarSyncContentDTO buildRegistrarSyncContentDTO(
             String sourceRegistrarId, String sourceDeviceId,
             String[] destinationRegistrars, String medicalRecordId,

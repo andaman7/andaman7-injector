@@ -14,6 +14,15 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SecurityHelper {
 
+    /**
+     * Returns a hexadecimal digest of the data based on the specified
+     * algorithm.
+     *
+     * @param data the data to get the hash from
+     * @param algo the hashing algorithm
+     * @return the hexadecimal hash string
+     * @throws NoSuchAlgorithmException if the algorithm is not known
+     */
     public static String getHexDigest(String data, String algo) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance(algo);
@@ -21,6 +30,12 @@ public class SecurityHelper {
         return new BigInteger(1, md.digest()).toString(16);
     }
 
+    /**
+     * Returns a hexadecimal SHA-256 digest of the specified data.
+     *
+     * @param data the data to get the hash from
+     * @return the SHA-256 hexadecimal hash string
+     */
     public static String getSHA256Digest(String data) {
 
         String hash = null;
@@ -28,6 +43,7 @@ public class SecurityHelper {
         try {
             hash = getHexDigest(data, "SHA-256");
         } catch (NoSuchAlgorithmException e) {
+            System.err.println(e.getMessage());
             e.printStackTrace();
         }
 
