@@ -23,23 +23,12 @@ public class CustomRestService {
      */
     protected ObjectMapper jsonMapper;
 
-    /**
-     * The login needed for authentication.
-     */
-    protected String login;
-
-    /**
-     * The password needed for authentication.
-     */
-    protected String password;
-
 
     protected CustomRestService(String urlServer, String apiKey, String login,
             String password) {
 
-        this.restTemplate = new CustomRestTemplate(urlServer, apiKey);
+        this.restTemplate = new CustomRestTemplate(urlServer, apiKey, login,
+                password);
         this.jsonMapper = new ObjectMapper();
-        this.login = login;
-        this.password = password;
     }
 }

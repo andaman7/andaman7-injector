@@ -98,9 +98,9 @@ public class Main {
             for(RegistrarSyncContentDTO item : registrarSyncContentDTOs)
                 medicalRecordIds.add(item.getMedicalRecordId());
 
-            ehrService.acknowledgeMedicalData(PATIENT_DEVICE_ID,
+            /*ehrService.acknowledgeMedicalData(PATIENT_DEVICE_ID,
                     medicalRecordIds.toArray(
-                            new String[medicalRecordIds.size()]));
+                            new String[medicalRecordIds.size()]));*/
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

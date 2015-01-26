@@ -18,7 +18,10 @@ public class AmiDTO extends IdentifiedDataModelObjectDTO {
         super();
     }
 
-    public AmiDTO(String uuid, Date creationDate, String creatorId, Date modificationDate, String modificatorId, String tamiId, String tamiVersion, String value) {
+    public AmiDTO(String uuid, Date creationDate, String creatorId,
+            Date modificationDate, String modificatorId, String tamiId,
+            String tamiVersion, String value) {
+
         super(uuid, creationDate, creatorId, modificationDate, modificatorId);
         this.tamiId = tamiId;
         this.tamiVersion = tamiVersion;

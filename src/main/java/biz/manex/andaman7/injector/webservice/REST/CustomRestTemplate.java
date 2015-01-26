@@ -34,43 +34,57 @@ public class CustomRestTemplate {
      */
     private HttpClient httpClient;
 
+    /**
+     * The login used for authentication.
+     */
+    private String login;
 
-    public CustomRestTemplate(String urlServer, String apiKey) {
+    /**
+     * The password used for authentication.
+     */
+    private String password;
+
+
+    public CustomRestTemplate(String urlServer, String apiKey, String login,
+            String password) {
+
         this.urlServer = urlServer;
         this.apiKey = apiKey;
 
         this.httpClient = HttpClientBuilder.create().build();
+
+        this.login = login;
+        this.password = password;
     }
 
     /**
-     * Makes an unauthenticated GET request.
+     * Performs a GET request.
      *
      * @param path the path to the resource
      * @return the HTTP response to the request
      * @throws Exception
      */
     public HttpResponse get(String path) throws Exception {
-        return this.get(path, null, null);
+        return this.get(path, false);
     }
 
     /**
-     * Makes an authenticated GET request.
+     * Performs a GET request.
      *
      * @param path the path to the resource
-     * @param username the username used for authentication
-     * @param password the password used for authentication
+     * @param authenticationNeeded says if an authentication is needed or not
      * @return the HTTP response to the request
      * @throws Exception
      */
-    public HttpResponse get(String path, String username, String password)
+    public HttpResponse get(String path, boolean authenticationNeeded)
             throws Exception {
 
         HttpGet request = new HttpGet(this.buildUrl(path));
-        return this.executeRequest(request, username, password);
+        return this.executeRequest(request, authenticationNeeded);
     }
 
     /**
-     * Makes an unauthenticated POST request.
+     * Performs a POST request.
      *
      * @param path the path to the resource
      * @param body the body of the POST request
@@ -78,30 +92,29 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse post(String path, String body) throws Exception {
-        return this.post(path, body, null, null);
+        return this.post(path, body, false);
     }
 
     /**
-     * Makes an authenticated POST request.
+     * Performs a POST request.
      *
      * @param path the path to the resource
      * @param body the body of the POST request
-     * @param username the username used for authentication
-     * @param password the password used for authentication
+     * @param authenticationNeeded says if an authentication is needed or not
      * @return the HTTP response to the request
      * @throws Exception
      */
-    public HttpResponse post(String path, String body, String username,
-            String password) throws Exception {
+    public HttpResponse post(String path, String body,
+            boolean authenticationNeeded) throws Exception {
 
         HttpPost request = new HttpPost(this.buildUrl(path));
         request.setHeader("Content-Type", "application/json");
         request.setEntity(new StringEntity(body));
-        return this.executeRequest(request, username, password);
+        return this.executeRequest(request, authenticationNeeded);
     }
 
     /**
-     * Makes an unauthenticated PUT request.
+     * Performs a PUT request.
      *
      * @param path the path to the resource
      * @param body the body of the PUT request
@@ -109,57 +122,56 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse put(String path, String body) throws Exception {
-        return this.put(path, body, null, null);
+        return this.put(path, body, false);
     }
 
     /**
-     * Makes an authenticated PUT request.
+     * Performs a PUT request.
      *
      * @param path the path to the resource
      * @param body the body of the PUT request
-     * @param username the username used for authentication
-     * @param password the password used for authentication
+     * @param authenticationNeeded says if an authentication is needed or not
      * @return the HTTP response to the request
      * @throws Exception
      */
-    public HttpResponse put(String path, String body, String username,
-            String password) throws Exception {
+    public HttpResponse put(String path, String body,
+            boolean authenticationNeeded) throws Exception {
 
         HttpPut request = new HttpPut(this.buildUrl(path));
         request.setHeader("Content-Type", "application/json");
         request.setEntity(new StringEntity(body));
-        return this.executeRequest(request, username, password);
+        return this.executeRequest(request, authenticationNeeded);
     }
 
     /**
-     * Makes an unauthenticated DELETE request.
+     * Performs a DELETE request.
      *
      * @param path the path to the resource
      * @return the HTTP response to the request
      * @throws Exception
      */
     public HttpResponse delete(String path) throws Exception {
-        return this.delete(path, null, null);
+        return this.delete(path, false);
     }
 
     /**
-     * Makes an authenticated DELETE request.
+     * Performs a DELETE request.
      *
      * @param path the path to the resource
-     * @param username the username used for authentication
-     * @param password the password used for authentication
+     * @param authenticationNeeded says if an authentication is needed or not
      * @return the HTTP response to the request
      * @throws Exception
      */
-    public HttpResponse delete(String path, String username, String password)
+    public HttpResponse delete(String path, boolean authenticationNeeded)
             throws Exception {
 
         HttpDelete request = new HttpDelete(this.buildUrl(path));
-        return this.executeRequest(request, username, password);
+        return this.executeRequest(request, authenticationNeeded);
     }
 
     /**
-     * Concatenate the server endpoint and the given path.
+     * Concatenates the server endpoint and the given path.
+     *
      * @param path the path to the resource
      * @return the built URL
      */
@@ -179,6 +191,7 @@ public class CustomRestTemplate {
 
     /**
      * Adds an authorization header to the HTTP request.
+     *
      * @param request the HTTP request
      * @param username the username needed for authentication
      * @param password the password needed for authentication
@@ -202,19 +215,19 @@ public class CustomRestTemplate {
 
     /**
      * Executes an HTTP request.
+     *
      * @param request the HTTP request
-     * @param username the username needed for authentication (can be null if no
-     *                 authentication is needed)
-     * @param password the password needed for authentication (can be null if no
-     *                 authentication is needed)
+     * @param authenticationNeeded says if an authentication is needed or not
      * @return the HTTP response to the request
      * @throws Exception
      */
     private HttpResponse executeRequest(HttpRequestBase request,
-            String username, String password) throws Exception {
+            boolean authenticationNeeded) throws Exception {
 
         request.addHeader("api-key", this.apiKey);
-        setAuthorizationHeader(request, username, password);
+
+        if(authenticationNeeded)
+            setAuthorizationHeader(request, this.login, this.password);
         System.err.println("Request : " + request.getMethod() + " - " +
                 request.getURI());
         return  this.httpClient.execute(request);

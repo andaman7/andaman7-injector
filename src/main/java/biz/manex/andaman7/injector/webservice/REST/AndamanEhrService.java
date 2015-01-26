@@ -27,7 +27,8 @@ public class AndamanEhrService extends CustomRestService {
     }
 
     /**
-     * Returns the unique instance of the EHR service.
+     * Returns the unique instance of the EHR service corresponding to the URL
+     * server and the login.
      *
      * @param urlServer the URL of the distant server
      * @param apiKey the API key
@@ -96,7 +97,7 @@ public class AndamanEhrService extends CustomRestService {
         try {
             String body = this.jsonMapper.writeValueAsString(syncContentDTOs);
             return this.restTemplate.put("registrars/medical-records", body,
-                    login, password);
+                    true);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -116,7 +117,7 @@ public class AndamanEhrService extends CustomRestService {
 
         try {
             return this.restTemplate.get("devices/medical-records?device-uuid="+
-                    deviceId + "&brand=android", login, password);
+                    deviceId + "&brand=android", true);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -126,11 +127,22 @@ public class AndamanEhrService extends CustomRestService {
         return null;
     }
 
-    public HttpResponse acknowledgeMedicalData(String deviceId, String[] medicalRecordIds) {
+    /**
+     * Acknowledges some medical data to allow the server to delete them.
+     *
+     * @param deviceId the UUID of the device from which the data have been
+     *                 retrieved
+     * @param medicalRecordIds a list of UUIDs of the retrieved medical data
+     * @return the HTTP response to the request
+     */
+    public HttpResponse acknowledgeMedicalData(String deviceId,
+            String[] medicalRecordIds) {
 
         try {
             String body = this.jsonMapper.writeValueAsString(medicalRecordIds);
-            return this.restTemplate.post("registrars/medical-records/acknowledge?device-uuid=" + deviceId, body);
+            return this.restTemplate.post(
+                    "registrars/medical-records/acknowledge?device-uuid=" +
+                            deviceId, body, true);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -175,7 +187,8 @@ public class AndamanEhrService extends CustomRestService {
      * @return the built AmiContainerDTO
      */
     private AmiContainerDTO buildAmiContainerDTO(
-            HashSet<AmiBaseDTO> amiBaseDTOs, AndamanUserDTO destinationRegistrar,
+            HashSet<AmiBaseDTO> amiBaseDTOs,
+            AndamanUserDTO destinationRegistrar,
             HashMap<String, String> contextMap) {
 
         AmiContainerDTO amiContainerDTO = new AmiContainerDTO();

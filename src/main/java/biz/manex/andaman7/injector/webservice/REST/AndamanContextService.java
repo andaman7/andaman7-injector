@@ -28,16 +28,27 @@ public class AndamanContextService extends CustomRestService {
         super(urlServer, apiKey, login, password);
     }
 
-    public static AndamanContextService getInstance(String urlServer, String apiKey,
-            String login, String password) {
+    /**
+     * Returns the unique instance of the EHR service corresponding to the URL
+     * server and the login.
+     *
+     * @param urlServer the URL of the distant server
+     * @param apiKey the API key
+     * @param login the login needed to authenticate
+     * @param password the password needed to authenticate
+     * @return the unique instance of the EHR service
+     */
+    public static AndamanContextService getInstance(String urlServer,
+            String apiKey, String login, String password) {
 
-        AndamanContextService instance = AndamanContextService.instances.get(urlServer +
-                "#" + login);
+        AndamanContextService instance = AndamanContextService.instances.
+                get(urlServer + "#" + login);
 
         if(instance == null) {
             instance = new AndamanContextService(urlServer, apiKey, login,
                     password);
-            AndamanContextService.instances.put(urlServer + "#" + login, instance);
+            AndamanContextService.instances.put(urlServer + "#" + login,
+                    instance);
         }
 
         return instance;
@@ -52,7 +63,7 @@ public class AndamanContextService extends CustomRestService {
     public RegistrarDTO login() {
         try {
             HttpResponse response = this.restTemplate.get("registrars/login/",
-                    login, password);
+                    true);
             return this.jsonMapper.readValue(response.getEntity().getContent(),
                     RegistrarDTO.class);
 
@@ -75,7 +86,7 @@ public class AndamanContextService extends CustomRestService {
 
         try {
             HttpResponse response = this.restTemplate.get(
-                    "andamanusers/search?keyword=" + keyword, login, password);
+                    "andamanusers/search?keyword=" + keyword, true);
             return this.jsonMapper.readValue(response.getEntity().getContent(),
                     AndamanUserDTO[].class);
 
