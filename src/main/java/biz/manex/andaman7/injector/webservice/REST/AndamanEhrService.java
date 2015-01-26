@@ -86,7 +86,7 @@ public class AndamanEhrService extends CustomRestService {
      * @param password the password needed for authentication
      * @return the HTTP response to the request
      */
-    public HttpResponse getMedicalRecordsInQueue(String deviceId, String login,
+    public HttpResponse getMedicalDataInQueue(String deviceId, String login,
             String password) {
 
         try {

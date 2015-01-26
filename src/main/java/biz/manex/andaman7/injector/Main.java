@@ -30,9 +30,6 @@ public class Main {
     public static String PATIENT_PASSWORD = "aaaaaa";
 
     // UUIDs of registrars and devices
-    //public static String LAB_ID = "7e698f06-f58a-446e-9488-f9824050c2e7";
-    //public static String LAB_DEVICE_ID = "B4EE0D40-A35B-4DD6-AADC-4C3029219590";
-    //public static String PATIENT_ID = "9eeec626-5b24-4b55-b588-4ec05c39c96a";
     public static String PATIENT_DEVICE_ID = "B08286E0-A9FB-4D85-A673-B6A29F61ED97";
 
     // AMIs
@@ -41,7 +38,6 @@ public class Main {
         AMIS = new HashMap<String, String>();
         AMIS.put("vaccineName", "Influenza");
     }
-
 
     public static void main(String[] args) {
 
@@ -73,40 +69,29 @@ public class Main {
                 System.exit(1);
             }
 
-            String patientId = patients[0].getUuid();
+            RegistrarDTO patient = patients[0];
+            String patientId = patient.getUuid();
 
-            // Sending invitation to the patient
-            String[] newCommunityMembers = new String[] { patientId };
-            RegistrarDTO[] registrars = contextService.sendCommunityRequest(
-                    labDeviceId, newCommunityMembers, LAB_LOGIN, LAB_PASSWORD);
+            // Send medical data to the server
+            HttpResponse response = ehrService.sendAmiBasesToRegistrar(
+                    labDeviceId, labId, patient, patientId, AMIS, LAB_LOGIN,
+                    LAB_PASSWORD);
 
-            for(RegistrarDTO registrar : registrars) {
-                System.out.println("Name : " + registrar.getFirstName() + " " +
-                        registrar.getLastName());
+            System.out.println("Status code : " + response.getStatusLine().
+                    getStatusCode());
 
-                // Send medical data to the server
-                HttpResponse response = ehrService.sendAmiBasesToRegistrar(
-                        labDeviceId, labId, registrar, registrar.getUuid(),
-                        AMIS, LAB_LOGIN, LAB_PASSWORD);
+            // Simulate retrieval of the data by the patient
+            response = ehrService.getMedicalDataInQueue(
+                    PATIENT_DEVICE_ID, PATIENT_LOGIN, PATIENT_PASSWORD);
 
-                System.out.println("Status code : " + response.getStatusLine
-                        ().getStatusCode());
-
-                // Simulate patient acceptation and retrieval of the data
-                contextService.setCommunityAcceptance(labId, true,
-                        PATIENT_LOGIN, PATIENT_PASSWORD);
-                response = ehrService.getMedicalRecordsInQueue(
-                        PATIENT_DEVICE_ID, PATIENT_LOGIN, PATIENT_PASSWORD);
-
-                ObjectMapper mapper = new ObjectMapper();
-                RegistrarSyncContentDTO[] registrarSyncContentDTOs =
-                        mapper.readValue(
-                                EntityUtils.toString(response.getEntity()),
-                                RegistrarSyncContentDTO[].class);
-                System.out.println("Retrieved medical data : \n" +
-                        mapper.writerWithDefaultPrettyPrinter().
-                                writeValueAsString(registrarSyncContentDTOs));
-            }
+            ObjectMapper mapper = new ObjectMapper();
+            RegistrarSyncContentDTO[] registrarSyncContentDTOs =
+                    mapper.readValue(
+                            EntityUtils.toString(response.getEntity()),
+                            RegistrarSyncContentDTO[].class);
+            System.out.println("Retrieved medical data : \n" +
+                    mapper.writerWithDefaultPrettyPrinter().
+                            writeValueAsString(registrarSyncContentDTOs));
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
