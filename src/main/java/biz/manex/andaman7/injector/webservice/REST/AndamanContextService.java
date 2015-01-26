@@ -1,7 +1,11 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
+import biz.manex.andaman7.injector.dto.AndamanUserDTO;
 import biz.manex.andaman7.injector.dto.RegistrarDTO;
 import org.apache.http.HttpResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class contains methods to interact with the context service of Andaman7.
@@ -12,19 +16,40 @@ import org.apache.http.HttpResponse;
  */
 public class AndamanContextService extends CustomRestService {
 
-    public AndamanContextService(String urlServer, String apiKey) {
-        super(urlServer, apiKey);
+    /**
+     * Unique instance of the REST service.
+     */
+    private static Map<String, AndamanContextService> instances =
+            new HashMap<String, AndamanContextService>();
+
+
+    public AndamanContextService(String urlServer, String apiKey, String login,
+            String password) {
+        super(urlServer, apiKey, login, password);
+    }
+
+    public static AndamanContextService getInstance(String urlServer, String apiKey,
+            String login, String password) {
+
+        AndamanContextService instance = AndamanContextService.instances.get(urlServer +
+                "#" + login);
+
+        if(instance == null) {
+            instance = new AndamanContextService(urlServer, apiKey, login,
+                    password);
+            AndamanContextService.instances.put(urlServer + "#" + login, instance);
+        }
+
+        return instance;
     }
 
     /**
      * Returns data related to the authenticated registrar.
      *
-     * @param login the login needed for authentication
-     * @param password the password needed for authentication
      * @return the {@link biz.manex.andaman7.injector.dto.RegistrarDTO} of the
      * authenticated registrar
      */
-    public RegistrarDTO login(String login, String password) {
+    public RegistrarDTO login() {
         try {
             HttpResponse response = this.restTemplate.get("registrars/login/",
                     login, password);
@@ -43,19 +68,16 @@ public class AndamanContextService extends CustomRestService {
      * Searches users based on a given keyword.
      *
      * @param keyword the keyword used to filter users
-     * @param login the login needed for authentication
-     * @param password the password needed for authentication
      * @return the list of {@link biz.manex.andaman7.injector.dto.RegistrarDTO}
      * found based on the keyword
      */
-    public RegistrarDTO[] searchUsers(String keyword, String login,
-            String password) {
+    public AndamanUserDTO[] searchUsers(String keyword) {
 
         try {
             HttpResponse response = this.restTemplate.get(
                     "andamanusers/search?keyword=" + keyword, login, password);
             return this.jsonMapper.readValue(response.getEntity().getContent(),
-                    RegistrarDTO[].class);
+                    AndamanUserDTO[].class);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

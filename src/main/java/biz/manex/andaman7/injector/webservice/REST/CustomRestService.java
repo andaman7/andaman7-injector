@@ -3,13 +3,13 @@ package biz.manex.andaman7.injector.webservice.REST;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * An abstract base class for any implementation of a REST service.
+ * An base class for any implementation of a REST service.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://www.manex.biz)
  * Date: 24/01/2015.
  */
-public abstract class CustomRestService {
+public class CustomRestService {
 
     /**
      * The REST template.
@@ -23,9 +23,23 @@ public abstract class CustomRestService {
      */
     protected ObjectMapper jsonMapper;
 
+    /**
+     * The login needed for authentication.
+     */
+    protected String login;
 
-    public CustomRestService(String urlServer, String apiKey) {
+    /**
+     * The password needed for authentication.
+     */
+    protected String password;
+
+
+    protected CustomRestService(String urlServer, String apiKey, String login,
+            String password) {
+
         this.restTemplate = new CustomRestTemplate(urlServer, apiKey);
         this.jsonMapper = new ObjectMapper();
+        this.login = login;
+        this.password = password;
     }
 }

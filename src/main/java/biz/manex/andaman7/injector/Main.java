@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector;
 
+import biz.manex.andaman7.injector.dto.AndamanUserDTO;
 import biz.manex.andaman7.injector.dto.RegistrarDTO;
 import biz.manex.andaman7.injector.dto.RegistrarSyncContentDTO;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
@@ -8,7 +9,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
@@ -44,13 +47,13 @@ public class Main {
         try {
             // Initialization of the REST services
             AndamanContextService contextService =
-                    new AndamanContextService(CONTEXT_SERVICE_URL, API_KEY);
-            AndamanEhrService ehrService =
-                    new AndamanEhrService(EHR_SERVICE_URL, API_KEY);
+                    AndamanContextService.getInstance(CONTEXT_SERVICE_URL,
+                            API_KEY, LAB_LOGIN, LAB_PASSWORD);
+            AndamanEhrService ehrService = AndamanEhrService.getInstance(
+                    EHR_SERVICE_URL, API_KEY, LAB_LOGIN, LAB_PASSWORD);
 
             // Login as laboratory to get registrar and device UUIDs
-            RegistrarDTO labRegistrar = contextService.login(LAB_LOGIN,
-                    LAB_PASSWORD);
+            RegistrarDTO labRegistrar = contextService.login();
             String labId = labRegistrar.getUuid();
 
             if(labRegistrar.getDevices().isEmpty()) {
@@ -61,28 +64,25 @@ public class Main {
             String labDeviceId = labRegistrar.getDevices().get(0).getUuid();
 
             // Search for the patient
-            RegistrarDTO[] patients = contextService.searchUsers("derbaix",
-                    LAB_LOGIN, LAB_PASSWORD);
+            AndamanUserDTO[] patients = contextService.searchUsers("derbaix");
 
             if(patients.length == 0) {
                 System.err.println("No patients were found.");
                 System.exit(1);
             }
 
-            RegistrarDTO patient = patients[0];
-            String patientId = patient.getUuid();
+            AndamanUserDTO patient = patients[0];
 
             // Send medical data to the server
-            HttpResponse response = ehrService.sendAmiBasesToRegistrar(
-                    labDeviceId, labId, patient, patientId, AMIS, LAB_LOGIN,
-                    LAB_PASSWORD);
-
-            System.out.println("Status code : " + response.getStatusLine().
-                    getStatusCode());
+            ehrService.sendAmiBasesToRegistrar(labDeviceId, labId, patient,
+                    AMIS);
 
             // Simulate retrieval of the data by the patient
-            response = ehrService.getMedicalDataInQueue(
-                    PATIENT_DEVICE_ID, PATIENT_LOGIN, PATIENT_PASSWORD);
+            ehrService = AndamanEhrService.getInstance(EHR_SERVICE_URL, API_KEY,
+                    PATIENT_LOGIN, PATIENT_PASSWORD);
+
+            HttpResponse response = ehrService.getMedicalDataInQueue(
+                    PATIENT_DEVICE_ID);
 
             ObjectMapper mapper = new ObjectMapper();
             RegistrarSyncContentDTO[] registrarSyncContentDTOs =
@@ -92,6 +92,15 @@ public class Main {
             System.out.println("Retrieved medical data : \n" +
                     mapper.writerWithDefaultPrettyPrinter().
                             writeValueAsString(registrarSyncContentDTOs));
+
+            List<String> medicalRecordIds = new ArrayList<String>();
+
+            for(RegistrarSyncContentDTO item : registrarSyncContentDTOs)
+                medicalRecordIds.add(item.getMedicalRecordId());
+
+            ehrService.acknowledgeMedicalData(PATIENT_DEVICE_ID,
+                    medicalRecordIds.toArray(
+                            new String[medicalRecordIds.size()]));
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
