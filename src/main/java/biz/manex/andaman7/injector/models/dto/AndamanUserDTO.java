@@ -1,4 +1,4 @@
-package biz.manex.andaman7.injector.dto;
+package biz.manex.andaman7.injector.models.dto;
 
 import java.util.List;
 
@@ -143,5 +143,10 @@ public class AndamanUserDTO extends IdentifiedDataModelObjectDTO {
 
     public void setDoctorFunction(String doctorFunction) {
         this.doctorFunction = doctorFunction;
+    }
+
+    @Override
+    public String toString() {
+        return this.firstName + " " + this.lastName;
     }
 }

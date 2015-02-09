@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itemDictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="dictionary-item.xsd" version="1">
+    <head>
+        <defaultQualifiers>
+            <lastElements xsi:type="text" id="Note" i18nId="note">
+                <marker name="note"/>
+            </lastElements>
+            <lastElements xsi:type="text" id="Stars" i18nId="Stars">
+                <marker name="stars"/>
+                <marker name="deviceSyncOnly"/>
+            </lastElements>
+        </defaultQualifiers>
+        <selectionLists>
+            <selectionList id="SL.patientSex" defaultValue="sl.man">
+                <item>sl.man</item>
+                <item>sl.woman</item>
+                <item>sl.unknow</item>
+            </selectionList>
+            <selectionList id="SL.patientLanguage">
+                <item>sl.french</item>
+                <item>sl.english</item>
+                <item>sl.german</item>
+                <item>sl.dutch</item>
+                <item>sl.italian</item>
+                <item>sl.spanish</item>
+            </selectionList>
+            <selectionList id="SL.CLINICAL" defaultValue="0">
+                <item>sl.absent</item>
+                <item>sl.present</item>
+                <item>sl.missing</item>
+            </selectionList>
+            <selectionList id="SL.LANGUAGE">
+                <item>sl.dutch</item>
+                <item>sl.french</item>
+                <item>sl.german</item>
+                <item>sl.english</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.SMOKERTYPE">
+                <item>sl.nonSmoker</item>
+                <item>sl.exSmoker</item>
+                <item>sl.smoker</item>
+            </selectionList>
+            <selectionList id="SL.SMOKES">
+                <item>sl.cigarette</item>
+                <item>sl.cigare</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.ALCOHOLTYPE">
+                <item>sl.abstainer</item>
+                <item>sl.exDrinker</item>
+                <item>sl.Drinker</item>
+            </selectionList>
+            <selectionList id="SL.ALCOHOLDAYS">
+                <item>sl.frequent</item>
+                <item>sl.notFrequent</item>
+                <item>sl.never</item>
+            </selectionList>
+            <selectionList id="SL.ALCOHOLNUMBER">
+                <item>sl.1-2g/day</item>
+                <item>sl.3-4g/day</item>
+                <item>sl.5-6g/day</item>
+                <item>sl.7-9g/day</item>
+                <item>sl.>9g/day</item>
+            </selectionList>
+            <selectionList id="SL.DRUGUSE">
+                <item>sl.nonUser</item>
+                <item>sl.exUser</item>
+                <item>sl.drugUser</item>
+            </selectionList>
+            <selectionList id="SL.DRUGTYPE">
+                <item>sl.cannabis</item>
+                <item>sl.coca��ne</item>
+                <item>sl.amfetamines</item>
+                <item>sl.XTC</item>
+                <item>sl.GHB</item>
+                <item>sl.hallucinogen</item>
+                <item>sl.hero��ne</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.DRUGUNITS">
+                <item>1-2</item>
+                <item>3-4</item>
+                <item>5-6</item>
+                <item>7-9</item>
+                <item>>=10</item>
+            </selectionList>
+            <selectionList id="SL.SPORTERINTENSITY">
+                <item>sl.recreation</item>
+                <item>sl.competition</item>
+                <item>sl.never</item>
+            </selectionList>
+            <selectionList id="SL.SPORTERTYPE">
+                <item>sl.bicycle</item>
+                <item>sl.football</item>
+                <item>sl.running</item>
+                <item>sl.swimming</item>
+                <item>sl.fishing</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.doctorFunction">
+                <item>sl.generaliste</item>
+                <item>sl.gyneco</item>
+                <item>sl.neurologue</item>
+                <item>sl.dentiste</item>
+                <item>sl.podologue</item>
+                <item>sl.pharmacien</item>
+                <item>sl.infirmier</item>
+                <item>sl.phsychologue</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.REGIME">
+                <item>sl.worker</item>
+                <item>sl.patient</item>
+                <item>sl.student</item>
+                <item>sl.apprentice</item>
+                <item>sl.selfEmployed</item>
+                <item>sl.interim</item>
+                <item>sl.employee</item>
+                <item>sl.volunteer</item>
+                <item>sl.thirdParty</item>
+                <item>sl.civilServant</item>
+            </selectionList>
+            <selectionList id="SL.MARITAL">
+                <item>sl.single</item>
+                <item>sl.married</item>
+                <item>sl.cohabitant</item>
+                <item>sl.divorced</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.PULSE">
+                <item>sl.regular</item>
+                <item>sl.irregular</item>
+            </selectionList>
+            <selectionList id="SL.patientBloodGroup">
+                <item>O-</item>
+                <item>O+</item>
+                <item>A-</item>
+                <item>A+</item>
+                <item>B-</item>
+                <item>B+</item>
+                <item>AB-</item>
+                <item>AB+</item>
+            </selectionList>
+            <selectionList id="SL.RELATIONSHIP">
+                <item>SL.FATHER</item>
+                <item>SL.MOTHER</item>
+                <item>SL.SISTER</item>
+                <item>SL.FRIEND</item>
+                <item>SL.BROTHER</item>
+                <item>SL.HUSBAND</item>
+                <item>SL.WIFE</item>
+                <item>sl.other</item>
+            </selectionList>
+            <selectionList id="SL.testResult">
+                <item>sl.positive</item>
+                <item>sl.negative</item>
+                <item>sl.undefined</item>
+            </selectionList>
+            <selectionList id="SL.allergySeverity">
+                <item>SL.serious</item>
+                <item>SL.soft</item>
+                <item>SL.verySerious</item>
+                <item>SL.average</item>
+            </selectionList>
+            <selectionList id="SL.unitRange">
+                <item>m</item>
+                <item>cm</item>
+                <item>mm</item>
+            </selectionList>
+            <selectionList id="SL.unitWeight">
+                <item>gr</item>
+                <item>kg</item>
+                <item>t</item>
+            </selectionList>
+            <selectionList id="SL.administrativeDataSharing">
+                <item>item.to.everyone</item>
+                <item>item.to.community.members</item>
+                <item>item.to.nobody</item>
+            </selectionList>
+        </selectionLists>
+        <tamiLists>
+            <tamiList id="SL.boodAnalysis">
+                <item>sl.BMP</item>
+                <item>sl.CHEMP-7</item>
+                <item>sl.cholesterol</item>
+                <item>sl.CMP</item>
+                <item>sl.liver</item>
+                <item>sl.glucose</item>
+                <item>sl.glycatedHemoglobin</item>
+                <item>sl.hemogramme</item>
+                <item>sl.PSA</item>
+                <item>sl.kidney</item>
+                <item>sl.thyroide</item>
+            </tamiList>
+            <tamiList id="SL.vitalFonctions">
+                <item>sl.fever</item>
+                <item>sl.tension</item>
+            </tamiList>
+            <tamiList id="SL.medicalImaging">
+                <item>sl.coloscopy</item>
+                <item>sl.EEG</item>
+                <item>sl.ECG</item>
+                <item>sl.endoscopy</item>
+                <item>sl.echography</item>
+                <item>sl.IRM</item>
+                <item>sl.radiography</item>
+                <item>sl.mammography</item>
+                <item>sl.TDM</item>
+                <item>sl.TEP</item>
+            </tamiList>
+        </tamiLists>
+    </head>
+    <body>
+
+        <set id="set.administrative">
+            <tami id="lastName" xsi:type="string">
+                <marker name="doctor.admin.0"/>
+                <marker name="patient.admin.0"/>
+            </tami>
+            <tami id="firstName" xsi:type="string">
+                <marker name="doctor.admin.1"/>
+                <marker name="patient.admin.1"/>
+            </tami>
+            <tami id="patientBirthDate" xsi:type="date"/>
+            <tami id="patientSex" xsi:type="oneSelection" selectionListId="SL.patientSex"/>
+            <tami id="patientLanguage" xsi:type="oneSelection" selectionListId="SL.patientLanguage">
+                <marker name="doctor.admin.2"/>
+                <marker name="patient.admin.2"/>
+            </tami>
+            <tami xsi:type="string" id="patientBirthPlace"/>
+            <tami xsi:type="picture" id="patientPicture"/>
+            <tami xsi:type="string" id="patientAddress">
+                <marker name="doctor.admin.6"/>
+                <marker name="patient.admin.5"/>
+            </tami>
+            <tami xsi:type="integer" id="patientAddressNumber">
+                <marker name="doctor.admin.7"/>
+                <marker name="patient.admin.6"/>
+            </tami>
+            <tami xsi:type="string" id="patientAddressBox">
+                <marker name="doctor.admin.8"/>
+                <marker name="patient.admin.7"/>
+                <marker name="optional"/>
+            </tami>
+            <tami xsi:type="integer" id="patientAddressZip">
+                <marker name="doctor.admin.9"/>
+                <marker name="patient.admin.8"/>
+            </tami>
+            <tami xsi:type="string" id="patientAddressTown">
+                <marker name="doctor.admin.10"/>
+                <marker name="patient.admin.9"/>
+            </tami>
+            <tami xsi:type="string" id="patientAddressCountry">
+                <marker name="doctor.admin.11"/>
+                <marker name="patient.admin.10"/>
+            </tami>
+            <tami xsi:type="oneSelection" id="patientFunction" selectionListId="SL.REGIME">
+                <marker name="doctor.admin.3"/>
+            </tami>
+            <tami xsi:type="oneSelection" id="patientBloodGroup" selectionListId="SL.patientBloodGroup"/>
+            <tami xsi:type="string" id="patientPhonePersonal">
+                <marker name="patient.admin.3"/>
+            </tami>
+            <tami xsi:type="string" id="patientPhoneProfessional">
+                <marker name="doctor.admin.4"/>
+            </tami>
+            <tami xsi:type="string" id="patientMailPersonal">
+                <marker name="patient.admin.4"/>
+            </tami>
+            <tami xsi:type="string" id="patientMailProfessional">
+                <marker name="doctor.admin.5"/>
+            </tami>
+            <tami xsi:type="string" id="patientMobilePhone"/>
+            <tami xsi:type="string" id="patientFax"/>
+            <tami xsi:type="multiSelection" id="doctorFunction" selectionListId="SL.doctorFunction"/>
+            <tami xsi:type="date" id="patientDeathDate">
+                <qualifiers>
+                    <tamiQual id="patientDeathPlace" xsi:type="string">
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="oneSelection" id="patientMaritalStatus" selectionListId="SL.MARITAL">
+                <qualifiers>
+                    <tamiQual id="patientMaritalStatusSince" xsi:type="string">
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami id="emergencyContact" xsi:type="string">
+                <qualifiers>
+                    <tamiQual id="emergencyContactRelation" xsi:type="oneSelection" selectionListId="SL.RELATIONSHIP"/>
+                    <tamiQual id="emergencyContactPhone1" xsi:type="string"/>
+                    <tamiQual id="emergencyContactPhone2" xsi:type="string"/>
+                    <tamiQual id="emergencyContactEmail" xsi:type="string"/>
+                    <tamiQual id="emergencyContactAddress" xsi:type="string"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="date" id="patientDateOfFiring">
+            </tami>
+            <tami xsi:type="date" id="patientDateOfHiring">
+            </tami>
+            <tami xsi:type="string" id="patientSisNumber">
+                <marker name="noProcessInvalidation"/>
+                <marker name="ruleOnInput" value="administrative.drl"/>
+            </tami>
+            <tami xsi:type="oneSelection" id="patientStatus" selectionListId="SL.REGIME">
+                <marker name="noProcessInvalidation"/>
+            </tami>
+            <tami xsi:type="string" id="patientTraining"/>
+            <tami xsi:type="integer" id="patientWnNumber">
+                <marker name="inhibitACCreation"/>
+                <marker name="inhibitACInvalidation"/>
+            </tami>
+            <tami xsi:type="boolean" id="orderStickers"/>
+            <tami xsi:type="string" id="patientWorkStation">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="patientWorkStationStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="patientWorkStationEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="oneSelection" id="patientWorkStationDisplayInOverview" selectionListId="SL.DISPLAYINOVERVIEW" i18nId="displayInOverview">
+                        <marker name="displayInOverview"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+        </set>
+
+        <set id="set.biometry">
+            <tami id="bmi" xsi:type="integer">
+                <formula>
+                    length = [length] / 100;
+                    return [weight] / Math.pow(length,2);
+                </formula>
+            </tami>
+
+            <tami id="patientCenterCode" xsi:type="string"/>
+            <tami id="length" xsi:type="integer"/>
+            <tami id="weight" xsi:type="integer"/>
+            <tami xsi:type="oneSelection" selectionListId="SL.31.Urine" id="urineLeucocytes"/>
+            <tami xsi:type="oneSelection" selectionListId="SL.SMOKERTYPE" id="smoking">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="smokingSince">
+                    </tamiQual>
+                    <tamiQual xsi:type="integer" id="smokingNumber">
+                    </tamiQual>
+                    <tamiQual xsi:type="oneSelection" selectionListId="SL.SMOKES" id="smokingWhat">
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="oneSelection" selectionListId="SL.ALCOHOLDAYS" id="drinking">
+                <qualifiers>
+                    <tamiQual id="drinkingType" xsi:type="multiSelection" selectionListId="SL.ALCOHOLTYPE"/>
+                    <tamiQual id="drinkingNumber" xsi:type="oneSelection" selectionListId="SL.ALCOHOLNUMBER"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="oneSelection" selectionListId="SL.DRUGUSE" id="drugs">
+                <qualifiers>
+                    <tamiQual id="drugsType" xsi:type="multiSelection" selectionListId="SL.DRUGTYPE"/>
+                    <tamiQual id="drugsUnits" xsi:type="oneSelection" selectionListId="SL.DRUGUNITS"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="oneSelection" selectionListId="SL.SPORTERINTENSITY" id="sportsman">
+                <qualifiers>
+                    <tamiQual id="sportType" xsi:type="multiSelection" selectionListId="SL.SPORTERTYPE"/>
+                    <tamiQual id="sportIntensity" xsi:type="oneSelection" selectionListId="SL.SPORTERINTENSITY"/>
+                    <tamiQual id="sporterSince" xsi:type="date"/>
+                </qualifiers>
+            </tami>
+        </set>
+
+        <set id="set.documents">
+            <tami id="testResults" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="prescriptions" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="notes" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="xRays" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="reports" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="pictures" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+        </set>
+
+        <set id="set.antecedents">
+            <tami id="RTH" xsi:type="integer">
+            </tami>
+            <tami id="adiposity" xsi:type="string">
+                <qualifiers>
+                    <tamiQual id="startDate" xsi:type="date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami id="patientProfile" xsi:type="string">
+                <qualifiers>
+                    <tamiQual id="patientProfileStartDate" xsi:type="date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual id="patientProfileEndDate" xsi:type="date">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="vaccineName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="vaccineDate"/>
+                    <tamiQual xsi:type="string" id="vaccineType"/>
+                    <tamiQual xsi:type="string" id="vaccineProportioning"/>
+                    <tamiQual xsi:type="string" id="vaccineAdministrationType"/>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+
+            <tami xsi:type="string" id="drugName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="prescriptionStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="prescriptionEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="frequency"/>
+                    <tamiQual xsi:type="string" id="duration"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="consultation">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="consultationDate">
+                        <defaultValue>[currentDate]</defaultValue>
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="consultationReason"/>
+                    <tamiQual xsi:type="string" id="consultationDoctor"/>
+                    <tamiQual xsi:type="string" id="consultationQuestion"/>
+                    <tamiQual xsi:type="string" id="consultationResult"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="personalAntecedents">
+                <qualifiers>
+                    <tamiQual xsi:type="fastCodeEngine" id="personalAntecedentsFastCodeEngine">
+                        <marker name="fastCodeEngine"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="personalAntecedentsStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="personalAntecedentsEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="occupationalDiseases">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="occupationalDiseasesStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="occupationalDiseasesEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="integer" id="girth">
+                <marker name="ruleOnInput" value="regexp.drl"/>
+            </tami>
+            <tami xsi:type="oneSelection" selectionListId="SL.34.Urine-bevinding" id="urineBevinding"/>
+
+            <tami xsi:type="string" id="therapy">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="therapyStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="therapyEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="note" id="patientPersonalNote"/>
+            <tami xsi:type="string" id="workAccidents">
+                <qualifiers>
+                    <tamiQual xsi:type="fastCodeEngine" id="workAccidentsFastCodeEngine">
+                        <marker name="fastCodeEngine"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="workAccidentsStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="workAccidentsEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="familialAntecedentName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="familialAntecedentStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="familialAntecedentEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami xsi:type="string" id="medicalAntecedentName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="medicalAntecedentStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="medicalAntecedentEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="chirurgicalAntecedentName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="chirurgicalAntecedentStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="chirurgicalAntecedentEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+        </set>
+
+        <set id="set.disease">
+            <tami xsi:type="integer" id="Adiposity">
+                <marker name="ruleOnInput" value="regexp.drl"/>
+            </tami>
+            <tami xsi:type="oneSelection" selectionListId="SL.37.UrineBloed" id="urineB"/>
+            <tami xsi:type="oneSelection" selectionListId="SL.31.Urine" id="urineG"/>
+            <tami xsi:type="oneSelection" selectionListId="SL.31.Urine" id="urineK"/>
+
+            <tami xsi:type="string" id="patientDepartment"/>
+            <tami xsi:type="boolean" id="keepLocal"/>
+
+            <tami xsi:type="string" id="patientGP"/>
+            <tami xsi:type="integer" id="patientHourByWeek">
+                <qualifiers>
+                    <tamiQual xsi:type="oneSelection" id="patientHourByWeekDisplayInOverview" selectionListId="SL.DISPLAYINOVERVIEW" i18nId="displayInOverview">
+                        <marker name="displayInOverview"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="integer" id="patientHourVDTByWeek">
+                <marker name="ruleOnInput" value="regexp.drl"/>
+            </tami>
+            <tami xsi:type="string" id="patientKids"/>
+
+            <tami xsi:type="oneSelection" id="patientEMD" selectionListId="SL.COMPLETE">
+            </tami>
+
+
+            <tami xsi:type="oneSelection" id="patientMutualFund" selectionListId="SL.MUTUALFUNDS"/>
+            <tami xsi:type="string" id="patientName">
+                <marker name="noProcessInvalidation"/>
+            </tami>
+            <tami xsi:type="string" id="patientCallingName"/>
+            <tami xsi:type="string" id="patientNationality"/>
+
+            <tami xsi:type="string" id="patientPersonalNumber">
+                <marker name="noProcessInvalidation"/>
+            </tami>
+
+
+            <tami xsi:type="string" id="patientInsuranceName">
+                <qualifiers>
+                    <tamiQual id="patientInsuranceNameStartDate" xsi:type="date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual id="patientInsuranceNameEndDate" xsi:type="date">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="patientComplInsuranceName">
+                <qualifiers>
+                    <tamiQual id="patientComplInsuranceNameStartDate" xsi:type="date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual id="patientComplInsuranceNameEndDate" xsi:type="date">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+        </set>
+
+        <set id="set.analysis">
+            <tami xsi:type="string" id="sl.BMP">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="BMP.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="BMP.azoteUreique"/>
+                    <tamiQual xsi:type="string" id="BMP.CO"/>
+                    <tamiQual xsi:type="string" id="BMP.creatinine"/>
+                    <tamiQual xsi:type="string" id="BMP.glucose"/>
+                    <tamiQual xsi:type="string" id="BMP.calcium"/>
+                    <tamiQual xsi:type="string" id="BMP.chlorure"/>
+                    <tamiQual xsi:type="string" id="BMP.potassium"/>
+                    <tamiQual xsi:type="string" id="BMP.sodium"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.CHEMP-7">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="CHEMP-7.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="CHEMP-7.azoteUreique"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.CO"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.creatinine"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.glucose"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.calcium"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.chlorure"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.potassium"/>
+                    <tamiQual xsi:type="string" id="CHEMP-7.sodium"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.cholesterol">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Cholesterol.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Cholesterol.LDL"/>
+                    <tamiQual xsi:type="string" id="Cholesterol.HDL"/>
+                    <tamiQual xsi:type="string" id="Cholesterol.Triglycerides"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.CMP">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="CMP.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="CMP.azoteUreique"/>
+                    <tamiQual xsi:type="string" id="CMP.CO"/>
+                    <tamiQual xsi:type="string" id="CMP.creatinine"/>
+                    <tamiQual xsi:type="string" id="CMP.glucose"/>
+                    <tamiQual xsi:type="string" id="CMP.calcium"/>
+                    <tamiQual xsi:type="string" id="CMP.chlorure"/>
+                    <tamiQual xsi:type="string" id="CMP.potassium"/>
+                    <tamiQual xsi:type="string" id="CMP.sodium"/>
+                    <tamiQual xsi:type="string" id="CMP.proteine"/>
+                    <tamiQual xsi:type="string" id="CMP.albumine"/>
+                    <tamiQual xsi:type="string" id="CMP.ALAT"/>
+                    <tamiQual xsi:type="string" id="CMP.ASAT"/>
+                    <tamiQual xsi:type="string" id="CMP.PAL"/>
+                    <tamiQual xsi:type="string" id="CMP.bilirubine"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.liver">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Foie.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Foie.albumine"/>
+                    <tamiQual xsi:type="string" id="Foie.ALAT"/>
+                    <tamiQual xsi:type="string" id="Foie.ASAT"/>
+                    <tamiQual xsi:type="string" id="Foie.PAL"/>
+                    <tamiQual xsi:type="string" id="Foie.bilirubine"/>
+                    <tamiQual xsi:type="string" id="Foie.GGT"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.glucose">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Glucose.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Glucose.nom"/>
+                    <tamiQual xsi:type="string" id="Glucose.type"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.glycatedHemoglobin">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="HemoglobineGlyquee.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="HemoglobineGlyquee.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.hemogramme">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Hemogramme.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Hemogramme.leucocytes"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.neutrophiles"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.lymphocytes"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.monocytes"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.eosinophiles"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.basophiles"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.erythrocytes"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.hemoglobine"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.hematocrite"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.RDW"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.MPV"/>
+                    <tamiQual xsi:type="string" id="Hemogramme.plaquettes"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.PSA">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="PSA.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="PSA.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.kidney">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Rein.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Rein.azoteUreique"/>
+                    <tamiQual xsi:type="string" id="Rein.filtrationGlomerulaire"/>
+                    <tamiQual xsi:type="string" id="Rein.GFR"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.thyroide">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="Thyroide.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="Thyroide.TSH"/>
+                    <tamiQual xsi:type="string" id="Thyroide.T3"/>
+                    <tamiQual xsi:type="string" id="Thyroide.T4"/>
+                    <tamiQual xsi:type="string" id="Thyroide.T3free"/>
+                    <tamiQual xsi:type="string" id="Thyroide.T4free"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.fever">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="fever.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="fever.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.tension">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="tension.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="tension.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.coloscopy">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="coloscopy.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="coloscopy.monitoring"/>
+                    <tamiQual xsi:type="string" id="coloscopy.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.EEG">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="EEG.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="EEG.monitoring"/>
+                    <tamiQual xsi:type="string" id="EEG.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.ECG">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="ECG.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="ECG.monitoring"/>
+                    <tamiQual xsi:type="string" id="ECG.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.IRM">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="IRM.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="IRM.monitoring"/>
+                    <tamiQual xsi:type="string" id="IRM.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.TDM">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="TDM.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="TDM.monitoring"/>
+                    <tamiQual xsi:type="string" id="TDM.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.TEP">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="TEP.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="TEP.monitoring"/>
+                    <tamiQual xsi:type="string" id="TEP.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.radiography">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="radiography.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="radiography.monitoring"/>
+                    <tamiQual xsi:type="string" id="radiography.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.mammography">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="mammography.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="mammography.monitoring"/>
+                    <tamiQual xsi:type="string" id="mammography.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.echography">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="echography.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="echography.monitoring"/>
+                    <tamiQual xsi:type="string" id="echography.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="sl.endoscopy">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="endoscopy.Date">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="endoscopy.monitoring"/>
+                    <tamiQual xsi:type="string" id="endoscopy.result"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="allergyName">
+                <qualifiers>
+                    <tamiQual xsi:type="oneSelection" id="allergyResult" selectionListId="SL.testResult"/>
+                    <tamiQual xsi:type="oneSelection" id="allergySeverity" selectionListId="SL.allergySeverity"/>
+                    <tamiQual xsi:type="date" id="allergyDate"/>
+                    <tamiQual xsi:type="string" id="allergySymptoms"/>
+                    <tamiQual xsi:type="string" id="allergyPrescribedDrug"/>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami xsi:type="string" id="familyAllergyName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="familyAllergyDate"/>
+                    <tamiQual xsi:type="string" id="familyAllergySymptoms"/>
+                    <tamiQual xsi:type="string" id="familyAllergyPrescribedDrug"/>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami xsi:type="string" id="hospitalStay">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="hospitalStayDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="hospitalStayReason"/>
+                    <tamiQual xsi:type="string" id="hospitalStayResult"/>
+                    <tamiQual xsi:type="string" id="hospitalStayHospital"/>
+                    <tamiQual xsi:type="string" id="hospitalStayDuration"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="surgery">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="surgeryDate"/>
+                    <tamiQual xsi:type="string" id="surgeryResult"/>
+                    <tamiQual xsi:type="string" id="surgeryHospital"/>
+                    <tamiQual xsi:type="string" id="surgeryDoctor"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="actualDrugs">
+                <qualifiers>
+                    <tamiQual xsi:type="string" id="actualDrugsDose"/>
+                    <tamiQual xsi:type="string" id="actualDrugsFrequency"/>
+                    <tamiQual xsi:type="string" id="actualDrugsReason"/>
+                    <tamiQual xsi:type="date" id="actualDrugsStartDate"/>
+                    <tamiQual xsi:type="string" id="actualDrugsSideEffect"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="historicDrugs">
+                <qualifiers>
+                    <tamiQual xsi:type="string" id="historicDrugsDose"/>
+                    <tamiQual xsi:type="string" id="historicDrugsFrequency"/>
+                    <tamiQual xsi:type="string" id="historicDrugsReason"/>
+                    <tamiQual xsi:type="date" id="historicDrugsStartDate"/>
+                    <tamiQual xsi:type="string" id="historicDrugsSideEffect"/>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="prescription">
+                <qualifiers>
+                    <tamiQual xsi:type="string" id="prescriptionRechargeAmount">
+                        <marker name="prescriptionRechargeAmount"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="prescriptionDate">
+                        <defaultValue>[currentDate]</defaultValue>
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="string" id="prescriptionRegistrationNumber"/>
+                </qualifiers>
+            </tami>
+        </set>
+
+        <set id="set.documents">
+            <tami id="bloodAnalysis" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="xRays" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami id="draftDocument" xsi:type="document">
+                <qualifiers>
+                    <tamiQual id="filename" xsi:type="string"></tamiQual>
+                    <tamiQual id="mimetype" xsi:type="string"></tamiQual>
+                </qualifiers>
+                <marker name="metaItemMulti"/>
+            </tami>
+            <tami xsi:type="string" id="patientThirdName"/>
+        </set>
+
+        <set id="set.other">
+            <tami xsi:type="integer" id="isArchived">
+                <marker name="hidden"/>
+                <marker name="deviceSyncOnly"/>
+            </tami>
+            <tami xsi:type="string" id="factorName">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="factorDate">
+                        <marker name="factorDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+
+            <tami xsi:type="string" id="patientDoctor">
+                <qualifiers>
+                    <tamiQual xsi:type="string" id="patientDoctorSpeciality"/>
+                    <tamiQual xsi:type="string" id="patientDoctorAddress"/>
+                    <tamiQual xsi:type="string" id="patientDoctorPhone"/>
+                    <tamiQual xsi:type="string" id="patientDoctorMobilePhone"/>
+                    <tamiQual xsi:type="string" id="patientDoctorMail"/>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="text" id="importedEMR">
+                <marker name="inhibitACCreation"/>
+                <marker name="inhibitACInvalidation"/>
+            </tami>
+            <tami xsi:type="oneSelection" selectionListId="SL.31.Urine" id="urineP"/>
+            <tami xsi:type="oneSelection" id="patientISCO2008" selectionListId="SL.ISCO2008">
+                <marker name="noProcessInvalidation"/>
+            </tami>
+
+            <tami xsi:type="string" id="previousEmploy">
+                <qualifiers>
+                    <tamiQual xsi:type="string" id="previousEmployer"/>
+                    <tamiQual xsi:type="date" id="previousEmployStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="previousEmployEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="string" id="Training">
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="TrainingStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="oneSelection" id="TrainingType" selectionListId="SL.TRAININGTYPES">
+                        <marker name="trainingType"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="oneSelection" id="Brochure" selectionListId="SL.BROCHURES">
+                <marker name="noProcessInvalidation"/>
+            </tami>
+
+            <tami xsi:type="oneSelection" id="inactivity" selectionListId="SL.INACTIVITY">
+
+                <qualifiers>
+                    <tamiQual xsi:type="date" id="inactivityStartDate">
+                        <marker name="startDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="date" id="inactivityEndDate">
+                        <marker name="endDate"/>
+                    </tamiQual>
+                    <tamiQual xsi:type="oneSelection" id="inactivityDisplayInOverview" selectionListId="SL.DISPLAYINOVERVIEW" i18nId="displayInOverview">
+                        <marker name="displayInOverview"/>
+                    </tamiQual>
+                </qualifiers>
+            </tami>
+            <tami xsi:type="oneSelection" id="smokerType" selectionListId="SL.SMOKERTYPE">
+                <marker name="inhibitACCreation"/>
+                <marker name="inhibitACInvalidation"/>
+            </tami>
+            <tami xsi:type="string" id="sporterWhat">
+                <marker name="inhibitACCreation"/>
+                <marker name="inhibitACInvalidation"/>
+            </tami>
+        </set>
+    </body>
+</itemDictionary>

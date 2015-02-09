@@ -1,6 +1,6 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
-import biz.manex.andaman7.injector.dto.*;
+import biz.manex.andaman7.injector.models.dto.*;
 import org.apache.http.HttpResponse;
 
 import java.util.*;
@@ -17,7 +17,7 @@ public class AndamanEhrService extends CustomRestService {
     /**
      * Unique instance of the REST service.
      */
-    private static Map<String, AndamanEhrService> instances =
+    private static final Map<String, AndamanEhrService> instances =
             new HashMap<String, AndamanEhrService>();
 
 
@@ -101,7 +101,6 @@ public class AndamanEhrService extends CustomRestService {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
         }
 
         return null;
@@ -121,7 +120,6 @@ public class AndamanEhrService extends CustomRestService {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
         }
 
         return null;
@@ -145,7 +143,6 @@ public class AndamanEhrService extends CustomRestService {
                             deviceId, body, true);
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
         }
 
         return null;
@@ -211,7 +208,7 @@ public class AndamanEhrService extends CustomRestService {
     }
 
     /**
-     * Builds a {@link biz.manex.andaman7.injector.dto.RegistrarSyncContentDTO}.
+     * Builds a {@link biz.manex.andaman7.injector.models.dto.RegistrarSyncContentDTO}.
      *
      * @param sourceRegistrarId the UUID of the source registrar
      * @param sourceDeviceId the UUID of the source device

@@ -1,4 +1,4 @@
-package biz.manex.andaman7.injector.dto;
+package biz.manex.andaman7.injector.models.dto;
 
 import java.util.Date;
 import java.util.HashSet;
