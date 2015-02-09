@@ -1,8 +1,11 @@
 package biz.manex.andaman7.injector.models.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DeviceDTO extends IdentifiedDataModelObjectDTO {
 
     private Date lastSynchro;

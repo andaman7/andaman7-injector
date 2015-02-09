@@ -104,7 +104,7 @@ public class AndamanContextService extends CustomRestService {
      * @param senderDeviceId the UUID of the source device
      * @param newCommunityMembers the list of registrars UUIDs to send the
      *                            request to
-     * @return the list of {@link biz.manex.andaman7.injector.dto.RegistrarDTO}s
+     * @return the list of {@link biz.manex.andaman7.injector.models.dto.RegistrarDTO}s
      * of the new community members
      */
     public RegistrarDTO[] sendCommunityRequest(String senderDeviceId,

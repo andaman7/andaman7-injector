@@ -11,22 +11,22 @@ package biz.manex.andaman7.injector.models;
  */
 public class AMI {
     
-    private String type;
+    private TAMI type;
     private String value;
 
     public AMI() {
     }
 
-    public AMI(String type, String value) {
+    public AMI(TAMI type, String value) {
         this.type = type;
         this.value = value;
     }
     
-    public String getType() {
+    public TAMI getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TAMI type) {
         this.type = type;
     }
 

@@ -161,6 +161,7 @@ public class AndamanEhrService extends CustomRestService {
             String tamiId, String value, String sourceDeviceId) {
 
         AmiBaseDTO amiBaseDTO = new AmiBaseDTO();
+        amiBaseDTO.setUuid(UUID.randomUUID().toString());
         amiBaseDTO.setAmiContainerId(destinationRegistrarId);
         amiBaseDTO.setQualifiers(new HashSet<AmiQualDTO>());
         //amiBaseDTO.setUuidMulti("");

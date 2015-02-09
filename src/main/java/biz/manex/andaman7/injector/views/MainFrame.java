@@ -58,6 +58,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Andaman7 - Injector");
 
         jPanelPatient.setBorder(javax.swing.BorderFactory.createTitledBorder("Patient"));
         jPanelPatient.setPreferredSize(new java.awt.Dimension(424, 200));
@@ -264,7 +265,7 @@ public class MainFrame extends javax.swing.JFrame {
         String value = jTextFieldDataValue.getText();
         
         if(!value.isEmpty()) {
-            AMI ami = new AMI(type.getKey(), value);
+            AMI ami = new AMI(type, value);
             DefaultListModel<AMI> model = (DefaultListModel<AMI>) jListData.getModel();
             model.addElement(ami);
             jListData.setModel(model);
@@ -338,7 +339,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         while(enu.hasMoreElements()) {
             AMI ami = enu.nextElement();
-            amis.put(ami.getType(), ami.getValue());
+            amis.put(ami.getType().getKey(), ami.getValue());
         }
 
         boolean alreadyMember = this.mainController.sendData(currentDeviceUUID,

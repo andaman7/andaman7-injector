@@ -62,6 +62,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        setTitle("Andaman7 - Login");
 
         jPanelSettingsUser.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
 
