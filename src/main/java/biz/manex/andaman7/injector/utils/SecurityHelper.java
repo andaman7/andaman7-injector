@@ -1,4 +1,4 @@
-package biz.manex.andaman7.injector.util;
+package biz.manex.andaman7.injector.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

@@ -1,6 +1,6 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
-import biz.manex.andaman7.injector.util.SecurityHelper;
+import biz.manex.andaman7.injector.utils.SecurityHelper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;

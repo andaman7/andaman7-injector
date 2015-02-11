@@ -1,10 +1,25 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
 import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
+import biz.manex.andaman7.injector.models.dto.DeviceDTO;
 import biz.manex.andaman7.injector.models.dto.MessageDTO;
 import biz.manex.andaman7.injector.models.dto.RegistrarDTO;
+import biz.manex.andaman7.injector.utils.FileHelper;
+import biz.manex.andaman7.injector.utils.XmlHelper;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +91,58 @@ public class AndamanContextService extends CustomRestService {
         return null;
     }
 
+    public Document getTamiXml(int currentVersion) {
+        try {
+            HttpResponse response = this.restTemplate.get("tami-xml/next/" +
+                    currentVersion, true);
+
+            if(response.getStatusLine().getStatusCode() == 204)
+                return null;
+            else
+                return XmlHelper.getDocument(response.getEntity().getContent());
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Document getGuiXml(int currentXmlVersion) {
+        try {
+            HttpResponse response = this.restTemplate.get("gui-xml/last/" +
+                    currentXmlVersion, true);
+
+            if(response.getStatusLine().getStatusCode() == 204)
+                return null;
+            else
+                return XmlHelper.getDocument(response.getEntity().getContent());
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public DeviceDTO[] getDevices() {
+
+        try {
+            HttpResponse response = this.restTemplate.get(
+                    "devices/", true);
+            return this.jsonMapper.readValue(response.getEntity().getContent(),
+                    DeviceDTO[].class);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     /**
      * Searches users based on a given keyword.
      *
@@ -93,6 +160,7 @@ public class AndamanContextService extends CustomRestService {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
@@ -120,6 +188,7 @@ public class AndamanContextService extends CustomRestService {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
@@ -130,8 +199,10 @@ public class AndamanContextService extends CustomRestService {
             HttpResponse response =  this.restTemplate.get("community/");
             return this.jsonMapper.readValue(response.getEntity().getContent(),
                     RegistrarDTO[].class);
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
         
         return null;
@@ -152,8 +223,10 @@ public class AndamanContextService extends CustomRestService {
         try {
             return this.restTemplate.post("registrars/" + otherRegistrarId +
                     "/acceptance/" + isAccepted, "");
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
@@ -165,8 +238,10 @@ public class AndamanContextService extends CustomRestService {
             HttpResponse response = this.restTemplate.get("translations/");
             return this.jsonMapper.readValue(response.getEntity().getContent(),
                     MessageDTO[].class);
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;

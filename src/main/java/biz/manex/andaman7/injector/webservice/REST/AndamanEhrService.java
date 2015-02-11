@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
+import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.dto.*;
 import org.apache.http.HttpResponse;
 
@@ -54,50 +55,57 @@ public class AndamanEhrService extends CustomRestService {
     /**
      * Injects some AMIs into the EHR of a registrar.
      *
-     * @param sourceDeviceId the UUID of the source device
-     * @param sourceRegistrarId the UUID of the source registrar
+     * @param sourceRegistrar the source registrar
      * @param destinationRegistrar the destination {@link RegistrarDTO}
-     * @param amis the AMIs to inject into the destination registrar's EHR
+     * @param amiContainers the AMI containers where to inject AMIs
+     * @param contextId the ID of the context
+     * @param tamiVersion the version of the XML file describing the TAMIs
      * @return the HTTP response to the request
      */
-    public HttpResponse sendAmiBasesToRegistrar(String sourceDeviceId,
-            String sourceRegistrarId, AndamanUserDTO destinationRegistrar,
-            HashMap<String, String> amis) {
+    public HttpResponse sendAmiBasesToRegistrar(RegistrarDTO sourceRegistrar, AndamanUserDTO destinationRegistrar,
+            List<AMIContainer> amiContainers, String contextId, int tamiVersion) {
+
+        String sourceDeviceId = sourceRegistrar.getDevices().get(0).getUuid();
 
         String destinationRegistrarId = destinationRegistrar.getUuid();
-        String[] destinationRegistrars = new String[] {destinationRegistrarId};
+        String[] destinationRegistrars = new String[] { destinationRegistrarId };
 
-        // Build an AmiBaseDTO for each AMI
-        HashSet<AmiBaseDTO> amiBaseDTOs = new HashSet<AmiBaseDTO>();
+        List<AmiContainerDTO> amiContainerDTOs = new ArrayList<AmiContainerDTO>();
 
-        for(HashMap.Entry<String, String> entry : amis.entrySet()) {
-            AmiBaseDTO amiBaseDTO = buildAmiBaseDTO(destinationRegistrarId,
-                    entry.getKey(), entry.getValue(), sourceDeviceId);
-            amiBaseDTOs.add(amiBaseDTO);
+        // Build AmiContainerDTOs for each AMI container
+        for(AMIContainer amiContainer : amiContainers) {
+
+            HashMap<String, String> amis = amiContainer.getAmis();
+
+            // Build an AmiBaseDTO for each AMI
+            HashSet<AmiBaseDTO> amiBaseDTOs = new HashSet<AmiBaseDTO>();
+
+            for (HashMap.Entry<String, String> entry : amis.entrySet()) {
+                AmiBaseDTO amiBaseDTO = buildAmiBaseDTO(amiContainer.getUuid(), destinationRegistrarId,
+                        entry.getKey(), entry.getValue(), tamiVersion, sourceDeviceId);
+                amiBaseDTOs.add(amiBaseDTO);
+            }
+
+            // Build the context map
+            HashMap<String, String> contextMap = new HashMap<String, String>();
+            contextMap.put(contextId, amiContainer.getUuid());
+
+            // Build the AmiContainerDTO(s)
+            AmiContainerDTO amiContainerDTO = buildAmiContainerDTO(amiBaseDTOs,
+                    destinationRegistrar, contextMap);
+            amiContainerDTOs.add(amiContainerDTO);
         }
 
-        // Build the context map
-        HashMap<String, String> contextMap = new HashMap<String, String>();
-        contextMap.put(sourceDeviceId, destinationRegistrar.getUuid());
-
-        // Build the AmiContainerDTO(s)
-        AmiContainerDTO amiContainerDTO = buildAmiContainerDTO(amiBaseDTOs,
-                destinationRegistrar, contextMap);
-        AmiContainerDTO[] amiContainerDTOs =
-                new AmiContainerDTO[] { amiContainerDTO };
-
         // Build the RegistrarSyncContentDTO(s)
-        RegistrarSyncContentDTO syncContentDTO = buildRegistrarSyncContentDTO(
-                sourceRegistrarId, sourceDeviceId, destinationRegistrars,
-                amiContainerDTOs);
-        RegistrarSyncContentDTO[] syncContentDTOs = new
-                RegistrarSyncContentDTO[] { syncContentDTO };
+        RegistrarSyncContentDTO syncContentDTO = buildRegistrarSyncContentDTO(sourceRegistrar,
+                destinationRegistrars, amiContainerDTOs.toArray(new AmiContainerDTO[amiContainerDTOs.size()]));
+
+        RegistrarSyncContentDTO[] syncContentDTOs = new RegistrarSyncContentDTO[] { syncContentDTO };
 
         // Send the request to the server
         try {
             String body = this.jsonMapper.writeValueAsString(syncContentDTOs);
-            return this.restTemplate.put("registrars/medical-records", body,
-                    true);
+            return this.restTemplate.put("registrars/medical-records", body, true);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -151,23 +159,26 @@ public class AndamanEhrService extends CustomRestService {
     /**
      * Builds an {@link AmiBaseDTO}.
      *
-     * @param destinationRegistrarId the UUID of the destination registrar
+     * @param amiContainerId the UUID of the AMI container in which the AMI will
+     *                       be inserted
+     * @param registrarCreatorId the UUID of the registrar that created the AMI
      * @param tamiId the identifier of the TAMI
      * @param value the value of the AMI
+     * @param tamiVersion the version of the XML file describing the TAMIs
      * @param sourceDeviceId the UUID of the source device
      * @return the built {@link AmiBaseDTO}
      */
-    private AmiBaseDTO buildAmiBaseDTO(String destinationRegistrarId,
-            String tamiId, String value, String sourceDeviceId) {
+    private AmiBaseDTO buildAmiBaseDTO(String amiContainerId, String registrarCreatorId,
+            String tamiId, String value, int tamiVersion, String sourceDeviceId) {
 
         AmiBaseDTO amiBaseDTO = new AmiBaseDTO();
         amiBaseDTO.setUuid(UUID.randomUUID().toString());
-        amiBaseDTO.setAmiContainerId(destinationRegistrarId);
+        amiBaseDTO.setAmiContainerId(amiContainerId);
         amiBaseDTO.setQualifiers(new HashSet<AmiQualDTO>());
         //amiBaseDTO.setUuidMulti("");
-        //amiBaseDTO.setRegistrarCreatorId("");
+        amiBaseDTO.setRegistrarCreatorId(registrarCreatorId);
         amiBaseDTO.setTamiId(tamiId);
-        amiBaseDTO.setTamiVersion("1");
+        amiBaseDTO.setTamiVersion(String.valueOf(tamiVersion));
         amiBaseDTO.setValue(value);
         amiBaseDTO.setCreationDate(new Date());
         amiBaseDTO.setCreatorId(sourceDeviceId);
@@ -184,9 +195,7 @@ public class AndamanEhrService extends CustomRestService {
      *                   destination registrar
      * @return the built AmiContainerDTO
      */
-    private AmiContainerDTO buildAmiContainerDTO(
-            HashSet<AmiBaseDTO> amiBaseDTOs,
-            AndamanUserDTO destinationRegistrar,
+    private AmiContainerDTO buildAmiContainerDTO(HashSet<AmiBaseDTO> amiBaseDTOs, AndamanUserDTO destinationRegistrar,
             HashMap<String, String> contextMap) {
 
         AmiContainerDTO amiContainerDTO = new AmiContainerDTO();
@@ -196,14 +205,10 @@ public class AndamanEhrService extends CustomRestService {
         amiContainerDTO.setUuid(destinationRegistrar.getUuid());
         amiContainerDTO.setCreatorId(destinationRegistrar.getCreatorId());
         amiContainerDTO.setCreationDate(destinationRegistrar.getCreationDate());
-        amiContainerDTO.setModificatorId(
-                destinationRegistrar.getModificatorId());
-        amiContainerDTO.setModificationDate(
-                destinationRegistrar.getModificationDate());
-        amiContainerDTO.setInvalidatorId(
-                destinationRegistrar.getInvalidatorId());
-        amiContainerDTO.setInvalidationDate(
-                destinationRegistrar.getInvalidationDate());
+        amiContainerDTO.setModificatorId(destinationRegistrar.getModificatorId());
+        amiContainerDTO.setModificationDate(destinationRegistrar.getModificationDate());
+        amiContainerDTO.setInvalidatorId(destinationRegistrar.getInvalidatorId());
+        amiContainerDTO.setInvalidationDate(destinationRegistrar.getInvalidationDate());
 
         return amiContainerDTO;
     }
@@ -211,24 +216,23 @@ public class AndamanEhrService extends CustomRestService {
     /**
      * Builds a {@link biz.manex.andaman7.injector.models.dto.RegistrarSyncContentDTO}.
      *
-     * @param sourceRegistrarId the UUID of the source registrar
-     * @param sourceDeviceId the UUID of the source device
+     * @param sourceRegistrar the source registrar
      * @param destinationRegistrars the list of destination registrar's UUIDs
      * @param amiContainerDTOs the list of AmiContainerDTOs
      * @return the built RegistrarSyncContentDTO
      */
-    private RegistrarSyncContentDTO buildRegistrarSyncContentDTO(
-            String sourceRegistrarId, String sourceDeviceId,
-            String[] destinationRegistrars, AmiContainerDTO[] amiContainerDTOs)
-    {
+    private RegistrarSyncContentDTO buildRegistrarSyncContentDTO(RegistrarDTO sourceRegistrar,
+            String[] destinationRegistrars, AmiContainerDTO[] amiContainerDTOs) {
+
+        String sourceRegistrarId = sourceRegistrar.getUuid();
+        String sourceDeviceId = sourceRegistrar.getDevices().get(0).getUuid();
 
         RegistrarSyncContentDTO syncContentDTO = new RegistrarSyncContentDTO();
         syncContentDTO.setSourceDeviceId(sourceDeviceId);
         syncContentDTO.setSourceRegistrarId(sourceRegistrarId);
-        syncContentDTO.setDestinationRegistrars(
-                Arrays.asList(destinationRegistrars));
+        syncContentDTO.setDestinationRegistrars(Arrays.asList(destinationRegistrars));
         syncContentDTO.setAmiContainerDTOs(Arrays.asList(amiContainerDTOs));
-        //syncContentDTO.setFileUuidToFileContent(new HashMap<String, String>());
+        syncContentDTO.setFileUuidToFileContent(new HashMap<String, String>());
         //syncContentDTO.setFileUuidToFileContentString("");
         //syncContentDTO.setLastUploadDateFromDevice();
         syncContentDTO.setCreationDate(new Date());

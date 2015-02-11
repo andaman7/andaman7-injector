@@ -10,6 +10,7 @@ import biz.manex.andaman7.injector.models.Settings;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Properties;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -29,11 +30,27 @@ public class LoginFrame extends javax.swing.JFrame {
      * @param loginListener the listener that will listen for actions on the
      *                      login button
      */
-    public LoginFrame(MainController mainController, ActionListener loginListener) {
+    public LoginFrame(MainController mainController, ActionListener loginListener, Properties properties) {
         initComponents();
         
         this.mainController = mainController;
+
         this.jButtonLogin.addActionListener(loginListener);
+
+        jTextFieldSettingsServerPort.setText(properties.getProperty("serverPort"));
+        jTextFieldSettingsServerHostname.setText(properties.getProperty("serverHostname"));
+        jTextFieldSettingsApiKey.setText(properties.getProperty("apiKey"));
+
+        jTextFieldSettingsUsername.setText(properties.getProperty("username"));
+        jPasswordFieldSettingsPassword.setText(properties.getProperty("password"));
+
+        if(jTextFieldSettingsServerPort.getText().equals("443")) {
+            jComboBoxProtocol.setSelectedItem("https");
+        }
+        else {
+            jComboBoxProtocol.setSelectedItem("http");
+        }
+
     }
 
     /**
@@ -58,24 +75,23 @@ public class LoginFrame extends javax.swing.JFrame {
         jTextFieldSettingsServerPort = new javax.swing.JTextField();
         jLabelSettingsApiKey = new javax.swing.JLabel();
         jTextFieldSettingsApiKey = new javax.swing.JTextField();
+        jLabelProtocol = new javax.swing.JLabel();
+        jComboBoxProtocol = new javax.swing.JComboBox();
         jButtonLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        setTitle("Andaman7 - Login");
 
         jPanelSettingsUser.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
 
         jLabelSettingsUsername.setText("Username");
 
-        jTextFieldSettingsUsername.setText("pyderbaix@student.ulg.ac.be");
         jTextFieldSettingsUsername.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsUsername.setName("username"); // NOI18N
         jTextFieldSettingsUsername.setPreferredSize(new java.awt.Dimension(125, 22));
 
         jLabelSettingsPassword.setText("Password");
 
-        jPasswordFieldSettingsPassword.setText("aaaaaa");
         jPasswordFieldSettingsPassword.setInputVerifier(new NoEmptyInputVerifier());
         jPasswordFieldSettingsPassword.setName("password"); // NOI18N
         jPasswordFieldSettingsPassword.setPreferredSize(new java.awt.Dimension(125, 22));
@@ -119,21 +135,27 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabelSettingsServerHostname.setText("Server hostname");
 
-        jTextFieldSettingsServerHostname.setText("localhost");
         jTextFieldSettingsServerHostname.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsServerHostname.setName("server hostname"); // NOI18N
 
         jLabelSettingsServerPort.setText("Server port");
 
-        jTextFieldSettingsServerPort.setText("8080");
         jTextFieldSettingsServerPort.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsServerPort.setName("server port"); // NOI18N
+        jTextFieldSettingsServerPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldSettingsServerPortKeyReleased(evt);
+            }
+        });
 
         jLabelSettingsApiKey.setText("API key");
 
-        jTextFieldSettingsApiKey.setText("2C949434-20FF-4636-BA96-B7C0CAD42612");
         jTextFieldSettingsApiKey.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsApiKey.setName("API key"); // NOI18N
+
+        jLabelProtocol.setText("Protocol");
+
+        jComboBoxProtocol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http", "https" }));
 
         javax.swing.GroupLayout jPanelSettingsServerLayout = new javax.swing.GroupLayout(jPanelSettingsServer);
         jPanelSettingsServer.setLayout(jPanelSettingsServerLayout);
@@ -147,11 +169,17 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldSettingsApiKey, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(jTextFieldSettingsServerHostname, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
+                    .addComponent(jTextFieldSettingsServerHostname, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabelSettingsServerPort)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldSettingsServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
+                        .addComponent(jLabelSettingsServerPort)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldSettingsServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
+                        .addComponent(jLabelProtocol)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBoxProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanelSettingsServerLayout.setVerticalGroup(
@@ -165,7 +193,9 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSettingsApiKey)
-                    .addComponent(jTextFieldSettingsApiKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldSettingsApiKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelProtocol)
+                    .addComponent(jComboBoxProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -200,6 +230,11 @@ public class LoginFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldSettingsServerPortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSettingsServerPortKeyReleased
+        if(jTextFieldSettingsServerPort.getText().equals("443"))
+            jComboBoxProtocol.setSelectedItem("https");
+    }//GEN-LAST:event_jTextFieldSettingsServerPortKeyReleased
 
     private boolean verifySettings() {
         
@@ -239,12 +274,18 @@ public class LoginFrame extends javax.swing.JFrame {
             String username = jTextFieldSettingsUsername.getText();
             String password = new String(jPasswordFieldSettingsPassword.getPassword());
             
+            boolean isHttps = false;
+            
+            if(jComboBoxProtocol.getSelectedItem().toString().equals("https"))
+                isHttps = true;
+
             Settings settings = new Settings();
             settings.setApiKey(apiKey);
             settings.setServerHostname(serverHostname);
             settings.setServerPort(serverPort);
             settings.setUsername(username);
             settings.setPassword(password);
+            settings.setHttps(isHttps);
             
             return settings;
         }
@@ -254,6 +295,8 @@ public class LoginFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonLogin;
+    private javax.swing.JComboBox jComboBoxProtocol;
+    private javax.swing.JLabel jLabelProtocol;
     private javax.swing.JLabel jLabelSettingTestConnection;
     private javax.swing.JLabel jLabelSettingsApiKey;
     private javax.swing.JLabel jLabelSettingsPassword;

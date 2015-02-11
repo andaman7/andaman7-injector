@@ -2,3 +2,9 @@
 target/
 
 *.iml
+*.properties
+*.csv
+*.xlsx
+
+tamidict.xml
+guipanels.xml

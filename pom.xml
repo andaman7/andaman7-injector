@@ -7,11 +7,6 @@
     <groupId>biz.manex.andaman7.injector</groupId>
     <artifactId>injector</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <apache-commons-lang3-version>3.3.2</apache-commons-lang3-version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -27,8 +22,8 @@
 
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${apache-commons-lang3-version}</version>
+            <artifactId>commons-csv</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

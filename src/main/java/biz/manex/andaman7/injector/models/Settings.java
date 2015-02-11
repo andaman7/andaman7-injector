@@ -10,6 +10,7 @@ public class Settings {
 
     private String serverHostname;
     private String serverPort;
+    private boolean isHttps;
     private String apiKey;
 
     public Settings() {
@@ -45,6 +46,14 @@ public class Settings {
 
     public void setServerPort(String serverPort) {
         this.serverPort = serverPort;
+    }
+
+    public boolean isHttps() {
+        return isHttps;
+    }
+
+    public void setHttps(boolean isHttps) {
+        this.isHttps = isHttps;
     }
 
     public String getApiKey() {

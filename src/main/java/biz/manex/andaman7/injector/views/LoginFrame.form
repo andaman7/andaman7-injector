@@ -115,7 +115,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldSettingsUsername">
           <Properties>
-            <Property name="text" type="java.lang.String" value="pyderbaix@student.ulg.ac.be"/>
             <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new NoEmptyInputVerifier()" type="code"/>
             </Property>
@@ -132,7 +131,6 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="jPasswordFieldSettingsPassword">
           <Properties>
-            <Property name="text" type="java.lang.String" value="aaaaaa"/>
             <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new NoEmptyInputVerifier()" type="code"/>
             </Property>
@@ -167,12 +165,21 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jTextFieldSettingsApiKey" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jTextFieldSettingsServerHostname" alignment="0" pref="134" max="32767" attributes="0"/>
+                      <Component id="jTextFieldSettingsServerHostname" alignment="0" pref="222" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabelSettingsServerPort" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldSettingsServerPort" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="jLabelSettingsServerPort" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jTextFieldSettingsServerPort" min="-2" pref="50" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="jLabelProtocol" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jComboBoxProtocol" min="-2" pref="69" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -190,6 +197,8 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabelSettingsApiKey" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldSettingsApiKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelProtocol" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxProtocol" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -204,7 +213,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldSettingsServerHostname">
           <Properties>
-            <Property name="text" type="java.lang.String" value="localhost"/>
             <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new NoEmptyInputVerifier()" type="code"/>
             </Property>
@@ -218,12 +226,14 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldSettingsServerPort">
           <Properties>
-            <Property name="text" type="java.lang.String" value="8080"/>
             <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new NoEmptyInputVerifier()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="server port" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldSettingsServerPortKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelSettingsApiKey">
           <Properties>
@@ -232,11 +242,25 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldSettingsApiKey">
           <Properties>
-            <Property name="text" type="java.lang.String" value="2C949434-20FF-4636-BA96-B7C0CAD42612"/>
             <Property name="inputVerifier" type="javax.swing.InputVerifier" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new NoEmptyInputVerifier()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="API key" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelProtocol">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Protocol"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBoxProtocol">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="2">
+                <StringItem index="0" value="http"/>
+                <StringItem index="1" value="https"/>
+              </StringArray>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

@@ -2,29 +2,31 @@ package biz.manex.andaman7.injector.controllers;
 
 import biz.manex.andaman7.injector.models.Settings;
 import biz.manex.andaman7.injector.models.TAMI;
+import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
+import biz.manex.andaman7.injector.models.dto.DeviceDTO;
 import biz.manex.andaman7.injector.models.dto.MessageDTO;
 import biz.manex.andaman7.injector.models.dto.RegistrarDTO;
+import biz.manex.andaman7.injector.utils.FileHelper;
+import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
 import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 import javax.swing.JButton;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 
 /**
  *
@@ -39,14 +41,12 @@ public class MainController implements ActionListener {
     
     private LoginFrame loginFrame;
     private MainFrame mainFrame;
+
+    private int currentTamiVersion = 0;
     
     
     public RegistrarDTO getCurrentUser() {
         return currentUser;
-    }
-
-    public void setCurrentUser(RegistrarDTO currentUser) {
-        this.currentUser = currentUser;
     }
     
     public void start(LoginFrame loginFrame, MainFrame mainFrame) {
@@ -78,12 +78,12 @@ public class MainController implements ActionListener {
         url.append("http");
         
         // Use HTTPS if SSL is used
-        if(settings.getServerPort().equals("443"))
+        if(settings.getServerPort().equals("443") || settings.isHttps())
             url.append("s");
         
         url.append("://").append(settings.getServerHostname());
         
-        // Add explicitely the port if not the default HTTP or HTTPS one
+        // Add explicitly the port if not the default HTTP or HTTPS one
         if(!settings.getServerPort().equals("80") &&
                 !settings.getServerPort().equals("443"))
             url.append(":").append(settings.getServerPort());
@@ -97,6 +97,73 @@ public class MainController implements ActionListener {
         return this.contextService.login();
     }
 
+    private Document getTamiXml() {
+
+        String filename = "tamidict.xml";
+        File file = FileHelper.getFileInCurrentDir(filename);
+        Document doc = null;
+
+        try {
+            // Get the current version of the XML file
+            if (file.canRead()) {
+                doc = XmlHelper.getDocument(file);
+                XPathExpression expr = XmlHelper.getXPathExpression("//itemDictionary/@version");
+                NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+                this.currentTamiVersion = Integer.parseInt(nodes.item(0).getNodeValue());
+            }
+
+            Document docFromServer = this.contextService.getTamiXml(this.currentTamiVersion);
+
+            // If a new version is available, overwrite the file
+            if(docFromServer != null) {
+                XmlHelper.writeDocumentToFile(docFromServer, file);
+                doc = docFromServer;
+            }
+
+            return doc;
+
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private Document getGuiXml() {
+
+        String filename = "guipanels.xml";
+        int currentVersion = 0;
+        File file = FileHelper.getFileInCurrentDir(filename);
+        Document doc = null;
+
+        try {
+            // Get the current version of the XML file
+            if (file.canRead()) {
+                doc = XmlHelper.getDocument(file);
+                XPathExpression expr = XmlHelper.getXPathExpression("//guiDictionary/@version");
+                NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+                currentVersion = Integer.parseInt(nodes.item(0).getNodeValue());
+            }
+
+            Document docFromServer = this.contextService.getGuiXml(currentVersion);
+
+            // If a new version is available, overwrite the file
+            if(docFromServer != null) {
+                XmlHelper.writeDocumentToFile(docFromServer, file);
+                doc = docFromServer;
+            }
+
+            return doc;
+
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public TAMI[] getTamis() {
         try {
             MessageDTO[] messages = this.contextService.getTranslations();
@@ -107,14 +174,9 @@ public class MainController implements ActionListener {
                 if(message.getLanguageCode().equals("EN"))
                     translations.put(message.getKey(), message.getValue());
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(String.valueOf(
-                    ClassLoader.getSystemClassLoader().getResource(
-                            "tamidict.xml")));
-            XPathFactory xPathfactory = XPathFactory.newInstance();
-            XPath xpath = xPathfactory.newXPath();
-            XPathExpression expr = xpath.compile("//tami/@id");
+            Document doc = this.getTamiXml();
+            this.getGuiXml();
+            XPathExpression expr = XmlHelper.getXPathExpression("//tami/@id");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nodes.getLength(); i++) {
@@ -140,13 +202,15 @@ public class MainController implements ActionListener {
         AndamanUserDTO[] results = this.contextService.searchUsers(keyword);
         RegistrarDTO[] members = this.contextService.getCommunityMembers();
         
-        // Add all user from search and add only the members that correspond to the specified keyword
+        // Add all user from search and add only the members that correspond to
+        // the specified keyword except ourselves
         ArrayList<AndamanUserDTO> users = new ArrayList<AndamanUserDTO>();
         users.addAll(Arrays.asList(results));
         
         for(RegistrarDTO member : members)
-            if(member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
-                    member.getLastName().toLowerCase().contains(keyword.toLowerCase()))
+            if((member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
+                    member.getLastName().toLowerCase().contains(keyword.toLowerCase())) &&
+                    !member.getUuid().equals(this.currentUser.getUuid()))
                 users.add(member);
         
         return users.toArray(new AndamanUserDTO[users.size()]);
@@ -159,8 +223,8 @@ public class MainController implements ActionListener {
         
     }
     
-    public boolean sendData(String sourceDeviceId, String sourceRegistrarId,
-            AndamanUserDTO destinationRegistrar, HashMap<String, String> amis) {
+    public boolean sendData(AndamanUserDTO destinationRegistrar,
+            List<AMIContainer> amiContainers, String contextId) {
         
         RegistrarDTO[] members = this.contextService.getCommunityMembers();
         boolean alreadyMember = false;
@@ -172,14 +236,32 @@ public class MainController implements ActionListener {
         
         // If not, send an invitation
         if(!alreadyMember)
-            this.sendCommunityInvitation(sourceDeviceId,
-                    new String[] { destinationRegistrar.getUuid() });
+            this.sendCommunityInvitation(this.currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
         
         // Send the data
-        this.ehrService.sendAmiBasesToRegistrar(sourceDeviceId,
-                sourceRegistrarId, destinationRegistrar, amis);
+        this.ehrService.sendAmiBasesToRegistrar(this.currentUser, destinationRegistrar,
+                amiContainers, contextId, this.currentTamiVersion);
         
         return alreadyMember;
+    }
+    
+    public HashMap<String, String> getAmisFromCsvFile(File file) throws IOException {
+
+        // Get the AMIs from the CSV file
+        Reader in = new FileReader(file);
+        CSVParser csvParser = new CSVParser(in, CSVFormat.EXCEL.withDelimiter(';').withHeader());
+        Iterable<CSVRecord> records = csvParser.getRecords();
+
+        HashMap<String, String> amis = new HashMap<String, String>();
+
+        for (CSVRecord record : records) {
+            String tami = record.get("tami");
+            String value = record.get("value");
+
+            amis.put(tami, value);
+        }
+
+        return amis;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -198,6 +280,21 @@ public class MainController implements ActionListener {
                     this.currentUser = this.login();
                 
                     if(this.currentUser != null) {
+                        List<DeviceDTO> devices = currentUser.getDevices();
+
+                        if(devices == null) {
+                            devices = new ArrayList<DeviceDTO>();
+                            DeviceDTO[] devicesArray = this.contextService.getDevices();
+
+                            if(devicesArray != null) {
+                                devices.addAll(Arrays.asList(devicesArray));
+                                this.currentUser.setDevices(devices);
+                            }
+                        }
+
+                        if(devices != null && devices.size() != 0)
+                            this.mainFrame.setContextId(devices.get(0).getUuid());
+
                         this.loginFrame.setVisible(false);
                         this.mainFrame.setVisible(true);
                     }
