@@ -25,8 +25,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        //File propertyFile = FileHelper.getFileInCurrentDir("local_config.properties");
-        File propertyFile = FileHelper.getFileInCurrentDir("prod_config.properties");
+        File propertyFile = FileHelper.getFileInCurrentDir("config_local.properties");
+        //File propertyFile = FileHelper.getFileInCurrentDir("config_prod.properties");
         PropertyUtils propertyUtils = new PropertyUtils(propertyFile);
 
         MainController mainController = new MainController();

@@ -147,6 +147,12 @@ public class AndamanUserDTO extends IdentifiedDataModelObjectDTO {
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName;
+
+        String str = String.format("%s %s", this.firstName, this.lastName);
+
+        if(this.getPatientAddressCountry() != null && !this.getPatientAddressCountry().isEmpty())
+            str += String.format(" (%s)", this.patientAddressCountry);
+
+        return str;
     }
 }

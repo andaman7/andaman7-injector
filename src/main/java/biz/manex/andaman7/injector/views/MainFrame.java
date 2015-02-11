@@ -39,6 +39,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.jButtonLogout.addActionListener(logoutListener);
 
         this.jListRegistrars.setModel(new DefaultListModel<AndamanUserDTO>());
+        this.jTableAmis.setModel(new AmisTableModel());
     }
 
     @SuppressWarnings("unchecked")
@@ -50,7 +51,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelRegistrarKeyword = new javax.swing.JLabel();
         jTextFieldRegistrarKeyword = new javax.swing.JTextField();
         jButtonRegistrarSearch = new javax.swing.JButton();
-        jScrollPanePatients = new javax.swing.JScrollPane();
+        jScrollPaneRegistrars = new javax.swing.JScrollPane();
         jListRegistrars = new javax.swing.JList();
         jPanelData = new javax.swing.JPanel();
         jLabelDataType = new javax.swing.JLabel();
@@ -59,10 +60,10 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonDataAdd = new javax.swing.JButton();
         jButtonDataRemove = new javax.swing.JButton();
         jButtonDataEdit = new javax.swing.JButton();
-        jScrollPaneData = new javax.swing.JScrollPane();
-        jListData = new javax.swing.JList();
         jComboBoxDataType = new javax.swing.JComboBox();
         jButtonSend = new javax.swing.JButton();
+        jScrollPaneData = new javax.swing.JScrollPane();
+        jTableAmis = new javax.swing.JTable();
         jButtonLogout = new javax.swing.JButton();
         jPanelUpload = new javax.swing.JPanel();
         jLabelUploadFile = new javax.swing.JLabel();
@@ -99,9 +100,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jListRegistrars.setModel(new DefaultListModel<AndamanUserDTO>()
-        );
-        jScrollPanePatients.setViewportView(jListRegistrars);
+        jScrollPaneRegistrars.setViewportView(jListRegistrars);
 
         javax.swing.GroupLayout jPanelRegistrarLayout = new javax.swing.GroupLayout(jPanelRegistrar);
         jPanelRegistrar.setLayout(jPanelRegistrarLayout);
@@ -110,13 +109,13 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRegistrarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPanePatients, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addGroup(jPanelRegistrarLayout.createSequentialGroup()
-                        .addComponent(jLabelRegistrarKeyword)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldRegistrarKeyword)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRegistrarSearch)))
+                        .addComponent(jScrollPaneRegistrars)
+                        .addGroup(jPanelRegistrarLayout.createSequentialGroup()
+                                .addComponent(jLabelRegistrarKeyword)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextFieldRegistrarKeyword)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonRegistrarSearch)))
                 .addGap(17, 17, 17))
         );
         jPanelRegistrarLayout.setVerticalGroup(
@@ -124,11 +123,11 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanelRegistrarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRegistrarKeyword)
-                    .addComponent(jTextFieldRegistrarKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRegistrarSearch))
+                        .addComponent(jLabelRegistrarKeyword)
+                        .addComponent(jTextFieldRegistrarKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonRegistrarSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPanePatients)
+                .addComponent(jScrollPaneRegistrars)
                 .addContainerGap())
         );
 
@@ -166,16 +165,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jListData.setModel(new DefaultListModel<AMI>()
-        );
-        jScrollPaneData.setViewportView(jListData);
-
         jButtonSend.setText("Send");
         jButtonSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSendActionPerformed(evt);
             }
         });
+
+        jScrollPaneData.setViewportView(jTableAmis);
 
         javax.swing.GroupLayout jPanelDataLayout = new javax.swing.GroupLayout(jPanelData);
         jPanelData.setLayout(jPanelDataLayout);
@@ -192,7 +189,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jLabelDataValue)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldDataValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonDataRemove)
@@ -219,7 +216,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jButtonDataEdit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonSend))
-                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -293,7 +290,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabelContextId)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextFieldContextId, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
                 .addComponent(jLabelEhrId)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -322,10 +319,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+                            .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                             .addComponent(jPanelUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jPanelContext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -341,10 +338,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                        .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanelUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+                    .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonLogout)
                 .addContainerGap())
@@ -380,9 +377,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         if(!value.isEmpty()) {
             AMI ami = new AMI(type, value);
-            DefaultListModel<AMI> model = (DefaultListModel<AMI>) jListData.getModel();
-            model.addElement(ami);
-            jListData.setModel(model);
+            AmisTableModel model = (AmisTableModel) jTableAmis.getModel();
+            model.addAmi(ami);
+            model.fireTableDataChanged();
+            jTableAmis.setModel(model);
 
             jComboBoxDataType.setSelectedIndex(-1);
             jTextFieldDataValue.setText("");
@@ -390,11 +388,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void editData() {
-        int index = jListData.getSelectedIndex();
+        int index = jTableAmis.getSelectedRow();
 
         if(index != -1) {
-            DefaultListModel<AMI> model = (DefaultListModel<AMI>) jListData.getModel();
-            AMI ami = model.getElementAt(index);
+            AmisTableModel model = (AmisTableModel) jTableAmis.getModel();
+            AMI ami = model.getValueAt(index);
 
             jComboBoxDataType.setSelectedItem(ami.getType());
             jTextFieldDataValue.setText(ami.getValue());
@@ -405,21 +403,24 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void removeDataFromList() {
 
-        int index = jListData.getSelectedIndex();
+        int index = jTableAmis.getSelectedRow();
 
         if(index != -1) {
-            DefaultListModel<AMI> model = (DefaultListModel<AMI>) jListData.getModel();
+            AmisTableModel model = (AmisTableModel) jTableAmis.getModel();
             model.removeElementAt(index);
-            jListData.setModel(model);
-            jListData.setSelectedIndex((index < model.getSize() - 1 ? index : model.getSize() - 1));
+            model.fireTableDataChanged();
+            jTableAmis.setModel(model);
+
+            if(model.getSize() != 0) {
+                int selectedIndex = (index < model.getSize() - 1 ? index : model.getSize() - 1);
+                jTableAmis.setRowSelectionInterval(selectedIndex, selectedIndex);
+            }
         }
     }
 
     private boolean verifyBeforSendingData() {
 
         int patientIndex = jListRegistrars.getSelectedIndex();
-        DefaultListModel<AndamanUserDTO> patientsModel = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
-        DefaultListModel<AMI> dataModel = (DefaultListModel<AMI>) jListData.getModel();
 
         if(this.jTextFieldContextId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "You need to specify a context id.",
@@ -455,7 +456,7 @@ public class MainFrame extends javax.swing.JFrame {
         if(!verifyBeforSendingData())
             return;
 
-        DefaultListModel<AMI> dataModel = (DefaultListModel<AMI>) jListData.getModel();
+        AmisTableModel dataModel = (AmisTableModel)  jTableAmis.getModel();
 
         if(dataModel.isEmpty()) {
             JOptionPane.showMessageDialog(this, "At least one data must be entered.",
@@ -549,13 +550,13 @@ public class MainFrame extends javax.swing.JFrame {
         this.jTextFieldDataValue.setText("");
         this.jComboBoxDataType.setSelectedIndex(-1);
 
-        DefaultListModel model;
+        DefaultListModel listModel;
+        listModel = (DefaultListModel) this.jListRegistrars.getModel();
+        listModel.clear();
 
-        model = (DefaultListModel) this.jListRegistrars.getModel();
-        model.clear();
-
-        model = (DefaultListModel) this.jListData.getModel();
-        model.clear();
+        AmisTableModel tableModel;
+        tableModel = (AmisTableModel) this.jTableAmis.getModel();
+        tableModel.clear();
 
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
@@ -571,7 +572,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButtonUploadBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBrowseActionPerformed
         int result = this.jFileChooserCsv.showDialog(this, "Open");
-        
+
         if(result == JFileChooser.APPROVE_OPTION && jFileChooserCsv.getSelectedFile() != null) {
             this.selectedCsvFile = this.jFileChooserCsv.getSelectedFile();
             this.jTextFieldUploadFile.setText(this.selectedCsvFile.getAbsolutePath());
@@ -609,14 +610,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelEhrId;
     private javax.swing.JLabel jLabelRegistrarKeyword;
     private javax.swing.JLabel jLabelUploadFile;
-    private javax.swing.JList jListData;
     private javax.swing.JList jListRegistrars;
     private javax.swing.JPanel jPanelContext;
     private javax.swing.JPanel jPanelData;
     private javax.swing.JPanel jPanelRegistrar;
     private javax.swing.JPanel jPanelUpload;
     private javax.swing.JScrollPane jScrollPaneData;
-    private javax.swing.JScrollPane jScrollPanePatients;
+    private javax.swing.JScrollPane jScrollPaneRegistrars;
+    private javax.swing.JTable jTableAmis;
     private javax.swing.JTextField jTextFieldContextId;
     private javax.swing.JTextField jTextFieldDataValue;
     private javax.swing.JTextField jTextFieldEhrId;

@@ -5,7 +5,7 @@
     <Component class="javax.swing.JFileChooser" name="jFileChooserCsv">
       <Properties>
         <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="System.getProperty(&quot;user.dir&quot;)&#xd;&#xa;" type="code"/>
+          <Connection code="new File(System.getProperty(&quot;user.dir&quot;))" type="code"/>
         </Property>
         <Property name="dialogTitle" type="java.lang.String" value="Select CSV file"/>
         <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -40,10 +40,10 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jPanelRegistrar" pref="421" max="32767" attributes="0"/>
+                      <Component id="jPanelRegistrar" pref="442" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanelData" pref="504" max="32767" attributes="0"/>
+                          <Component id="jPanelData" pref="526" max="32767" attributes="0"/>
                           <Component id="jPanelUpload" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -65,11 +65,11 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jPanelData" pref="354" max="32767" attributes="0"/>
+                      <Component id="jPanelData" pref="418" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanelUpload" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jPanelRegistrar" pref="437" max="32767" attributes="0"/>
+                  <Component id="jPanelRegistrar" pref="501" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jButtonLogout" min="-2" max="-2" attributes="0"/>
@@ -97,7 +97,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jScrollPanePatients" pref="380" max="32767" attributes="0"/>
+                      <Component id="jScrollPaneRegistrars" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jLabelRegistrarKeyword" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -120,7 +120,7 @@
                       <Component id="jButtonRegistrarSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPanePatients" max="32767" attributes="0"/>
+                  <Component id="jScrollPaneRegistrars" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -145,7 +145,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRegistrarSearchActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPanePatients">
+        <Container class="javax.swing.JScrollPane" name="jScrollPaneRegistrars">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
@@ -154,8 +154,8 @@
           <SubComponents>
             <Component class="javax.swing.JList" name="jListRegistrars">
               <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultListModel&lt;AndamanUserDTO&gt;()&#xd;&#xa;" type="code"/>
+                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
             </Component>
@@ -179,7 +179,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jLabelDataType" min="-2" max="-2" attributes="0"/>
@@ -190,9 +190,9 @@
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldDataValue" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPaneData" pref="382" max="32767" attributes="0"/>
+                      <Component id="jScrollPaneData" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButtonDataRemove" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonDataAdd" min="-2" pref="79" max="-2" attributes="0"/>
@@ -223,7 +223,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="jButtonSend" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPaneData" pref="271" max="32767" attributes="0"/>
+                      <Component id="jScrollPaneData" pref="335" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -270,22 +270,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDataEditActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPaneData">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JList" name="jListData">
-              <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultListModel&lt;AMI&gt;()&#xd;&#xa;" type="code"/>
-                </Property>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
         <Component class="javax.swing.JComboBox" name="jComboBoxDataType">
         </Component>
         <Component class="javax.swing.JButton" name="jButtonSend">
@@ -296,6 +280,17 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSendActionPerformed"/>
           </Events>
         </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPaneData">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTable" name="jTableAmis">
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="jButtonLogout">
@@ -393,7 +388,7 @@
                   <Component id="jLabelContextId" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jTextFieldContextId" linkSize="4" min="-2" pref="350" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="122" max="32767" attributes="0"/>
                   <Component id="jLabelEhrId" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jTextFieldEhrId" linkSize="4" min="-2" pref="350" max="-2" attributes="0"/>
