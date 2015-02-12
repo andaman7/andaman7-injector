@@ -40,6 +40,6 @@ public class AMI {
 
     @Override
     public String toString() {
-        return this.type + " - " + this.value;
+        return type + " - " + value;
     }
 }

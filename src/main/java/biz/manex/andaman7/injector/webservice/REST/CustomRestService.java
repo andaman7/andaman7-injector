@@ -24,11 +24,8 @@ public class CustomRestService {
     protected final ObjectMapper jsonMapper;
 
 
-    protected CustomRestService(String urlServer, String apiKey, String login,
-            String password) {
-
-        this.restTemplate = new CustomRestTemplate(urlServer, apiKey, login,
-                password);
-        this.jsonMapper = new ObjectMapper();
+    protected CustomRestService(String urlServer, String apiKey, String login, String password) {
+        restTemplate = new CustomRestTemplate(urlServer, apiKey, login, password);
+        jsonMapper = new ObjectMapper();
     }
 }

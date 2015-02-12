@@ -12,7 +12,7 @@ import java.net.URL;
  * Date : 09/02/2015.
  */
 public class FileHelper {
-
+    
     public static File getFileInCurrentDir(String filename) {
         return new File(System.getProperty("user.dir") + "/" + filename);
     }

@@ -43,7 +43,7 @@ public class MainController implements ActionListener {
     private LoginFrame loginFrame;
     private MainFrame mainFrame;
 
-    private int currentTamiVersion = 0;
+    private int currentTamiVersion;
     
     
     public RegistrarDTO getCurrentUser() {
@@ -66,11 +66,11 @@ public class MainController implements ActionListener {
         
         String username = settings.getUsername();
         String password = settings.getPassword();
-        
-        this.contextService = AndamanContextService.getInstance(
+
+        contextService = AndamanContextService.getInstance(
                 contextServiceURL, apiKey, username, password);
-        
-        this.ehrService = AndamanEhrService.getInstance(ehrServiceURL, apiKey,
+
+        ehrService = AndamanEhrService.getInstance(ehrServiceURL, apiKey,
                 username, password);
     }
     
@@ -95,7 +95,7 @@ public class MainController implements ActionListener {
     }
     
     public RegistrarDTO login() {
-        return this.contextService.login();
+        return contextService.login();
     }
 
     private Document getTamiXml() {
@@ -110,10 +110,10 @@ public class MainController implements ActionListener {
                 doc = XmlHelper.getDocument(file);
                 XPathExpression expr = XmlHelper.getXPathExpression("//itemDictionary/@version");
                 NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-                this.currentTamiVersion = Integer.parseInt(nodes.item(0).getNodeValue());
+                currentTamiVersion = Integer.parseInt(nodes.item(0).getNodeValue());
             }
 
-            Document docFromServer = this.contextService.getTamiXml(this.currentTamiVersion);
+            Document docFromServer = contextService.getTamiXml(currentTamiVersion);
 
             // If a new version is available, overwrite the file
             if(docFromServer != null) {
@@ -147,7 +147,7 @@ public class MainController implements ActionListener {
                 currentVersion = Integer.parseInt(nodes.item(0).getNodeValue());
             }
 
-            Document docFromServer = this.contextService.getGuiXml(currentVersion);
+            Document docFromServer = contextService.getGuiXml(currentVersion);
 
             // If a new version is available, overwrite the file
             if(docFromServer != null) {
@@ -167,7 +167,7 @@ public class MainController implements ActionListener {
 
     public TAMI[] getTamis() {
         try {
-            MessageDTO[] messages = this.contextService.getTranslations();
+            MessageDTO[] messages = contextService.getTranslations();
             HashMap<String, String> translations = new HashMap<String, String>();
             ArrayList<TAMI> tamis = new ArrayList<TAMI>();
 
@@ -175,8 +175,8 @@ public class MainController implements ActionListener {
                 if(message.getLanguageCode().equals("EN"))
                     translations.put(message.getKey(), message.getValue());
 
-            Document doc = this.getTamiXml();
-            this.getGuiXml();
+            Document doc = getTamiXml();
+            getGuiXml();
             XPathExpression expr = XmlHelper.getXPathExpression("//tami/@id");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
@@ -199,9 +199,9 @@ public class MainController implements ActionListener {
         return null;
     }
     
-    public AndamanUserDTO[] searchUsers(String keyword) {       
-        AndamanUserDTO[] results = this.contextService.searchUsers(keyword);
-        RegistrarDTO[] members = this.contextService.getCommunityMembers();
+    public AndamanUserDTO[] searchUsers(String keyword) {
+        AndamanUserDTO[] results = contextService.searchUsers(keyword);
+        RegistrarDTO[] members = contextService.getCommunityMembers();
         
         // Add all user from search and add only the members that correspond to
         // the specified keyword except ourselves
@@ -211,7 +211,7 @@ public class MainController implements ActionListener {
         for(RegistrarDTO member : members)
             if((member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
                     member.getLastName().toLowerCase().contains(keyword.toLowerCase())) &&
-                    !member.getUuid().equals(this.currentUser.getUuid()))
+                    !member.getUuid().equals(currentUser.getUuid()))
                 users.add(member);
         
         return users.toArray(new AndamanUserDTO[users.size()]);
@@ -219,7 +219,7 @@ public class MainController implements ActionListener {
     
     public RegistrarDTO[] sendCommunityInvitation(String senderDeviceId,
             String[] newCommunityMembers) {
-        return this.contextService.sendCommunityRequest(senderDeviceId,
+        return contextService.sendCommunityRequest(senderDeviceId,
                 newCommunityMembers);
         
     }
@@ -227,7 +227,7 @@ public class MainController implements ActionListener {
     public boolean sendData(AndamanUserDTO destinationRegistrar,
             List<AMIContainer> amiContainers, String contextId) {
         
-        RegistrarDTO[] members = this.contextService.getCommunityMembers();
+        RegistrarDTO[] members = contextService.getCommunityMembers();
         boolean alreadyMember = false;
         
         // Check if the destination registrar is already a community member
@@ -237,11 +237,11 @@ public class MainController implements ActionListener {
         
         // If not, send an invitation
         if(!alreadyMember)
-            this.sendCommunityInvitation(this.currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
+            sendCommunityInvitation(currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
         
         // Send the data
-        this.ehrService.sendAmiBasesToRegistrar(this.currentUser, destinationRegistrar,
-                amiContainers, contextId, this.currentTamiVersion);
+        ehrService.sendAmiBasesToRegistrar(currentUser, destinationRegistrar,
+                amiContainers, contextId, currentTamiVersion);
         
         return alreadyMember;
     }
@@ -273,38 +273,38 @@ public class MainController implements ActionListener {
             if(button.getName().equalsIgnoreCase("login")) {
                 
                 // Get the settings from the login frame and login the user
-                Settings settings = this.loginFrame.getSettings();
+                Settings settings = loginFrame.getSettings();
                 
                 if(settings != null) {
-                    this.setSettings(settings);
-                    this.mainFrame.setTamiList();
-                    this.currentUser = this.login();
+                    setSettings(settings);
+                    mainFrame.setTamiList();
+                    currentUser = login();
                 
-                    if(this.currentUser != null) {
+                    if(currentUser != null) {
                         List<DeviceDTO> devices = currentUser.getDevices();
 
                         if(devices == null) {
                             devices = new ArrayList<DeviceDTO>();
-                            DeviceDTO[] devicesArray = this.contextService.getDevices();
+                            DeviceDTO[] devicesArray = contextService.getDevices();
 
                             if(devicesArray != null) {
                                 devices.addAll(Arrays.asList(devicesArray));
-                                this.currentUser.setDevices(devices);
+                                currentUser.setDevices(devices);
                             }
 
-                        } else if(devices.size() != 0) {
-                            this.mainFrame.setContextId(devices.get(0).getUuid());
+                        } else if(!devices.isEmpty()) {
+                            mainFrame.setContextId(devices.get(0).getUuid());
                         }
 
-                        this.loginFrame.setVisible(false);
-                        this.mainFrame.setVisible(true);
+                        loginFrame.setVisible(false);
+                        mainFrame.setVisible(true);
                     }
                 }
                 
             } else if(button.getName().equalsIgnoreCase("logout")) {
-                this.currentUser = null;
-                this.mainFrame.setVisible(false);
-                this.loginFrame.setVisible(true);
+                currentUser = null;
+                mainFrame.setVisible(false);
+                loginFrame.setVisible(true);
             }
         }
     }

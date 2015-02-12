@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AmisTableModel extends AbstractTableModel {
 
-    private static final String[] columnNames = new String[] { "TAMI", "Value" };
+    private static final String[] COLUMN_NAMES = { "TAMI", "Value" };
     private List<AMI> data = new ArrayList<AMI>();
 
 
@@ -29,7 +29,7 @@ public class AmisTableModel extends AbstractTableModel {
     }
 
     public void addAmi(AMI registrar) {
-        this.data.add(registrar);
+        data.add(registrar);
     }
 
     private Object getValueInAMI(AMI ami, int columnIndex) {
@@ -53,46 +53,46 @@ public class AmisTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return this.data.size();
+        return data.size();
     }
 
     @Override
     public int getColumnCount() {
-        return columnNames.length;
+        return COLUMN_NAMES.length;
     }
 
     @Override
     public String getColumnName(int columnIndex) {
-        return columnNames[columnIndex];
+        return COLUMN_NAMES[columnIndex];
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        AMI ami = this.data.get(rowIndex);
-        return this.getValueInAMI(ami, columnIndex);
+        AMI ami = data.get(rowIndex);
+        return getValueInAMI(ami, columnIndex);
     }
 
     public AMI getValueAt(int rowIndex) {
-        return this.data.get(rowIndex);
+        return data.get(rowIndex);
     }
 
     public void removeElementAt(int rowIndex) {
-        this.data.remove(rowIndex);
+        data.remove(rowIndex);
     }
 
     public int getSize() {
-        return this.data.size();
+        return data.size();
     }
 
     public boolean isEmpty() {
-        return this.data.isEmpty();
+        return data.isEmpty();
     }
 
     public Enumeration<AMI> elements() {
-        return Collections.enumeration(this.data);
+        return Collections.enumeration(data);
     }
 
     public void clear() {
-        this.data.clear();
+        data.clear();
     }
 }

@@ -18,7 +18,7 @@ public class AndamanEhrService extends CustomRestService {
     /**
      * Unique instance of the REST service.
      */
-    private static final Map<String, AndamanEhrService> instances =
+    private static final Map<String, AndamanEhrService> INSTANCES =
             new HashMap<String, AndamanEhrService>();
 
 
@@ -40,13 +40,13 @@ public class AndamanEhrService extends CustomRestService {
     public static AndamanEhrService getInstance(String urlServer, String apiKey,
             String login, String password) {
 
-        AndamanEhrService instance = AndamanEhrService.instances.get(urlServer +
+        AndamanEhrService instance = INSTANCES.get(urlServer +
                 "#" + login);
 
         if(instance == null) {
             instance = new AndamanEhrService(urlServer, apiKey, login,
                     password);
-            AndamanEhrService.instances.put(urlServer + "#" + login, instance);
+            INSTANCES.put(urlServer + "#" + login, instance);
         }
 
         return instance;
@@ -67,7 +67,7 @@ public class AndamanEhrService extends CustomRestService {
         String sourceDeviceId = sourceRegistrar.getDevices().get(0).getUuid();
 
         String destinationRegistrarId = destinationRegistrar.getUuid();
-        String[] destinationRegistrars = new String[] { destinationRegistrarId };
+        String[] destinationRegistrars = { destinationRegistrarId };
 
         List<AmiContainerDTO> amiContainerDTOs = new ArrayList<AmiContainerDTO>();
 
@@ -99,12 +99,12 @@ public class AndamanEhrService extends CustomRestService {
         RegistrarSyncContentDTO syncContentDTO = buildRegistrarSyncContentDTO(sourceRegistrar,
                 destinationRegistrars, amiContainerDTOs.toArray(new AmiContainerDTO[amiContainerDTOs.size()]));
 
-        RegistrarSyncContentDTO[] syncContentDTOs = new RegistrarSyncContentDTO[] { syncContentDTO };
+        RegistrarSyncContentDTO[] syncContentDTOs = { syncContentDTO };
 
         // Send the request to the server
         try {
-            String body = this.jsonMapper.writeValueAsString(syncContentDTOs);
-            this.restTemplate.put("registrars/medical-records", body, true);
+            String body = jsonMapper.writeValueAsString(syncContentDTOs);
+            restTemplate.put("registrars/medical-records", body, true);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -121,7 +121,7 @@ public class AndamanEhrService extends CustomRestService {
     public HttpResponse getMedicalDataInQueue(String deviceId) {
 
         try {
-            return this.restTemplate.get("devices/medical-records?device-uuid="+
+            return restTemplate.get("devices/medical-records?device-uuid=" +
                     deviceId + "&brand=android", true);
 
         } catch (Exception e) {
@@ -143,8 +143,8 @@ public class AndamanEhrService extends CustomRestService {
             String[] medicalRecordIds) {
 
         try {
-            String body = this.jsonMapper.writeValueAsString(medicalRecordIds);
-            return this.restTemplate.post(
+            String body = jsonMapper.writeValueAsString(medicalRecordIds);
+            return restTemplate.post(
                     "registrars/medical-records/acknowledge?device-uuid=" +
                             deviceId, body, true);
         } catch (Exception e) {

@@ -14,6 +14,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SecurityHelper {
 
+    private static final int HEX_BASE = 16;
+
     /**
      * Returns a hexadecimal digest of the data based on the specified
      * algorithm.
@@ -27,7 +29,7 @@ public class SecurityHelper {
 
         MessageDigest md = MessageDigest.getInstance(algo);
         md.update(data.getBytes());
-        return new BigInteger(1, md.digest()).toString(16);
+        return new BigInteger(1, md.digest()).toString(HEX_BASE);
     }
 
     /**

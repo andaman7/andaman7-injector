@@ -6,7 +6,11 @@ import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.TAMI;
 import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
 import biz.manex.andaman7.injector.models.dto.DeviceDTO;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
@@ -25,7 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * Copyright A7 Software (http://www.manex.biz)
  * Date: 02/02/2015.
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends JFrame {
 
     private final MainController mainController;
     private File selectedCsvFile;
@@ -35,314 +41,314 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         
         this.mainController = mainController;
-        
-        this.jButtonLogout.addActionListener(logoutListener);
 
-        this.jListRegistrars.setModel(new DefaultListModel<AndamanUserDTO>());
-        this.jTableAmis.setModel(new AmisTableModel());
+        jButtonLogout.addActionListener(logoutListener);
+
+        jListRegistrars.setModel(new DefaultListModel<AndamanUserDTO>());
+        jTableAmis.setModel(new AmisTableModel());
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooserCsv = new javax.swing.JFileChooser();
-        jPanelRegistrar = new javax.swing.JPanel();
-        jLabelRegistrarKeyword = new javax.swing.JLabel();
-        jTextFieldRegistrarKeyword = new javax.swing.JTextField();
-        jButtonRegistrarSearch = new javax.swing.JButton();
-        jScrollPaneRegistrars = new javax.swing.JScrollPane();
-        jListRegistrars = new javax.swing.JList<AndamanUserDTO>();
-        jPanelData = new javax.swing.JPanel();
-        jLabelDataType = new javax.swing.JLabel();
-        jLabelDataValue = new javax.swing.JLabel();
-        jTextFieldDataValue = new javax.swing.JTextField();
-        jButtonDataAdd = new javax.swing.JButton();
-        jButtonDataRemove = new javax.swing.JButton();
-        jButtonDataEdit = new javax.swing.JButton();
-        jComboBoxDataType = new javax.swing.JComboBox<TAMI>();
-        jButtonSend = new javax.swing.JButton();
-        jScrollPaneData = new javax.swing.JScrollPane();
-        jTableAmis = new javax.swing.JTable();
-        jButtonLogout = new javax.swing.JButton();
-        jPanelUpload = new javax.swing.JPanel();
-        jLabelUploadFile = new javax.swing.JLabel();
-        jTextFieldUploadFile = new javax.swing.JTextField();
-        jButtonUploadBrowse = new javax.swing.JButton();
-        jButtonUploadCsv = new javax.swing.JButton();
-        jPanelContext = new javax.swing.JPanel();
-        jLabelContextId = new javax.swing.JLabel();
-        jTextFieldContextId = new javax.swing.JTextField();
-        jLabelEhrId = new javax.swing.JLabel();
-        jTextFieldEhrId = new javax.swing.JTextField();
+        jFileChooserCsv = new JFileChooser();
+        jPanelRegistrar = new JPanel();
+        jLabelRegistrarKeyword = new JLabel();
+        jTextFieldRegistrarKeyword = new JTextField();
+        jButtonRegistrarSearch = new JButton();
+        jScrollPaneRegistrars = new JScrollPane();
+        jListRegistrars = new JList<AndamanUserDTO>();
+        jPanelData = new JPanel();
+        jLabelDataType = new JLabel();
+        jLabelDataValue = new JLabel();
+        jTextFieldDataValue = new JTextField();
+        jButtonDataAdd = new JButton();
+        jButtonDataRemove = new JButton();
+        jButtonDataEdit = new JButton();
+        jComboBoxDataType = new JComboBox<TAMI>();
+        jButtonSend = new JButton();
+        jScrollPaneData = new JScrollPane();
+        jTableAmis = new JTable();
+        jButtonLogout = new JButton();
+        jPanelUpload = new JPanel();
+        jLabelUploadFile = new JLabel();
+        jTextFieldUploadFile = new JTextField();
+        jButtonUploadBrowse = new JButton();
+        jButtonUploadCsv = new JButton();
+        jPanelContext = new JPanel();
+        jLabelContextId = new JLabel();
+        jTextFieldContextId = new JTextField();
+        jLabelEhrId = new JLabel();
+        jTextFieldEhrId = new JTextField();
 
         jFileChooserCsv.setCurrentDirectory(new File(System.getProperty("user.dir")));
         jFileChooserCsv.setDialogTitle("Select CSV file");
         jFileChooserCsv.setFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        jPanelRegistrar.setBorder(javax.swing.BorderFactory.createTitledBorder("Registrar"));
-        jPanelRegistrar.setPreferredSize(new java.awt.Dimension(424, 200));
+        jPanelRegistrar.setBorder(BorderFactory.createTitledBorder("Registrar"));
+        jPanelRegistrar.setPreferredSize(new Dimension(424, 200));
 
         jLabelRegistrarKeyword.setText("Keyword");
 
-        jTextFieldRegistrarKeyword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        jTextFieldRegistrarKeyword.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent evt) {
                 jTextFieldRegistrarKeywordKeyPressed(evt);
             }
         });
 
         jButtonRegistrarSearch.setText("Search");
-        jButtonRegistrarSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonRegistrarSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonRegistrarSearchActionPerformed(evt);
             }
         });
 
         jScrollPaneRegistrars.setViewportView(jListRegistrars);
 
-        javax.swing.GroupLayout jPanelRegistrarLayout = new javax.swing.GroupLayout(jPanelRegistrar);
+        GroupLayout jPanelRegistrarLayout = new GroupLayout(jPanelRegistrar);
         jPanelRegistrar.setLayout(jPanelRegistrarLayout);
         jPanelRegistrarLayout.setHorizontalGroup(
-            jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelRegistrarLayout.createSequentialGroup()
+            jPanelRegistrarLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(Alignment.TRAILING, jPanelRegistrarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanelRegistrarLayout.createParallelGroup(Alignment.TRAILING)
                         .addComponent(jScrollPaneRegistrars)
                         .addGroup(jPanelRegistrarLayout.createSequentialGroup()
                                 .addComponent(jLabelRegistrarKeyword)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
                                 .addComponent(jTextFieldRegistrarKeyword)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(ComponentPlacement.RELATED)
                                 .addComponent(jButtonRegistrarSearch)))
                 .addGap(17, 17, 17))
         );
         jPanelRegistrarLayout.setVerticalGroup(
-            jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelRegistrarLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelRegistrarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelRegistrarLayout.createParallelGroup(Alignment.BASELINE)
                         .addComponent(jLabelRegistrarKeyword)
-                        .addComponent(jTextFieldRegistrarKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldRegistrarKeyword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonRegistrarSearch))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneRegistrars)
                 .addContainerGap())
         );
 
-        jPanelData.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
-        jPanelData.setPreferredSize(new java.awt.Dimension(12, 200));
+        jPanelData.setBorder(BorderFactory.createTitledBorder("Data"));
+        jPanelData.setPreferredSize(new Dimension(12, 200));
 
         jLabelDataType.setText("Type");
 
         jLabelDataValue.setText("Value");
 
-        jTextFieldDataValue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        jTextFieldDataValue.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent evt) {
                 jTextFieldDataValueKeyPressed(evt);
             }
         });
 
         jButtonDataAdd.setText("Add");
-        jButtonDataAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonDataAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonDataAddActionPerformed(evt);
             }
         });
 
         jButtonDataRemove.setText("Remove");
-        jButtonDataRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonDataRemove.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonDataRemoveActionPerformed(evt);
             }
         });
 
         jButtonDataEdit.setText("Edit");
-        jButtonDataEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonDataEdit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonDataEditActionPerformed(evt);
             }
         });
 
         jButtonSend.setText("Send");
-        jButtonSend.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonSend.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonSendActionPerformed(evt);
             }
         });
 
         jScrollPaneData.setViewportView(jTableAmis);
 
-        javax.swing.GroupLayout jPanelDataLayout = new javax.swing.GroupLayout(jPanelData);
+        GroupLayout jPanelDataLayout = new GroupLayout(jPanelData);
         jPanelData.setLayout(jPanelDataLayout);
         jPanelDataLayout.setHorizontalGroup(
-            jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDataLayout.createSequentialGroup()
+            jPanelDataLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(Alignment.TRAILING, jPanelDataLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelDataLayout.createParallelGroup(Alignment.LEADING)
                     .addGroup(jPanelDataLayout.createSequentialGroup()
                         .addComponent(jLabelDataType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxDataType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBoxDataType, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabelDataValue)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextFieldDataValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextFieldDataValue, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPaneData, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addGroup(jPanelDataLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(jButtonDataRemove)
-                    .addComponent(jButtonDataAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDataEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonDataAdd, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDataEdit, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanelDataLayout.setVerticalGroup(
-            jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelDataLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelDataLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDataLayout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(jLabelDataType)
                     .addComponent(jLabelDataValue)
-                    .addComponent(jTextFieldDataValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDataValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonDataAdd)
-                    .addComponent(jComboBoxDataType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxDataType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addGroup(jPanelDataLayout.createParallelGroup(Alignment.LEADING)
                     .addGroup(jPanelDataLayout.createSequentialGroup()
                         .addComponent(jButtonDataRemove)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(ComponentPlacement.RELATED)
                         .addComponent(jButtonDataEdit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonSend))
-                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
+                    .addComponent(jScrollPaneData, GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jButtonLogout.setText("Logout");
         jButtonLogout.setName("logout"); // NOI18N
-        jButtonLogout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonLogout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonLogoutActionPerformed(evt);
             }
         });
 
-        jPanelUpload.setBorder(javax.swing.BorderFactory.createTitledBorder("Upload"));
+        jPanelUpload.setBorder(BorderFactory.createTitledBorder("Upload"));
 
         jLabelUploadFile.setText("File");
 
         jTextFieldUploadFile.setEditable(false);
 
         jButtonUploadBrowse.setText("Browse");
-        jButtonUploadBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonUploadBrowse.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonUploadBrowseActionPerformed(evt);
             }
         });
 
         jButtonUploadCsv.setText("Upload");
-        jButtonUploadCsv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonUploadCsv.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonUploadCsvActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanelUploadLayout = new javax.swing.GroupLayout(jPanelUpload);
+        GroupLayout jPanelUploadLayout = new GroupLayout(jPanelUpload);
         jPanelUpload.setLayout(jPanelUploadLayout);
         jPanelUploadLayout.setHorizontalGroup(
-            jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelUploadLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelUploadLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelUploadFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
                 .addComponent(jTextFieldUploadFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(jButtonUploadBrowse)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(jButtonUploadCsv)
                 .addContainerGap())
         );
         jPanelUploadLayout.setVerticalGroup(
-            jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelUploadLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelUploadLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelUploadLayout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(jLabelUploadFile)
-                    .addComponent(jTextFieldUploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldUploadFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonUploadBrowse)
                     .addComponent(jButtonUploadCsv))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanelContext.setBorder(javax.swing.BorderFactory.createTitledBorder("Context"));
+        jPanelContext.setBorder(BorderFactory.createTitledBorder("Context"));
 
         jLabelContextId.setText("Context ID");
 
         jLabelEhrId.setText("EHR ID");
 
-        javax.swing.GroupLayout jPanelContextLayout = new javax.swing.GroupLayout(jPanelContext);
+        GroupLayout jPanelContextLayout = new GroupLayout(jPanelContext);
         jPanelContext.setLayout(jPanelContextLayout);
         jPanelContextLayout.setHorizontalGroup(
-            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelContextLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelContextLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelContextId)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldContextId, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldContextId, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
                 .addComponent(jLabelEhrId)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldEhrId, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanelContextLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, jTextFieldContextId, jTextFieldEhrId);
+        jPanelContextLayout.linkSize(SwingConstants.HORIZONTAL, jTextFieldContextId, jTextFieldEhrId);
 
         jPanelContextLayout.setVerticalGroup(
-            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelContextLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanelContextLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelContextLayout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(jLabelContextId)
-                    .addComponent(jTextFieldContextId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldContextId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelEhrId)
-                    .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextFieldEhrId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            layout.createParallelGroup(Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
-                            .addComponent(jPanelUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanelContext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                    .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanelRegistrar, GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                            .addComponent(jPanelData, GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                            .addComponent(jPanelUpload, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanelContext, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonLogout)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelContext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jPanelContext, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelData, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanelData, GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addComponent(jPanelUpload, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelRegistrar, GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
+                .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(jButtonLogout)
                 .addContainerGap())
         );
@@ -351,14 +357,14 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void setContextId(String contextId) {
-        this.jTextFieldContextId.setText(contextId);
+        jTextFieldContextId.setText(contextId);
     }
 
     private void searchPatient() {
         String keyword = jTextFieldRegistrarKeyword.getText();
 
         if(!keyword.isEmpty()) {
-            AndamanUserDTO[] users = this.mainController.searchUsers(keyword);
+            AndamanUserDTO[] users = mainController.searchUsers(keyword);
 
             DefaultListModel<AndamanUserDTO> model = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
             model.clear();
@@ -412,7 +418,7 @@ public class MainFrame extends javax.swing.JFrame {
             jTableAmis.setModel(model);
 
             if(model.getSize() != 0) {
-                int selectedIndex = (index < model.getSize() - 1 ? index : model.getSize() - 1);
+                int selectedIndex = index < model.getSize() - 1 ? index : model.getSize() - 1;
                 jTableAmis.setRowSelectionInterval(selectedIndex, selectedIndex);
             }
         }
@@ -422,13 +428,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         int patientIndex = jListRegistrars.getSelectedIndex();
 
-        if(this.jTextFieldContextId.getText().isEmpty()) {
+        if(jTextFieldContextId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "You need to specify a context id.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        if(this.jTextFieldEhrId.getText().isEmpty()) {
+        if(jTextFieldEhrId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "You need to specify an EHR id.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -456,7 +462,7 @@ public class MainFrame extends javax.swing.JFrame {
         if(!verifyBeforeSendingData())
             return;
 
-        AmisTableModel dataModel = (AmisTableModel)  jTableAmis.getModel();
+        AmisTableModel dataModel = (AmisTableModel) jTableAmis.getModel();
 
         if(dataModel.isEmpty()) {
             JOptionPane.showMessageDialog(this, "At least one data must be entered.",
@@ -472,7 +478,7 @@ public class MainFrame extends javax.swing.JFrame {
             amis.put(ami.getType().getKey(), ami.getValue());
         }
 
-        this.sendData(amis);
+        sendData(amis);
     }
 
     private void sendDataFromCsvFile() {
@@ -480,17 +486,17 @@ public class MainFrame extends javax.swing.JFrame {
         if(!verifyBeforeSendingData())
             return;
 
-        if(this.selectedCsvFile == null) {
+        if(selectedCsvFile == null) {
             JOptionPane.showMessageDialog(this, "You need to select a CSV file.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            HashMap<String, String> amis = this.mainController.getAmisFromCsvFile(this.selectedCsvFile);
-            this.jFileChooserCsv.setSelectedFile(null);
-            this.jTextFieldUploadFile.setText("");
-            this.sendData(amis);
+            HashMap<String, String> amis = mainController.getAmisFromCsvFile(selectedCsvFile);
+            jFileChooserCsv.setSelectedFile(null);
+            jTextFieldUploadFile.setText("");
+            sendData(amis);
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -504,14 +510,14 @@ public class MainFrame extends javax.swing.JFrame {
         DefaultListModel<AndamanUserDTO> patientsModel = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
         AndamanUserDTO patient = patientsModel.getElementAt(patientIndex);
 
-        String contextId = this.jTextFieldContextId.getText();
+        String contextId = jTextFieldContextId.getText();
 
-        String amiContainerId = this.jTextFieldEhrId.getText();
+        String amiContainerId = jTextFieldEhrId.getText();
         AMIContainer amiContainer = new AMIContainer(amiContainerId, amis);
         List<AMIContainer> amiContainers = new ArrayList<AMIContainer>();
         amiContainers.add(amiContainer);
 
-        boolean alreadyMember = this.mainController.sendData(patient, amiContainers, contextId);
+        boolean alreadyMember = mainController.sendData(patient, amiContainers, contextId);
 
         if(!alreadyMember)
             JOptionPane.showMessageDialog(this,
@@ -523,105 +529,105 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void jButtonRegistrarSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPatientSearchActionPerformed
+    private void jButtonRegistrarSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonPatientSearchActionPerformed
         searchPatient();
     }//GEN-LAST:event_jButtonPatientSearchActionPerformed
 
-    private void jButtonDataAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDataAddActionPerformed
+    private void jButtonDataAddActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataAddActionPerformed
         addData();
     }//GEN-LAST:event_jButtonDataAddActionPerformed
 
-    private void jButtonDataRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDataRemoveActionPerformed
+    private void jButtonDataRemoveActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataRemoveActionPerformed
         removeDataFromList();
     }//GEN-LAST:event_jButtonDataRemoveActionPerformed
 
-    private void jButtonDataEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDataEditActionPerformed
+    private void jButtonDataEditActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataEditActionPerformed
         editData();
     }//GEN-LAST:event_jButtonDataEditActionPerformed
 
-    private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
+    private void jButtonSendActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
         sendDataFromGui();
     }//GEN-LAST:event_jButtonSendActionPerformed
 
-    private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
+    private void jButtonLogoutActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
 
         // Clear all text fields, combo boxes and lists
-        this.jTextFieldRegistrarKeyword.setText("");
-        this.jTextFieldDataValue.setText("");
-        this.jComboBoxDataType.setSelectedIndex(-1);
+        jTextFieldRegistrarKeyword.setText("");
+        jTextFieldDataValue.setText("");
+        jComboBoxDataType.setSelectedIndex(-1);
 
         DefaultListModel listModel;
-        listModel = (DefaultListModel) this.jListRegistrars.getModel();
+        listModel = (DefaultListModel) jListRegistrars.getModel();
         listModel.clear();
 
         AmisTableModel tableModel;
-        tableModel = (AmisTableModel) this.jTableAmis.getModel();
+        tableModel = (AmisTableModel) jTableAmis.getModel();
         tableModel.clear();
 
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jTextFieldRegistrarKeywordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPatientNameKeyPressed
+    private void jTextFieldRegistrarKeywordKeyPressed(KeyEvent evt) {//GEN-FIRST:event_jTextFieldPatientNameKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
             searchPatient();
     }//GEN-LAST:event_jTextFieldPatientNameKeyPressed
 
-    private void jTextFieldDataValueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDataValueKeyPressed
+    private void jTextFieldDataValueKeyPressed(KeyEvent evt) {//GEN-FIRST:event_jTextFieldDataValueKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
             addData();
     }//GEN-LAST:event_jTextFieldDataValueKeyPressed
 
-    private void jButtonUploadBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBrowseActionPerformed
-        int result = this.jFileChooserCsv.showDialog(this, "Open");
+    private void jButtonUploadBrowseActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBrowseActionPerformed
+        int result = jFileChooserCsv.showDialog(this, "Open");
 
         if(result == JFileChooser.APPROVE_OPTION && jFileChooserCsv.getSelectedFile() != null) {
-            this.selectedCsvFile = this.jFileChooserCsv.getSelectedFile();
-            this.jTextFieldUploadFile.setText(this.selectedCsvFile.getAbsolutePath());
+            selectedCsvFile = jFileChooserCsv.getSelectedFile();
+            jTextFieldUploadFile.setText(selectedCsvFile.getAbsolutePath());
         }
     }//GEN-LAST:event_jButtonUploadBrowseActionPerformed
 
-    private void jButtonUploadCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadCsvActionPerformed
+    private void jButtonUploadCsvActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonUploadCsvActionPerformed
         sendDataFromCsvFile();
     }//GEN-LAST:event_jButtonUploadCsvActionPerformed
 
     public void setTamiList() {
         DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<TAMI>();
-        TAMI[] tamis = this.mainController.getTamis();
+        TAMI[] tamis = mainController.getTamis();
 
         for(TAMI tami : tamis)
             model.addElement(tami);
 
-        this.jComboBoxDataType.setModel(model);
+        jComboBoxDataType.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonDataAdd;
-    private javax.swing.JButton jButtonDataEdit;
-    private javax.swing.JButton jButtonDataRemove;
-    private javax.swing.JButton jButtonLogout;
-    private javax.swing.JButton jButtonRegistrarSearch;
-    private javax.swing.JButton jButtonSend;
-    private javax.swing.JButton jButtonUploadBrowse;
-    private javax.swing.JButton jButtonUploadCsv;
+    private JButton jButtonDataAdd;
+    private JButton jButtonDataEdit;
+    private JButton jButtonDataRemove;
+    private JButton jButtonLogout;
+    private JButton jButtonRegistrarSearch;
+    private JButton jButtonSend;
+    private JButton jButtonUploadBrowse;
+    private JButton jButtonUploadCsv;
     private JComboBox<TAMI> jComboBoxDataType;
-    private javax.swing.JFileChooser jFileChooserCsv;
-    private javax.swing.JLabel jLabelContextId;
-    private javax.swing.JLabel jLabelDataType;
-    private javax.swing.JLabel jLabelDataValue;
-    private javax.swing.JLabel jLabelEhrId;
-    private javax.swing.JLabel jLabelRegistrarKeyword;
-    private javax.swing.JLabel jLabelUploadFile;
+    private JFileChooser jFileChooserCsv;
+    private JLabel jLabelContextId;
+    private JLabel jLabelDataType;
+    private JLabel jLabelDataValue;
+    private JLabel jLabelEhrId;
+    private JLabel jLabelRegistrarKeyword;
+    private JLabel jLabelUploadFile;
     private JList<AndamanUserDTO> jListRegistrars;
-    private javax.swing.JPanel jPanelContext;
-    private javax.swing.JPanel jPanelData;
-    private javax.swing.JPanel jPanelRegistrar;
-    private javax.swing.JPanel jPanelUpload;
-    private javax.swing.JScrollPane jScrollPaneData;
-    private javax.swing.JScrollPane jScrollPaneRegistrars;
-    private javax.swing.JTable jTableAmis;
-    private javax.swing.JTextField jTextFieldContextId;
-    private javax.swing.JTextField jTextFieldDataValue;
-    private javax.swing.JTextField jTextFieldEhrId;
-    private javax.swing.JTextField jTextFieldRegistrarKeyword;
-    private javax.swing.JTextField jTextFieldUploadFile;
+    private JPanel jPanelContext;
+    private JPanel jPanelData;
+    private JPanel jPanelRegistrar;
+    private JPanel jPanelUpload;
+    private JScrollPane jScrollPaneData;
+    private JScrollPane jScrollPaneRegistrars;
+    private JTable jTableAmis;
+    private JTextField jTextFieldContextId;
+    private JTextField jTextFieldDataValue;
+    private JTextField jTextFieldEhrId;
+    private JTextField jTextFieldRegistrarKeyword;
+    private JTextField jTextFieldUploadFile;
     // End of variables declaration//GEN-END:variables
 }

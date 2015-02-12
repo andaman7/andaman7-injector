@@ -21,6 +21,6 @@ public class NoEmptyInputVerifier extends InputVerifier {
     }
 
     protected boolean isValidText(JTextField field) {
-        return field.getText() != null && !field.getText().trim().isEmpty();
+        return (field.getText() != null) && !field.getText().trim().isEmpty();
     }
 }

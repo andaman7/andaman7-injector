@@ -29,7 +29,7 @@ public class PropertyUtils {
         propFile = new Properties();
 
         try {
-            this.propFile.load(new FileInputStream(this.file));
+            propFile.load(new FileInputStream(this.file));
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -47,7 +47,7 @@ public class PropertyUtils {
     public void reload() {
 
         try {
-            this.propFile.load(new FileInputStream(this.file));
+            propFile.load(new FileInputStream(file));
 
         } catch (IOException e) {
             System.err.println(e.getMessage());

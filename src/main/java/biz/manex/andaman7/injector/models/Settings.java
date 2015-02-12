@@ -17,8 +17,6 @@ public class Settings {
     private boolean isHttps;
     private String apiKey;
 
-    public Settings() {
-    }
 
     public String getUsername() {
         return username;

@@ -6,6 +6,7 @@ import biz.manex.andaman7.injector.models.dto.MessageDTO;
 import biz.manex.andaman7.injector.models.dto.RegistrarDTO;
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.w3c.dom.Document;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class AndamanContextService extends CustomRestService {
     /**
      * Unique instance of the REST service.
      */
-    private static final Map<String, AndamanContextService> instances =
+    private static final Map<String, AndamanContextService> INSTANCES =
             new HashMap<String, AndamanContextService>();
 
 
@@ -45,13 +46,13 @@ public class AndamanContextService extends CustomRestService {
     public static AndamanContextService getInstance(String urlServer,
             String apiKey, String login, String password) {
 
-        AndamanContextService instance = AndamanContextService.instances.
+        AndamanContextService instance = INSTANCES.
                 get(urlServer + "#" + login + "#" + password);
 
         if(instance == null) {
             instance = new AndamanContextService(urlServer, apiKey, login,
                     password);
-            AndamanContextService.instances.put(
+            INSTANCES.put(
                     urlServer + "#" + login + "#" + password,
                     instance);
         }
@@ -67,9 +68,9 @@ public class AndamanContextService extends CustomRestService {
      */
     public RegistrarDTO login() {
         try {
-            HttpResponse response = this.restTemplate.get("registrars/login/",
+            HttpResponse response = restTemplate.get("registrars/login/",
                     true);
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     RegistrarDTO.class);
 
         } catch (Exception e) {
@@ -81,10 +82,10 @@ public class AndamanContextService extends CustomRestService {
 
     public Document getTamiXml(int currentVersion) {
         try {
-            HttpResponse response = this.restTemplate.get("tami-xml/next/" +
+            HttpResponse response = restTemplate.get("tami-xml/next/" +
                     currentVersion, true);
 
-            if(response.getStatusLine().getStatusCode() == 204)
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)
                 return null;
             else
                 return XmlHelper.getDocument(response.getEntity().getContent());
@@ -99,10 +100,10 @@ public class AndamanContextService extends CustomRestService {
 
     public Document getGuiXml(int currentXmlVersion) {
         try {
-            HttpResponse response = this.restTemplate.get("gui-xml/last/" +
+            HttpResponse response = restTemplate.get("gui-xml/last/" +
                     currentXmlVersion, true);
 
-            if(response.getStatusLine().getStatusCode() == 204)
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)
                 return null;
             else
                 return XmlHelper.getDocument(response.getEntity().getContent());
@@ -118,9 +119,9 @@ public class AndamanContextService extends CustomRestService {
     public DeviceDTO[] getDevices() {
 
         try {
-            HttpResponse response = this.restTemplate.get(
+            HttpResponse response = restTemplate.get(
                     "devices/", true);
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     DeviceDTO[].class);
 
         } catch (Exception e) {
@@ -141,9 +142,9 @@ public class AndamanContextService extends CustomRestService {
     public AndamanUserDTO[] searchUsers(String keyword) {
 
         try {
-            HttpResponse response = this.restTemplate.get(
+            HttpResponse response = restTemplate.get(
                     "andamanusers/search?keyword=" + keyword, true);
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     AndamanUserDTO[].class);
 
         } catch (Exception e) {
@@ -167,11 +168,11 @@ public class AndamanContextService extends CustomRestService {
             String[] newCommunityMembers) {
 
         try {
-            String body = this.jsonMapper.writeValueAsString(
+            String body = jsonMapper.writeValueAsString(
                     newCommunityMembers);
-            HttpResponse response =  this.restTemplate.post("community/" +
+            HttpResponse response = restTemplate.post("community/" +
                     senderDeviceId, body);
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     RegistrarDTO[].class);
 
         } catch (Exception e) {
@@ -184,8 +185,8 @@ public class AndamanContextService extends CustomRestService {
     
     public RegistrarDTO[] getCommunityMembers() {
         try {
-            HttpResponse response =  this.restTemplate.get("community/");
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            HttpResponse response = restTemplate.get("community/");
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     RegistrarDTO[].class);
 
         } catch (Exception e) {
@@ -209,7 +210,7 @@ public class AndamanContextService extends CustomRestService {
             boolean isAccepted) {
 
         try {
-            return this.restTemplate.post("registrars/" + otherRegistrarId +
+            return restTemplate.post("registrars/" + otherRegistrarId +
                     "/acceptance/" + isAccepted, "");
 
         } catch (Exception e) {
@@ -223,8 +224,8 @@ public class AndamanContextService extends CustomRestService {
     public MessageDTO[] getTranslations() {
 
         try {
-            HttpResponse response = this.restTemplate.get("translations/");
-            return this.jsonMapper.readValue(response.getEntity().getContent(),
+            HttpResponse response = restTemplate.get("translations/");
+            return jsonMapper.readValue(response.getEntity().getContent(),
                     MessageDTO[].class);
 
         } catch (Exception e) {

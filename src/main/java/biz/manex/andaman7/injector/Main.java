@@ -18,8 +18,8 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            javax.swing.UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();

@@ -51,7 +51,7 @@ public class CustomRestTemplate {
         this.urlServer = urlServer;
         this.apiKey = apiKey;
 
-        this.httpClient = HttpClientBuilder.create().build();
+        httpClient = HttpClientBuilder.create().build();
 
         this.login = login;
         this.password = password;
@@ -65,7 +65,7 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse get(String path) throws Exception {
-        return this.get(path, false);
+        return get(path, false);
     }
 
     /**
@@ -79,8 +79,8 @@ public class CustomRestTemplate {
     public HttpResponse get(String path, boolean authenticationNeeded)
             throws Exception {
 
-        HttpGet request = new HttpGet(this.buildUrl(path));
-        return this.executeRequest(request, authenticationNeeded);
+        HttpGet request = new HttpGet(buildUrl(path));
+        return executeRequest(request, authenticationNeeded);
     }
 
     /**
@@ -92,7 +92,7 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse post(String path, String body) throws Exception {
-        return this.post(path, body, false);
+        return post(path, body, false);
     }
 
     /**
@@ -107,10 +107,10 @@ public class CustomRestTemplate {
     public HttpResponse post(String path, String body,
             boolean authenticationNeeded) throws Exception {
 
-        HttpPost request = new HttpPost(this.buildUrl(path));
+        HttpPost request = new HttpPost(buildUrl(path));
         request.setHeader("Content-Type", "application/json");
         request.setEntity(new StringEntity(body));
-        return this.executeRequest(request, authenticationNeeded);
+        return executeRequest(request, authenticationNeeded);
     }
 
     /**
@@ -122,7 +122,7 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse put(String path, String body) throws Exception {
-        return this.put(path, body, false);
+        return put(path, body, false);
     }
 
     /**
@@ -137,10 +137,10 @@ public class CustomRestTemplate {
     public HttpResponse put(String path, String body,
             boolean authenticationNeeded) throws Exception {
 
-        HttpPut request = new HttpPut(this.buildUrl(path));
+        HttpPut request = new HttpPut(buildUrl(path));
         request.setHeader("Content-Type", "application/json");
         request.setEntity(new StringEntity(body));
-        return this.executeRequest(request, authenticationNeeded);
+        return executeRequest(request, authenticationNeeded);
     }
 
     /**
@@ -151,7 +151,7 @@ public class CustomRestTemplate {
      * @throws Exception
      */
     public HttpResponse delete(String path) throws Exception {
-        return this.delete(path, false);
+        return delete(path, false);
     }
 
     /**
@@ -165,8 +165,8 @@ public class CustomRestTemplate {
     public HttpResponse delete(String path, boolean authenticationNeeded)
             throws Exception {
 
-        HttpDelete request = new HttpDelete(this.buildUrl(path));
-        return this.executeRequest(request, authenticationNeeded);
+        HttpDelete request = new HttpDelete(buildUrl(path));
+        return executeRequest(request, authenticationNeeded);
     }
 
     /**
@@ -176,12 +176,12 @@ public class CustomRestTemplate {
      * @return the built URL
      */
     private String buildUrl(String path) {
-        String url = this.urlServer;
+        String url = urlServer;
 
-        if (!this.urlServer.endsWith("/") && !path.startsWith("/"))
+        if (!urlServer.endsWith("/") && !path.startsWith("/"))
             url += "/";
 
-        if(this.urlServer.endsWith("/") && path.startsWith("/"))
+        if(urlServer.endsWith("/") && path.startsWith("/"))
             url += path.substring(1);
         else
             url += path;
@@ -201,8 +201,7 @@ public class CustomRestTemplate {
 
         // Set the username and password for creating a Basic Auth request
         if (username != null && password != null) {
-            String passwordHash = SecurityHelper.getSHA256Digest(
-                    password.trim());
+            String passwordHash = SecurityHelper.getSHA256Digest(password.trim());
 
             byte[] bytes = (username.trim() + ":" +
                     passwordHash.trim()).getBytes();
@@ -224,12 +223,12 @@ public class CustomRestTemplate {
     private HttpResponse executeRequest(HttpRequestBase request,
             boolean authenticationNeeded) throws Exception {
 
-        request.addHeader("api-key", this.apiKey);
+        request.addHeader("api-key", apiKey);
 
         if(authenticationNeeded)
-            setAuthorizationHeader(request, this.login, this.password);
+            setAuthorizationHeader(request, login, password);
         System.err.println("Request : " + request.getMethod() + " - " +
                 request.getURI());
-        return  this.httpClient.execute(request);
+        return httpClient.execute(request);
     }
 }
