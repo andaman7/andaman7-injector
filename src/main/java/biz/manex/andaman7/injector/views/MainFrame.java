@@ -4,8 +4,8 @@ import biz.manex.andaman7.injector.controllers.MainController;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.TAMI;
-import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
-import biz.manex.andaman7.injector.models.dto.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -517,7 +517,7 @@ public class MainFrame extends JFrame {
         List<AMIContainer> amiContainers = new ArrayList<AMIContainer>();
         amiContainers.add(amiContainer);
 
-        boolean alreadyMember = mainController.sendData(patient, amiContainers, contextId);
+        boolean alreadyMember = mainController.sendMedicalData(patient, amiContainers, contextId);
 
         if(!alreadyMember)
             JOptionPane.showMessageDialog(this,

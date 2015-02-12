@@ -1,10 +1,10 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
-import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
-import biz.manex.andaman7.injector.models.dto.DeviceDTO;
-import biz.manex.andaman7.injector.models.dto.MessageDTO;
-import biz.manex.andaman7.injector.models.dto.RegistrarDTO;
 import biz.manex.andaman7.injector.utils.XmlHelper;
+import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.others.MessageDTO;
+import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
+import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.w3c.dom.Document;
@@ -63,7 +63,7 @@ public class AndamanContextService extends CustomRestService {
     /**
      * Returns data related to the authenticated registrar.
      *
-     * @return the {@link biz.manex.andaman7.injector.models.dto.RegistrarDTO}
+     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}
      * of the authenticated registrar
      */
     public RegistrarDTO login() {
@@ -136,7 +136,7 @@ public class AndamanContextService extends CustomRestService {
      * Searches users based on a given keyword.
      *
      * @param keyword the keyword used to filter users
-     * @return the list of {@link biz.manex.andaman7.injector.models.dto.RegistrarDTO}
+     * @return the list of {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
      * found based on the keyword
      */
     public AndamanUserDTO[] searchUsers(String keyword) {
@@ -161,7 +161,7 @@ public class AndamanContextService extends CustomRestService {
      * @param senderDeviceId the UUID of the source device
      * @param newCommunityMembers the list of registrars UUIDs to send the
      *                            request to
-     * @return the list of {@link biz.manex.andaman7.injector.models.dto.RegistrarDTO}s
+     * @return the list of {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      * of the new community members
      */
     public RegistrarDTO[] sendCommunityRequest(String senderDeviceId,

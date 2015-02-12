@@ -1,7 +1,12 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
 import biz.manex.andaman7.injector.models.AMIContainer;
-import biz.manex.andaman7.injector.models.dto.*;
+import biz.manex.andaman7.server.api.dto.ehrSynchro.RegistrarSyncContentDTO;
+import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiBaseDTO;
+import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiContainerDTO;
+import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiQualDTO;
+import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
+import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import org.apache.http.HttpResponse;
 
 import java.util.*;
@@ -56,7 +61,7 @@ public class AndamanEhrService extends CustomRestService {
      * Injects some AMIs into the EHR of a registrar.
      *
      * @param sourceRegistrar the source registrar
-     * @param destinationRegistrar the destination {@link RegistrarDTO}
+     * @param destinationRegistrar the destination {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}
      * @param amiContainers the AMI containers where to inject AMIs
      * @param contextId the ID of the context
      * @param tamiVersion the version of the XML file describing the TAMIs
@@ -212,7 +217,7 @@ public class AndamanEhrService extends CustomRestService {
     }
 
     /**
-     * Builds a {@link biz.manex.andaman7.injector.models.dto.RegistrarSyncContentDTO}.
+     * Builds a {@link biz.manex.andaman7.server.api.dto.ehrSynchro.RegistrarSyncContentDTO}.
      *
      * @param sourceRegistrar the source registrar
      * @param destinationRegistrars the list of destination registrar's UUIDs

@@ -3,16 +3,16 @@ package biz.manex.andaman7.injector.controllers;
 import biz.manex.andaman7.injector.models.Settings;
 import biz.manex.andaman7.injector.models.TAMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
-import biz.manex.andaman7.injector.models.dto.AndamanUserDTO;
-import biz.manex.andaman7.injector.models.dto.DeviceDTO;
-import biz.manex.andaman7.injector.models.dto.MessageDTO;
-import biz.manex.andaman7.injector.models.dto.RegistrarDTO;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
 import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
+import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.others.MessageDTO;
+import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
+import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -29,34 +29,73 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
 /**
+ * The main controller that coordinates the views and performs all the business
+ * logic.
+ *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://www.manex.biz)
  * Date: 19/01/2015.
  */
 public class MainController implements ActionListener {
 
+    /**
+     * The current user that is logged in.
+     */
     private RegistrarDTO currentUser;
-    
+
+    /**
+     * The context web service.
+     */
     private AndamanContextService contextService;
+
+    /**
+     * The EHR web service.
+     */
     private AndamanEhrService ehrService;
-    
+
+    /**
+     * The login GUI frame.
+     */
     private LoginFrame loginFrame;
+
+    /**
+     * The main GUI frame.
+     */
     private MainFrame mainFrame;
 
+    /**
+     * The current version of the XML file where the TAMIs are described.
+     */
     private int currentTamiVersion;
-    
-    
+
+
+    /**
+     * Returns the current user.
+     *
+     * @return the current user
+     */
     public RegistrarDTO getCurrentUser() {
         return currentUser;
     }
-    
+
+    /**
+     * Starts the GUI.
+     *
+     * @param loginFrame the login GUI frame
+     * @param mainFrame the main GUI frame
+     */
     public void start(LoginFrame loginFrame, MainFrame mainFrame) {
         this.loginFrame = loginFrame;
         this.mainFrame = mainFrame;
         
         this.loginFrame.setVisible(true);
     }
-    
+
+    /**
+     * Setup the settings.
+     *
+     * @param settings the settings
+     */
     public void setSettings(Settings settings) {
         
         String serverURL = buildServerURL(settings);
@@ -73,7 +112,13 @@ public class MainController implements ActionListener {
         ehrService = AndamanEhrService.getInstance(ehrServiceURL, apiKey,
                 username, password);
     }
-    
+
+    /**
+     * Build the URL of the server.
+     *
+     * @param settings the settings
+     * @return the URL of the server
+     */
     private String buildServerURL(Settings settings) {
         StringBuilder url = new StringBuilder();
         url.append("http");
@@ -93,11 +138,22 @@ public class MainController implements ActionListener {
         
         return url.toString();
     }
-    
+
+    /**
+     * Logs the user in.
+     *
+     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}
+     *         of the logged user.
+     */
     public RegistrarDTO login() {
         return contextService.login();
     }
 
+    /**
+     * Returns the XML file where the TAMIs are described.
+     *
+     * @return the XML document
+     */
     private Document getTamiXml() {
 
         String filename = "tamidict.xml";
@@ -131,6 +187,11 @@ public class MainController implements ActionListener {
         return null;
     }
 
+    /**
+     * Returns the XML file where the GUI panels layouts are described.
+     *
+     * @return the XML document
+     */
     private Document getGuiXml() {
 
         String filename = "guipanels.xml";
@@ -165,6 +226,11 @@ public class MainController implements ActionListener {
         return null;
     }
 
+    /**
+     * Returns the TAMIs from the most recent XML file.
+     *
+     * @return a list of the TAMIs
+     */
     public TAMI[] getTamis() {
         try {
             MessageDTO[] messages = contextService.getTranslations();
@@ -198,7 +264,16 @@ public class MainController implements ActionListener {
 
         return null;
     }
-    
+
+    /**
+     * Searches some {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
+     * according to a specified keyword.
+     *
+     * The search is done on the first name, last name and email address.
+     *
+     * @param keyword the keyword on which the search is based
+     * @return a list of found {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
+     */
     public AndamanUserDTO[] searchUsers(String keyword) {
         AndamanUserDTO[] results = contextService.searchUsers(keyword);
         RegistrarDTO[] members = contextService.getCommunityMembers();
@@ -216,16 +291,34 @@ public class MainController implements ActionListener {
         
         return users.toArray(new AndamanUserDTO[users.size()]);
     }
-    
+
+    /**
+     * Sends some community invitations.
+     *
+     * @param senderDeviceId the UUID of the sender device
+     * @param newCommunityMembers the list of community members to add
+     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
+     *         of the added community members.
+     */
     public RegistrarDTO[] sendCommunityInvitation(String senderDeviceId,
             String[] newCommunityMembers) {
         return contextService.sendCommunityRequest(senderDeviceId,
                 newCommunityMembers);
         
     }
-    
-    public boolean sendData(AndamanUserDTO destinationRegistrar,
-            List<AMIContainer> amiContainers, String contextId) {
+
+    /**
+     * Sends some medical data into a specific AMI container of a specified
+     * registrar.
+     *
+     * @param destinationRegistrar the destination registrar
+     * @param amiContainers the AMI container UUID and the AMIs to send
+     * @param contextId the context identifier
+     * @return <code>true</code> if the destination registrar is already a member of the source registrar's community,
+     *         <code>false</code> otherwise
+     */
+    public boolean sendMedicalData(AndamanUserDTO destinationRegistrar, List<AMIContainer> amiContainers,
+            String contextId) {
         
         RegistrarDTO[] members = contextService.getCommunityMembers();
         boolean alreadyMember = false;
@@ -245,7 +338,14 @@ public class MainController implements ActionListener {
         
         return alreadyMember;
     }
-    
+
+    /**
+     * Returns a map of AMIs from an CSV file.
+     *
+     * @param file the CSV file
+     * @return a map with the TAMI keys as key and the AMI values as value
+     * @throws IOException if the CSV file is not found
+     */
     public HashMap<String, String> getAmisFromCsvFile(File file) throws IOException {
 
         // Get the AMIs from the CSV file
@@ -265,47 +365,53 @@ public class MainController implements ActionListener {
         return amis;
     }
 
+    /**
+     * Listens to a login and logout button press.
+     *
+     * @param e the event raised by the button press
+     */
     public void actionPerformed(ActionEvent e) {
         
-        if(e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
-            
-            if(button.getName().equalsIgnoreCase("login")) {
-                
-                // Get the settings from the login frame and login the user
-                Settings settings = loginFrame.getSettings();
-                
-                if(settings != null) {
-                    setSettings(settings);
-                    mainFrame.setTamiList();
-                    currentUser = login();
-                
-                    if(currentUser != null) {
-                        List<DeviceDTO> devices = currentUser.getDevices();
+        if(!(e.getSource() instanceof JButton))
+            return;
 
-                        if(devices == null) {
-                            devices = new ArrayList<DeviceDTO>();
-                            DeviceDTO[] devicesArray = contextService.getDevices();
+        JButton button = (JButton) e.getSource();
 
-                            if(devicesArray != null) {
-                                devices.addAll(Arrays.asList(devicesArray));
-                                currentUser.setDevices(devices);
-                            }
+        if(button.getName().equalsIgnoreCase("login")) {
 
-                        } else if(!devices.isEmpty()) {
-                            mainFrame.setContextId(devices.get(0).getUuid());
+            // Get the settings from the login frame and login the user
+            Settings settings = loginFrame.getSettings();
+
+            if(settings != null) {
+                setSettings(settings);
+                mainFrame.setTamiList();
+                currentUser = login();
+
+                if(currentUser != null) {
+                    List<DeviceDTO> devices = currentUser.getDevices();
+
+                    if(devices == null) {
+                        devices = new ArrayList<DeviceDTO>();
+                        DeviceDTO[] devicesArray = contextService.getDevices();
+
+                        if(devicesArray != null) {
+                            devices.addAll(Arrays.asList(devicesArray));
+                            currentUser.setDevices(devices);
                         }
 
-                        loginFrame.setVisible(false);
-                        mainFrame.setVisible(true);
+                    } else if(!devices.isEmpty()) {
+                        mainFrame.setContextId(devices.get(0).getUuid());
                     }
+
+                    loginFrame.setVisible(false);
+                    mainFrame.setVisible(true);
                 }
-                
-            } else if(button.getName().equalsIgnoreCase("logout")) {
-                currentUser = null;
-                mainFrame.setVisible(false);
-                loginFrame.setVisible(true);
             }
+
+        } else if(button.getName().equalsIgnoreCase("logout")) {
+            currentUser = null;
+            mainFrame.setVisible(false);
+            loginFrame.setVisible(true);
         }
     }
 }
