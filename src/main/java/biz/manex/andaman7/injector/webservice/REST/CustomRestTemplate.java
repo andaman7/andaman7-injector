@@ -21,28 +21,28 @@ public class CustomRestTemplate {
     /**
      * The URL of the distant server.
      */
-    private String urlServer;
+    private final String urlServer;
 
     /**
      * The API key.
      */
-    private String apiKey;
+    private final String apiKey;
 
     /**
      * The HTTP client used to make the requests to the server.
      * @see org.apache.http.client.HttpClient
      */
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
     /**
      * The login used for authentication.
      */
-    private String login;
+    private final String login;
 
     /**
      * The password used for authentication.
      */
-    private String password;
+    private final String password;
 
 
     public CustomRestTemplate(String urlServer, String apiKey, String login,

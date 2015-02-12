@@ -3,7 +3,11 @@ package biz.manex.andaman7.injector.models;
 import java.util.HashMap;
 
 /**
- * Created by Pierre-Yves on 11/02/2015.
+ *
+ *
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 11/02/2015.
  */
 public class AMIContainer {
 

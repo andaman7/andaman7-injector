@@ -18,7 +18,11 @@ import javax.xml.xpath.XPathFactory;
 import java.io.*;
 
 /**
- * Created by Pierre-Yves on 09/02/2015.
+ *
+ *
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 09/02/2015.
  */
 public class XmlHelper {
 
@@ -33,9 +37,8 @@ public class XmlHelper {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(inputStream);
 
-        return doc;
+        return builder.parse(inputStream);
     }
 
     public static String documentToString(Document doc) {
@@ -61,9 +64,8 @@ public class XmlHelper {
 
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile(xpathString);
 
-        return expr;
+        return xpath.compile(xpathString);
     }
 
     public static void writeDocumentToFile(Document doc, File file)

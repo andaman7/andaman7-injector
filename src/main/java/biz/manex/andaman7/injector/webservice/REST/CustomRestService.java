@@ -21,7 +21,7 @@ public class CustomRestService {
      * The mapper used to convert JSON into objects and vice versa.
      * @see org.codehaus.jackson.map.ObjectMapper
      */
-    protected ObjectMapper jsonMapper;
+    protected final ObjectMapper jsonMapper;
 
 
     protected CustomRestService(String urlServer, String apiKey, String login,

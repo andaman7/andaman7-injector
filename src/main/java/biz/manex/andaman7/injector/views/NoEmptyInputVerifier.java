@@ -7,7 +7,6 @@ package biz.manex.andaman7.injector.views;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
@@ -18,10 +17,7 @@ public class NoEmptyInputVerifier extends InputVerifier {
 
     @Override
     public boolean verify(JComponent input) {
-        if (!(input instanceof JTextField))
-            return true;
-        
-        return isValidText((JTextField) input);
+        return !(input instanceof JTextField) || isValidText((JTextField) input);
     }
 
     protected boolean isValidText(JTextField field) {

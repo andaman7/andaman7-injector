@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * This class contains some static methods about cryptography.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://www.manex.biz)
+ * Copyright A7 Software (http://a7-software.com/)
  * Date: 19/01/2015.
  */
 public class SecurityHelper {

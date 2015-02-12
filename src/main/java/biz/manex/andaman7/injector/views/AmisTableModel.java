@@ -9,11 +9,15 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Created by Pierre-Yves on 11/02/2015.
+ *
+ *
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 11/02/2015.
  */
 public class AmisTableModel extends AbstractTableModel {
 
-    private static String[] columnNames = new String[] { "TAMI", "Value" };
+    private static final String[] columnNames = new String[] { "TAMI", "Value" };
     private List<AMI> data = new ArrayList<AMI>();
 
 

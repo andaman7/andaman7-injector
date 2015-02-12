@@ -52,7 +52,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextFieldRegistrarKeyword = new javax.swing.JTextField();
         jButtonRegistrarSearch = new javax.swing.JButton();
         jScrollPaneRegistrars = new javax.swing.JScrollPane();
-        jListRegistrars = new javax.swing.JList();
+        jListRegistrars = new javax.swing.JList<AndamanUserDTO>();
         jPanelData = new javax.swing.JPanel();
         jLabelDataType = new javax.swing.JLabel();
         jLabelDataValue = new javax.swing.JLabel();
@@ -60,7 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonDataAdd = new javax.swing.JButton();
         jButtonDataRemove = new javax.swing.JButton();
         jButtonDataEdit = new javax.swing.JButton();
-        jComboBoxDataType = new javax.swing.JComboBox();
+        jComboBoxDataType = new javax.swing.JComboBox<TAMI>();
         jButtonSend = new javax.swing.JButton();
         jScrollPaneData = new javax.swing.JScrollPane();
         jTableAmis = new javax.swing.JTable();
@@ -297,7 +297,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanelContextLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldContextId, jTextFieldEhrId});
+        jPanelContextLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, jTextFieldContextId, jTextFieldEhrId);
 
         jPanelContextLayout.setVerticalGroup(
             jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,7 +418,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private boolean verifyBeforSendingData() {
+    private boolean verifyBeforeSendingData() {
 
         int patientIndex = jListRegistrars.getSelectedIndex();
 
@@ -453,7 +453,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void sendDataFromGui() {
 
-        if(!verifyBeforSendingData())
+        if(!verifyBeforeSendingData())
             return;
 
         AmisTableModel dataModel = (AmisTableModel)  jTableAmis.getModel();
@@ -477,7 +477,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void sendDataFromCsvFile() {
 
-        if(!verifyBeforSendingData())
+        if(!verifyBeforeSendingData())
             return;
 
         if(this.selectedCsvFile == null) {
@@ -519,7 +519,7 @@ public class MainFrame extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
 
         JOptionPane.showMessageDialog(this,
-                "The data has been successfuly sent !", "Success",
+                "The data has been successfully sent !", "Success",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -602,7 +602,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonSend;
     private javax.swing.JButton jButtonUploadBrowse;
     private javax.swing.JButton jButtonUploadCsv;
-    private javax.swing.JComboBox jComboBoxDataType;
+    private JComboBox<TAMI> jComboBoxDataType;
     private javax.swing.JFileChooser jFileChooserCsv;
     private javax.swing.JLabel jLabelContextId;
     private javax.swing.JLabel jLabelDataType;
@@ -610,7 +610,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelEhrId;
     private javax.swing.JLabel jLabelRegistrarKeyword;
     private javax.swing.JLabel jLabelUploadFile;
-    private javax.swing.JList jListRegistrars;
+    private JList<AndamanUserDTO> jListRegistrars;
     private javax.swing.JPanel jPanelContext;
     private javax.swing.JPanel jPanelData;
     private javax.swing.JPanel jPanelRegistrar;

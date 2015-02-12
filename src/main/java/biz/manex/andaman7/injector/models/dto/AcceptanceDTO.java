@@ -32,9 +32,4 @@ public enum AcceptanceDTO {
         }
         return UNDEFINED;
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

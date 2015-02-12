@@ -60,9 +60,8 @@ public class AndamanEhrService extends CustomRestService {
      * @param amiContainers the AMI containers where to inject AMIs
      * @param contextId the ID of the context
      * @param tamiVersion the version of the XML file describing the TAMIs
-     * @return the HTTP response to the request
      */
-    public HttpResponse sendAmiBasesToRegistrar(RegistrarDTO sourceRegistrar, AndamanUserDTO destinationRegistrar,
+    public void sendAmiBasesToRegistrar(RegistrarDTO sourceRegistrar, AndamanUserDTO destinationRegistrar,
             List<AMIContainer> amiContainers, String contextId, int tamiVersion) {
 
         String sourceDeviceId = sourceRegistrar.getDevices().get(0).getUuid();
@@ -105,13 +104,12 @@ public class AndamanEhrService extends CustomRestService {
         // Send the request to the server
         try {
             String body = this.jsonMapper.writeValueAsString(syncContentDTOs);
-            return this.restTemplate.put("registrars/medical-records", body, true);
+            this.restTemplate.put("registrars/medical-records", body, true);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
-
-        return null;
     }
 
     /**

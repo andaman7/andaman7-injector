@@ -1,7 +1,11 @@
 package biz.manex.andaman7.injector.models;
 
 /**
- * Created by Pierre-Yves on 07/02/2015.
+ *
+ *
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 07/02/2015.
  */
 public class TAMI {
 

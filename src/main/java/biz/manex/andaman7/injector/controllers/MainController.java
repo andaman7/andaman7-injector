@@ -29,8 +29,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
 /**
- *
- * @author Pierre-Yves
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://www.manex.biz)
+ * Date: 19/01/2015.
  */
 public class MainController implements ActionListener {
 
@@ -290,10 +291,10 @@ public class MainController implements ActionListener {
                                 devices.addAll(Arrays.asList(devicesArray));
                                 this.currentUser.setDevices(devices);
                             }
-                        }
 
-                        if(devices != null && devices.size() != 0)
+                        } else if(devices.size() != 0) {
                             this.mainFrame.setContextId(devices.get(0).getUuid());
+                        }
 
                         this.loginFrame.setVisible(false);
                         this.mainFrame.setVisible(true);

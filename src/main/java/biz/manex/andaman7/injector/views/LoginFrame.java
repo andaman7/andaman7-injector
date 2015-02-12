@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author Pierre-Yves
  */
 public class LoginFrame extends javax.swing.JFrame {
-    
+
     private final MainController mainController;
     private Settings settings;
 
@@ -32,7 +32,7 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame(MainController mainController, ActionListener loginListener, Properties properties) {
         initComponents();
-        
+
         this.mainController = mainController;
 
         this.jButtonLogin.addActionListener(loginListener);

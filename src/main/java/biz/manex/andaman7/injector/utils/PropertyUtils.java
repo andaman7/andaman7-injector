@@ -7,12 +7,16 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by Pierre-Yves on 11/02/2015.
+ *
+ *
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 11/02/2015.
  */
 public class PropertyUtils {
 
-    private File file;
-    private Properties propFile;
+    private final File file;
+    private final Properties propFile;
 
 
     public PropertyUtils(String filename) {
