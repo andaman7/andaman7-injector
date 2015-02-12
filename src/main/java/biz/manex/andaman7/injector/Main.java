@@ -17,6 +17,11 @@ import java.io.File;
  */
 public class Main {
 
+    /**
+     * The entry point method of the program.
+     *
+     * @param args the arguments given to the program
+     */
     public static void main(String[] args) {
 
         try {
@@ -32,7 +37,7 @@ public class Main {
         PropertyUtils propertyUtils = new PropertyUtils(propertyFile);
 
         MainController mainController = new MainController();
-        LoginFrame loginFrame = new LoginFrame(mainController, mainController, propertyUtils.getPropFile());
+        LoginFrame loginFrame = new LoginFrame(mainController, propertyUtils.getProperties());
         MainFrame mainFrame = new MainFrame(mainController, mainController);
         mainController.start(loginFrame, mainFrame);
     }

@@ -26,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 /**
+ * The main GUI frame.
  *
  * @author Pierre-Yves
  * Copyright A7 Software (http://www.manex.biz)
@@ -33,10 +34,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MainFrame extends JFrame {
 
+    /**
+     * The main controller.
+     */
     private final MainController mainController;
+
+    /**
+     * The selected CSV file.
+     */
     private File selectedCsvFile;
-    
-    
+
+
+    /**
+     * Builds a main frame.
+     *
+     * @param mainController the main controller
+     * @param logoutListener the logout listener
+     */
     public MainFrame(MainController mainController, ActionListener logoutListener) {
         initComponents();
         
@@ -356,28 +370,44 @@ public class MainFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Sets the context id.
+     *
+     * @param contextId the context id
+     */
     public void setContextId(String contextId) {
         jTextFieldContextId.setText(contextId);
     }
 
-    private void searchPatient() {
+    /**
+     * Searches some Andaman users.
+     */
+    private void searchAndamanUsers() {
         String keyword = jTextFieldRegistrarKeyword.getText();
 
         if(!keyword.isEmpty()) {
-            AndamanUserDTO[] users = mainController.searchUsers(keyword);
+            try {
+                AndamanUserDTO[] users = mainController.searchUsers(keyword);
 
-            DefaultListModel<AndamanUserDTO> model = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
-            model.clear();
+                DefaultListModel<AndamanUserDTO> model = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
+                model.clear();
 
-            for (AndamanUserDTO user : users)
-                model.addElement(user);
+                for (AndamanUserDTO user : users)
+                    model.addElement(user);
 
-            jListRegistrars.setModel(model);
-            jListRegistrars.invalidate();
+                jListRegistrars.setModel(model);
+                jListRegistrars.invalidate();
+            } catch(IOException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
-    private void addData() {
+    /**
+     * Adds an AMI to the AMIs list.
+     */
+    private void addAmi() {
         TAMI type = (TAMI) jComboBoxDataType.getModel().getSelectedItem();
         String value = jTextFieldDataValue.getText();
 
@@ -393,7 +423,10 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void editData() {
+    /**
+     * Edits a selected AMI.
+     */
+    private void editAmi() {
         int index = jTableAmis.getSelectedRow();
 
         if(index != -1) {
@@ -403,11 +436,14 @@ public class MainFrame extends JFrame {
             jComboBoxDataType.setSelectedItem(ami.getType());
             jTextFieldDataValue.setText(ami.getValue());
 
-            removeDataFromList();
+            removeAmi();
         }
     }
 
-    private void removeDataFromList() {
+    /**
+     * Removes a selected AMI from the list.
+     */
+    private void removeAmi() {
 
         int index = jTableAmis.getSelectedRow();
 
@@ -418,13 +454,18 @@ public class MainFrame extends JFrame {
             jTableAmis.setModel(model);
 
             if(model.getSize() != 0) {
-                int selectedIndex = index < model.getSize() - 1 ? index : model.getSize() - 1;
+                int selectedIndex = (index < (model.getSize() - 1)) ? index : (model.getSize() - 1);
                 jTableAmis.setRowSelectionInterval(selectedIndex, selectedIndex);
             }
         }
     }
 
-    private boolean verifyBeforeSendingData() {
+    /**
+     * Verify the form before sending the AMIs.
+     *
+     * @return {@code true} if the data of the form are coherent, {@code false} otherwise
+     */
+    private boolean verifyBeforeSendingAmis() {
 
         int patientIndex = jListRegistrars.getSelectedIndex();
 
@@ -456,10 +497,12 @@ public class MainFrame extends JFrame {
         return true;
     }
 
+    /**
+     * Sends some AMIs from the list of the GUI.
+     */
+    private void sendAmisFromGui() {
 
-    private void sendDataFromGui() {
-
-        if(!verifyBeforeSendingData())
+        if(!verifyBeforeSendingAmis())
             return;
 
         AmisTableModel dataModel = (AmisTableModel) jTableAmis.getModel();
@@ -478,12 +521,15 @@ public class MainFrame extends JFrame {
             amis.put(ami.getType().getKey(), ami.getValue());
         }
 
-        sendData(amis);
+        sendAmis(amis);
     }
 
-    private void sendDataFromCsvFile() {
+    /**
+     * Sends some AMIs from a CSV file.
+     */
+    private void sendAmisFromCsvFile() {
 
-        if(!verifyBeforeSendingData())
+        if(!verifyBeforeSendingAmis())
             return;
 
         if(selectedCsvFile == null) {
@@ -496,7 +542,7 @@ public class MainFrame extends JFrame {
             HashMap<String, String> amis = mainController.getAmisFromCsvFile(selectedCsvFile);
             jFileChooserCsv.setSelectedFile(null);
             jTextFieldUploadFile.setText("");
-            sendData(amis);
+            sendAmis(amis);
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -504,7 +550,12 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void sendData(HashMap<String, String> amis) {
+    /**
+     * Sends some AMIs to the server.
+     *
+     * @param amis the AMIs to send
+     */
+    private void sendAmis(HashMap<String, String> amis) {
 
         int patientIndex = jListRegistrars.getSelectedIndex();
         DefaultListModel<AndamanUserDTO> patientsModel = (DefaultListModel<AndamanUserDTO>) jListRegistrars.getModel();
@@ -517,38 +568,72 @@ public class MainFrame extends JFrame {
         List<AMIContainer> amiContainers = new ArrayList<AMIContainer>();
         amiContainers.add(amiContainer);
 
-        boolean alreadyMember = mainController.sendMedicalData(patient, amiContainers, contextId);
+        try {
+            boolean alreadyMember = mainController.sendMedicalData(patient, amiContainers, contextId);
 
-        if(!alreadyMember)
-            JOptionPane.showMessageDialog(this,
-                    "An invitation has been sent to the user.", "Info",
-                    JOptionPane.INFORMATION_MESSAGE);
+            if (!alreadyMember)
+                JOptionPane.showMessageDialog(this, "An invitation has been sent to the user.",
+                        "Info", JOptionPane.INFORMATION_MESSAGE);
 
-        JOptionPane.showMessageDialog(this,
-                "The data has been successfully sent !", "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "The data has been successfully sent !",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch(IOException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
+    /**
+     * Listens for the search registrars button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonRegistrarSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonPatientSearchActionPerformed
-        searchPatient();
+        searchAndamanUsers();
     }//GEN-LAST:event_jButtonPatientSearchActionPerformed
 
+    /**
+     * Listens for the data add button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonDataAddActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataAddActionPerformed
-        addData();
+        addAmi();
     }//GEN-LAST:event_jButtonDataAddActionPerformed
 
+    /**
+     * Listens for the data remove button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonDataRemoveActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataRemoveActionPerformed
-        removeDataFromList();
+        removeAmi();
     }//GEN-LAST:event_jButtonDataRemoveActionPerformed
 
+    /**
+     * Listens for the data edit button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonDataEditActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonDataEditActionPerformed
-        editData();
+        editAmi();
     }//GEN-LAST:event_jButtonDataEditActionPerformed
 
+    /**
+     * Listens for the send button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonSendActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
-        sendDataFromGui();
+        sendAmisFromGui();
     }//GEN-LAST:event_jButtonSendActionPerformed
 
+    /**
+     * Listens for the logout button to be clicked.
+     *
+     * @param evt the action event
+     */
     private void jButtonLogoutActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
 
         // Clear all text fields, combo boxes and lists
@@ -566,16 +651,31 @@ public class MainFrame extends JFrame {
 
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
+    /**
+     * Listens for the enter key to be pressed while focusing the registrar keyword text field.
+     *
+     * @param evt the key event
+     */
     private void jTextFieldRegistrarKeywordKeyPressed(KeyEvent evt) {//GEN-FIRST:event_jTextFieldPatientNameKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-            searchPatient();
+            searchAndamanUsers();
     }//GEN-LAST:event_jTextFieldPatientNameKeyPressed
 
+    /**
+     * Listens for the enter key to be pressed while focusing the registrar keyword text field.
+     *
+     * @param evt the key event
+     */
     private void jTextFieldDataValueKeyPressed(KeyEvent evt) {//GEN-FIRST:event_jTextFieldDataValueKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-            addData();
+            addAmi();
     }//GEN-LAST:event_jTextFieldDataValueKeyPressed
 
+    /**
+     * Listens for the browse button to be clicked.
+     *
+     * @param evt the key event
+     */
     private void jButtonUploadBrowseActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBrowseActionPerformed
         int result = jFileChooserCsv.showDialog(this, "Open");
 
@@ -585,11 +685,16 @@ public class MainFrame extends JFrame {
         }
     }//GEN-LAST:event_jButtonUploadBrowseActionPerformed
 
+    /**
+     * Listens for the upload button to be clicked.
+     * @param evt
+     */
     private void jButtonUploadCsvActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonUploadCsvActionPerformed
-        sendDataFromCsvFile();
+        sendAmisFromCsvFile();
     }//GEN-LAST:event_jButtonUploadCsvActionPerformed
 
-    public void setTamiList() {
+    public void setTamiList() throws IOException {
+
         DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<TAMI>();
         TAMI[] tamis = mainController.getTamis();
 

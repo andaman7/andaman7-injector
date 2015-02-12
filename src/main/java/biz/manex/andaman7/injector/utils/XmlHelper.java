@@ -18,7 +18,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.*;
 
 /**
- *
+ * A utility class to deal with XML files.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://a7-software.com/)
@@ -26,21 +26,50 @@ import java.io.*;
  */
 public class XmlHelper {
 
+    /**
+     * Returns a {@link org.w3c.dom.Document} from an XML file.
+     * @param file the XML file
+     * @return the XML document
+     * @throws IOException if there was an error with the file
+     * @throws SAXException if there was an error while parsing the XML document
+     */
     public static Document getDocument(File file)
-            throws IOException, ParserConfigurationException, SAXException {
+            throws IOException, SAXException {
 
         return getDocument(new FileInputStream(file));
     }
 
+    /**
+     * Returns a {@link org.w3c.dom.Document} from an {@link java.io.InputStream}.
+     * @param inputStream the stream from which getting the XML content
+     * @return the XML document
+     * @throws IOException if there was an error while getting the XML from the stream
+     * @throws SAXException if there was an error while parsing the XML document
+     */
     public static Document getDocument(InputStream inputStream)
-            throws IOException, SAXException, ParserConfigurationException {
+            throws IOException, SAXException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
+        DocumentBuilder builder;
 
-        return builder.parse(inputStream);
+        try {
+            builder = factory.newDocumentBuilder();
+            return builder.parse(inputStream);
+
+        } catch (ParserConfigurationException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
+    /**
+     * Converts an XML {@link org.w3c.dom.Document} to a string.
+     *
+     * @param doc the XML document
+     * @return the string representation of the XML document
+     */
     public static String documentToString(Document doc) {
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -59,6 +88,13 @@ public class XmlHelper {
         return "";
     }
 
+    /**
+     * Returns an {@link javax.xml.xpath.XPathExpression} from a string.
+     *
+     * @param xpathString the XPath string
+     * @return the {@link javax.xml.xpath.XPathExpression}
+     * @throws XPathExpressionException if the given XPath expression is incorrect
+     */
     public static XPathExpression getXPathExpression(String xpathString)
             throws XPathExpressionException {
 
@@ -68,14 +104,25 @@ public class XmlHelper {
         return xpath.compile(xpathString);
     }
 
-    public static void writeDocumentToFile(Document doc, File file)
-            throws TransformerException {
+    /**
+     * Writes an XML document to a file.
+     *
+     * @param doc the XML document
+     * @param file the destination file
+     */
+    public static void writeDocumentToFile(Document doc, File file) {
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(file);
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(file);
 
-        transformer.transform(source, result);
+            transformer.transform(source, result);
+
+        } catch(TransformerException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

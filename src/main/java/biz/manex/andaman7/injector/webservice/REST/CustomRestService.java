@@ -24,7 +24,16 @@ public class CustomRestService {
     protected final ObjectMapper jsonMapper;
 
 
+    /**
+     * Builds a connection to a REST web service.
+     *
+     * @param urlServer the URL of the server
+     * @param apiKey the API key
+     * @param login the login used for the authentication
+     * @param password the password used for the authentication
+     */
     protected CustomRestService(String urlServer, String apiKey, String login, String password) {
+
         restTemplate = new CustomRestTemplate(urlServer, apiKey, login, password);
         jsonMapper = new ObjectMapper();
     }

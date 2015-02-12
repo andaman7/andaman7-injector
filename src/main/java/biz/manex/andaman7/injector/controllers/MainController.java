@@ -24,9 +24,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-import javax.swing.JButton;
+import javax.swing.*;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 
 /**
  * The main controller that coordinates the views and performs all the business
@@ -142,10 +143,9 @@ public class MainController implements ActionListener {
     /**
      * Logs the user in.
      *
-     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}
-     *         of the logged user.
+     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO} of the logged user.
      */
-    public RegistrarDTO login() {
+    private RegistrarDTO login() throws IOException {
         return contextService.login();
     }
 
@@ -231,18 +231,20 @@ public class MainController implements ActionListener {
      *
      * @return a list of the TAMIs
      */
-    public TAMI[] getTamis() {
+    public TAMI[] getTamis() throws IOException {
+
+        MessageDTO[] messages = contextService.getTranslations();
+        HashMap<String, String> translations = new HashMap<String, String>();
+        ArrayList<TAMI> tamis = new ArrayList<TAMI>();
+
+        for(MessageDTO message : messages)
+            if(message.getLanguageCode().equals("EN"))
+                translations.put(message.getKey(), message.getValue());
+
+        Document doc = getTamiXml();
+        getGuiXml();
+
         try {
-            MessageDTO[] messages = contextService.getTranslations();
-            HashMap<String, String> translations = new HashMap<String, String>();
-            ArrayList<TAMI> tamis = new ArrayList<TAMI>();
-
-            for(MessageDTO message : messages)
-                if(message.getLanguageCode().equals("EN"))
-                    translations.put(message.getKey(), message.getValue());
-
-            Document doc = getTamiXml();
-            getGuiXml();
             XPathExpression expr = XmlHelper.getXPathExpression("//tami/@id");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
@@ -250,7 +252,7 @@ public class MainController implements ActionListener {
                 Node node = nodes.item(i);
                 String key = node.getNodeValue();
 
-                if(translations.containsKey(key)) {
+                if (translations.containsKey(key)) {
                     TAMI tami = new TAMI(key, translations.get(key));
                     tamis.add(tami);
                 }
@@ -258,11 +260,9 @@ public class MainController implements ActionListener {
 
             return tamis.toArray(new TAMI[tamis.size()]);
 
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
+        } catch(XPathExpressionException e) {
+            return new TAMI[0];
         }
-
-        return null;
     }
 
     /**
@@ -274,21 +274,22 @@ public class MainController implements ActionListener {
      * @param keyword the keyword on which the search is based
      * @return a list of found {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
      */
-    public AndamanUserDTO[] searchUsers(String keyword) {
+    public AndamanUserDTO[] searchUsers(String keyword) throws IOException {
+
         AndamanUserDTO[] results = contextService.searchUsers(keyword);
         RegistrarDTO[] members = contextService.getCommunityMembers();
-        
+
         // Add all user from search and add only the members that correspond to
         // the specified keyword except ourselves
         ArrayList<AndamanUserDTO> users = new ArrayList<AndamanUserDTO>();
         users.addAll(Arrays.asList(results));
-        
-        for(RegistrarDTO member : members)
-            if((member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
+
+        for (RegistrarDTO member : members)
+            if ((member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
                     member.getLastName().toLowerCase().contains(keyword.toLowerCase())) &&
                     !member.getUuid().equals(currentUser.getUuid()))
                 users.add(member);
-        
+
         return users.toArray(new AndamanUserDTO[users.size()]);
     }
 
@@ -300,11 +301,14 @@ public class MainController implements ActionListener {
      * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      *         of the added community members.
      */
-    public RegistrarDTO[] sendCommunityInvitation(String senderDeviceId,
-            String[] newCommunityMembers) {
-        return contextService.sendCommunityRequest(senderDeviceId,
-                newCommunityMembers);
-        
+    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) {
+
+        try {
+            return contextService.sendCommunityRequest(senderDeviceId, newCommunityMembers);
+
+        } catch (IOException e) {
+            return new RegistrarDTO[0];
+        }
     }
 
     /**
@@ -314,13 +318,14 @@ public class MainController implements ActionListener {
      * @param destinationRegistrar the destination registrar
      * @param amiContainers the AMI container UUID and the AMIs to send
      * @param contextId the context identifier
-     * @return <code>true</code> if the destination registrar is already a member of the source registrar's community,
-     *         <code>false</code> otherwise
+     * @return {@code true} if the destination registrar is already a member of the source registrar's community,
+     *         {@code false} otherwise
      */
     public boolean sendMedicalData(AndamanUserDTO destinationRegistrar, List<AMIContainer> amiContainers,
-            String contextId) {
-        
+            String contextId) throws IOException {
+
         RegistrarDTO[] members = contextService.getCommunityMembers();
+
         boolean alreadyMember = false;
         
         // Check if the destination registrar is already a community member
@@ -368,14 +373,14 @@ public class MainController implements ActionListener {
     /**
      * Listens to a login and logout button press.
      *
-     * @param e the event raised by the button press
+     * @param evt the event raised by the button press
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent evt) {
         
-        if(!(e.getSource() instanceof JButton))
+        if(!(evt.getSource() instanceof JButton))
             return;
 
-        JButton button = (JButton) e.getSource();
+        JButton button = (JButton) evt.getSource();
 
         if(button.getName().equalsIgnoreCase("login")) {
 
@@ -383,28 +388,35 @@ public class MainController implements ActionListener {
             Settings settings = loginFrame.getSettings();
 
             if(settings != null) {
-                setSettings(settings);
-                mainFrame.setTamiList();
-                currentUser = login();
 
-                if(currentUser != null) {
-                    List<DeviceDTO> devices = currentUser.getDevices();
+                try {
+                    setSettings(settings);
+                    mainFrame.setTamiList();
+                    currentUser = login();
 
-                    if(devices == null) {
-                        devices = new ArrayList<DeviceDTO>();
-                        DeviceDTO[] devicesArray = contextService.getDevices();
+                    if (currentUser != null) {
+                        List<DeviceDTO> devices = currentUser.getDevices();
 
-                        if(devicesArray != null) {
-                            devices.addAll(Arrays.asList(devicesArray));
-                            currentUser.setDevices(devices);
+                        if (devices == null) {
+                            devices = new ArrayList<DeviceDTO>();
+                            DeviceDTO[] devicesArray = contextService.getDevices();
+
+                            if (devicesArray != null) {
+                                devices.addAll(Arrays.asList(devicesArray));
+                                currentUser.setDevices(devices);
+                            }
+
+                        } else if (!devices.isEmpty()) {
+                            mainFrame.setContextId(devices.get(0).getUuid());
                         }
 
-                    } else if(!devices.isEmpty()) {
-                        mainFrame.setContextId(devices.get(0).getUuid());
+                        loginFrame.setVisible(false);
+                        mainFrame.setVisible(true);
                     }
 
-                    loginFrame.setVisible(false);
-                    mainFrame.setVisible(true);
+                } catch(IOException e) {
+                    JOptionPane.showMessageDialog(button.getRootPane(), e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
 

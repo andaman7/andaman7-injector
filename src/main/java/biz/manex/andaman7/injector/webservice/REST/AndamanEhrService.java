@@ -12,7 +12,7 @@ import org.apache.http.HttpResponse;
 import java.util.*;
 
 /**
- * This class contains methods to interact with the EHR service of Andaman7.
+ * Contains methods to interact with the EHR service of Andaman7.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://www.manex.biz)
@@ -27,8 +27,15 @@ public class AndamanEhrService extends CustomRestService {
             new HashMap<String, AndamanEhrService>();
 
 
-    private AndamanEhrService(String urlServer, String apiKey, String login,
-            String password) {
+    /**
+     * Builds an EHR service connection to the server.
+     *
+     * @param urlServer the URL of the server
+     * @param apiKey the API key
+     * @param login the login used for the authentication
+     * @param password the password used for the authentication
+     */
+    private AndamanEhrService(String urlServer, String apiKey, String login, String password) {
         super(urlServer, apiKey, login, password);
     }
 
@@ -42,16 +49,13 @@ public class AndamanEhrService extends CustomRestService {
      * @param password the password needed to authenticate
      * @return the unique instance of the EHR service
      */
-    public static AndamanEhrService getInstance(String urlServer, String apiKey,
-            String login, String password) {
+    public static AndamanEhrService getInstance(String urlServer, String apiKey, String login, String password) {
 
-        AndamanEhrService instance = INSTANCES.get(urlServer +
-                "#" + login);
+        AndamanEhrService instance = INSTANCES.get(String.format("%s#%s#%s", urlServer, login, password));
 
         if(instance == null) {
-            instance = new AndamanEhrService(urlServer, apiKey, login,
-                    password);
-            INSTANCES.put(urlServer + "#" + login, instance);
+            instance = new AndamanEhrService(urlServer, apiKey, login, password);
+            INSTANCES.put(String.format("%s#%s#%s", urlServer, login, password), instance);
         }
 
         return instance;

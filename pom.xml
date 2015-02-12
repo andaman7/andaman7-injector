@@ -7,6 +7,11 @@
     <groupId>biz.manex.andaman7.injector</groupId>
     <artifactId>injector</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>biz.manex.andaman7.server</groupId>
@@ -46,8 +51,14 @@
 
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>${org.codehaus.jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <version>${org.codehaus.jackson.version}</version>
         </dependency>
 
         <dependency>

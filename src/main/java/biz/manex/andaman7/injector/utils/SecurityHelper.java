@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 
 /**
- * This class contains some static methods about cryptography.
+ * A utility class to deal with security and cryptography.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
  * Copyright A7 Software (http://a7-software.com/)
@@ -14,6 +14,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SecurityHelper {
 
+    /**
+     * The hexadecimal base number.
+     */
     private static final int HEX_BASE = 16;
 
     /**

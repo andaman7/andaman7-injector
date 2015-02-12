@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biz.manex.andaman7.injector.views;
 
-import biz.manex.andaman7.injector.controllers.MainController;
 import biz.manex.andaman7.injector.models.Settings;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,24 +26,22 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.WindowConstants;
 
 /**
+ * The login GUI frame.
  *
- * @author Pierre-Yves
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
+ * Copyright A7 Software (http://a7-software.com/)
+ * Date : 06/02/2015.
  */
 public class LoginFrame extends JFrame {
 
-    private final MainController mainController;
-    private Settings settings;
-
     /**
      * Creates new form LoginFrame
-     * @param mainController the controller that will control the frame
      * @param loginListener the listener that will listen for actions on the
      *                      login button
+     * @param properties the properties used to pre-fill the login form
      */
-    public LoginFrame(MainController mainController, ActionListener loginListener, Properties properties) {
+    public LoginFrame(ActionListener loginListener, Properties properties) {
         initComponents();
-
-        this.mainController = mainController;
 
         jButtonLogin.addActionListener(loginListener);
 
@@ -247,11 +239,21 @@ public class LoginFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Listens for a key to be pressed when focusing the server port text field
+     *
+     * @param evt the key event
+     */
     private void jTextFieldSettingsServerPortKeyReleased(KeyEvent evt) {//GEN-FIRST:event_jTextFieldSettingsServerPortKeyReleased
         if(jTextFieldSettingsServerPort.getText().equals("443"))
             jComboBoxProtocol.setSelectedItem("https");
     }//GEN-LAST:event_jTextFieldSettingsServerPortKeyReleased
 
+    /**
+     * Verifies if no value of the settings is empty.
+     *
+     * @return {@code true} if the settings are all initialized, {@code false} otherwise
+     */
     private boolean verifySettings() {
         
         boolean state = verifyForm(jPanelSettingsServer);
@@ -261,7 +263,12 @@ public class LoginFrame extends JFrame {
         
         return state;
     }
-    
+
+    /**
+     * Verifies a form.
+     * @param form the form to verify
+     * @return {@code true} if all the values of the form are coherent, {@code false} otherwise
+     */
     private boolean verifyForm(JComponent form) {
         
         for(Component item : Arrays.asList(form.getComponents())) {
@@ -269,7 +276,7 @@ public class LoginFrame extends JFrame {
             JComponent component = (JComponent) item;
             InputVerifier iv = component.getInputVerifier();
             
-            if(iv != null && !iv.verify(component)) {
+            if((iv != null) && (!iv.verify(component))) {
                 JOptionPane.showMessageDialog(this,
                         "The " + item.getName() + " must not be empty. Check the settings tab.",
                         "Missing setting", JOptionPane.ERROR_MESSAGE);
@@ -279,7 +286,13 @@ public class LoginFrame extends JFrame {
         
         return true;
     }
-    
+
+    /**
+     * Returns the {@link biz.manex.andaman7.injector.models.Settings} according to the form.
+     *
+     * @return the {@link biz.manex.andaman7.injector.models.Settings}
+     * @see biz.manex.andaman7.injector.models.Settings
+     */
     public Settings getSettings() {
 
         if(verifySettings()) {
