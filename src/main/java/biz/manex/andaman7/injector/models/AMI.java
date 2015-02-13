@@ -8,9 +8,9 @@ package biz.manex.andaman7.injector.models;
 /**
  * Stores the TAMI and the value of an AMI.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://a7-software.com/)
- * Date : 06/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://a7-software.com/)<br/>
+ * Date : 06/02/2015.<br/>
  */
 public class AMI {
 

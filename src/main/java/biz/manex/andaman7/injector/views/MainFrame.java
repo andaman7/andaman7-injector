@@ -28,9 +28,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  * The main GUI frame.
  *
- * @author Pierre-Yves
- * Copyright A7 Software (http://www.manex.biz)
- * Date: 02/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://www.manex.biz)<br/>
+ * Date: 02/02/2015.<br/>
  */
 public class MainFrame extends JFrame {
 

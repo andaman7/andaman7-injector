@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 /**
  * An {@link javax.swing.InputVerifier} to check if a form component is not empty.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://a7-software.com/)
- * Date : 06/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://a7-software.com/)<br/>
+ * Date : 06/02/2015.<br/>
  */
 public class NoEmptyInputVerifier extends InputVerifier {
 

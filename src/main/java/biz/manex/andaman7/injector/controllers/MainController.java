@@ -33,9 +33,9 @@ import javax.xml.xpath.XPathExpressionException;
  * The main controller that coordinates the views and performs all the business
  * logic.
  *
- * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://www.manex.biz)
- * Date: 19/01/2015.
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://www.manex.biz)<br/>
+ * Date: 19/01/2015.<br/>
  */
 public class MainController implements ActionListener {
 

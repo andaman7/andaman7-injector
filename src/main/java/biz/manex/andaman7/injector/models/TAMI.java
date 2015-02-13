@@ -3,9 +3,9 @@ package biz.manex.andaman7.injector.models;
 /**
  * A type of AMI.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://a7-software.com/)
- * Date : 07/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://a7-software.com/)<br/>
+ * Date : 07/02/2015.<br/>
  */
 public class TAMI {
 

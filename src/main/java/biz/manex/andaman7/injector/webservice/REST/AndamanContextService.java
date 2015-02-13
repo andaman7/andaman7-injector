@@ -17,9 +17,9 @@ import java.util.Map;
 /**
  * Contains methods to interact with the context service of Andaman7.
  *
- * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://www.manex.biz)
- * Date: 24/01/2015.
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://www.manex.biz)<br/>
+ * Date: 24/01/2015.<br/>
  */
 public class AndamanContextService extends CustomRestService {
 

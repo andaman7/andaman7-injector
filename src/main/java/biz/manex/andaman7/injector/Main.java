@@ -11,9 +11,9 @@ import java.io.File;
 /**
  * The entry point class of the program that launches the GUI.
  *
- * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://www.manex.biz)
- * Date: 19/01/2015.
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://www.manex.biz)</br>
+ * Date: 19/01/2015.</br>
  */
 public class Main {
 

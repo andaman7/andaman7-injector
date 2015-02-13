@@ -8,9 +8,9 @@ import java.util.Map.Entry;
 /**
  * Stores the identifier and the AMIs of an EHR.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://a7-software.com/)
- * Date : 11/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://a7-software.com/)<br/>
+ * Date : 11/02/2015.<br/>
  */
 public class AMIContainer {
 

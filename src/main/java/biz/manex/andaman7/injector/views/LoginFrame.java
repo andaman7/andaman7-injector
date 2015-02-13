@@ -28,9 +28,9 @@ import javax.swing.WindowConstants;
 /**
  * The login GUI frame.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- * Copyright A7 Software (http://a7-software.com/)
- * Date : 06/02/2015.
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ * Copyright A7 Software (http://a7-software.com/)<br/>
+ * Date : 06/02/2015.<br/>
  */
 public class LoginFrame extends JFrame {
 
