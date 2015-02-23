@@ -34,7 +34,7 @@ public class XmlHelper {
      * @throws SAXException if there was an error while parsing the XML document
      */
     public static Document getDocument(File file)
-            throws IOException, SAXException {
+            throws IOException, SAXException, ParserConfigurationException {
 
         return getDocument(new FileInputStream(file));
     }
@@ -42,26 +42,17 @@ public class XmlHelper {
     /**
      * Returns a {@link org.w3c.dom.Document} from an {@link java.io.InputStream}.
      * @param inputStream the stream from which getting the XML content
-     * @return the XML document
+     * @return the XML document or null if 
      * @throws IOException if there was an error while getting the XML from the stream
      * @throws SAXException if there was an error while parsing the XML document
      */
     public static Document getDocument(InputStream inputStream)
-            throws IOException, SAXException {
+            throws IOException, SAXException, ParserConfigurationException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-
-        try {
-            builder = factory.newDocumentBuilder();
-            return builder.parse(inputStream);
-
-        } catch (ParserConfigurationException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        
+        return builder.parse(inputStream);
     }
 
     /**

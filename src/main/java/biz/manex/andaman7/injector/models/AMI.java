@@ -5,6 +5,10 @@
  */
 package biz.manex.andaman7.injector.models;
 
+import biz.manex.andaman7.injector.models.types.TAMI;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Stores the TAMI and the value of an AMI.
  *
@@ -12,7 +16,7 @@ package biz.manex.andaman7.injector.models;
  * Copyright A7 Software (http://a7-software.com/)<br/>
  * Date : 06/02/2015.<br/>
  */
-public class AMI {
+public class AMI implements QualifiableItem {
 
     /**
      * The type of the AMI.
@@ -24,11 +28,18 @@ public class AMI {
      * The value of the AMI.
      */
     private String value;
+    
+    /**
+     * The qualifiers.
+     */
+    private List<Qualifier> qualifiers;
 
     /**
      * Builds an empty AMI.
      */
     public AMI() {
+        
+        qualifiers = new ArrayList<Qualifier>();
     }
 
     /**
@@ -40,6 +51,7 @@ public class AMI {
     public AMI(TAMI type, String value) {
         this.type = type;
         this.value = value;
+        qualifiers = new ArrayList<Qualifier>();
     }
 
     /**
@@ -78,6 +90,24 @@ public class AMI {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Returns the qualifiers of the AMI.
+     * 
+     * @return the qualifiers of the AMI
+     */
+    public List<Qualifier> getQualifiers() {
+        return qualifiers;
+    }
+
+    /**
+     * Sets the qualifiers of the AMI.
+     * 
+     * @param qualifiers the qualifiers of the AMI
+     */
+    public void setQualifiers(List<Qualifier> qualifiers) {
+        this.qualifiers = qualifiers;
     }
 
     /**

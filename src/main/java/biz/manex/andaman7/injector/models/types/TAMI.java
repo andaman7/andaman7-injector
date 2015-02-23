@@ -1,4 +1,7 @@
-package biz.manex.andaman7.injector.models;
+package biz.manex.andaman7.injector.models.types;
+
+import biz.manex.andaman7.injector.models.KeyNameItem;
+import java.util.List;
 
 /**
  * A type of AMI.
@@ -7,73 +10,62 @@ package biz.manex.andaman7.injector.models;
  * Copyright A7 Software (http://a7-software.com/)<br/>
  * Date : 07/02/2015.<br/>
  */
-public class TAMI {
+public class TAMI extends KeyNameItem implements Comparable<TAMI>, Type {
 
     /**
-     * The key of the TAMI.
+     * The types of the qualifiers supported by the TAMI
      */
-    private String key;
+    protected List<QualifierType> qualifierTypes;
+
+    public TAMI() {
+        super();
+    }
 
     /**
-     * The display name of the TAMI.
-     */
-    private String name;
-
-
-    /**
-     * Builds a TAMI from a key and a display name.
+     * Builds a TAMI from a key, a display name and some qualifier types.
      *
      * @param key the key of the TAMI
      * @param name the display name of the TAMI
+     * @param qualifierTypes the qualifier types supported by the TAMI
      */
-    public TAMI(String key, String name) {
-        this.key = key;
-        this.name = name;
+    public TAMI(String key, String name, List<QualifierType> qualifierTypes) {
+        super(key, name);
+        this.qualifierTypes = qualifierTypes;
     }
 
     /**
-     * Returns the key of the TAMI.
-     *
-     * @return the key of the TAMI
+     * Returns the types of qualifiers supported by the TAMI.
+     * 
+     * @return the types of qualifiers supported by the TAMI
      */
-    public String getKey() {
-        return key;
+    public List<QualifierType> getQualifierTypes() {
+        return qualifierTypes;
     }
 
     /**
-     * Sets the key of the TAMI.
-     *
-     * @param key the key of the TAMI
+     * Sets the types of qualifiers supported by the TAMI.
+     * 
+     * @param qualifierTypes the types of qualifiers supported by the TAMI
      */
-    public void setKey(String key) {
-        this.key = key;
+    public void setQualifierTypes(List<QualifierType> qualifierTypes) {
+        this.qualifierTypes = qualifierTypes;
+    }
+    
+    /**
+     * Adds a type of qualifier to the list of supported types of qualifiers.
+     * 
+     * @param qualifierType the type of qualifier to add
+     */
+    public void addQualifierType(QualifierType qualifierType) {
+        this.qualifierTypes.add(qualifierType);
     }
 
-    /**
-     * Returns the display name of the TAMI.
-     *
-     * @return the display name of the TAMI
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the display name of the TAMI.
-     *
-     * @param name the display name of the TAMI
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the string representation of the TAMI.
-     *
-     * @return the string representation of the TAMI
-     */
     @Override
     public String toString() {
         return name;
+    }
+
+    public int compareTo(TAMI o) {
+        return name.compareTo(o.getName());
     }
 }

@@ -1,12 +1,15 @@
 package biz.manex.andaman7.injector.controllers;
 
-import biz.manex.andaman7.injector.models.Settings;
-import biz.manex.andaman7.injector.models.TAMI;
-import biz.manex.andaman7.injector.models.AMIContainer;
+import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
+import biz.manex.andaman7.injector.models.types.QualifierType;
+import biz.manex.andaman7.injector.models.types.TAMI;
+import biz.manex.andaman7.injector.models.types.MultivaluedQualifierType;
+import biz.manex.andaman7.injector.models.*;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
+import biz.manex.andaman7.injector.views.QualifiersDialog;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
 import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
@@ -24,10 +27,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+import org.xml.sax.SAXException;
 
 /**
  * The main controller that coordinates the views and performs all the business
@@ -40,11 +47,6 @@ import javax.xml.xpath.XPathExpressionException;
 public class MainController implements ActionListener {
 
     /**
-     * The current user that is logged in.
-     */
-    private RegistrarDTO currentUser;
-
-    /**
      * The context web service.
      */
     private AndamanContextService contextService;
@@ -55,6 +57,11 @@ public class MainController implements ActionListener {
     private AndamanEhrService ehrService;
 
     /**
+     * The qualifiers controller.
+     */
+    private QualifiersController qualifiersController;
+    
+    /**
      * The login GUI frame.
      */
     private LoginFrame loginFrame;
@@ -63,11 +70,21 @@ public class MainController implements ActionListener {
      * The main GUI frame.
      */
     private MainFrame mainFrame;
+    
+    /**
+     * The current user that is logged in.
+     */
+    private RegistrarDTO currentUser;
 
     /**
      * The current version of the XML file where the TAMIs are described.
      */
     private int currentTamiVersion;
+    
+    
+    public void setQualifiersController(QualifiersController qualifiersController) {
+        this.qualifiersController = qualifiersController;
+    }
 
 
     /**
@@ -80,14 +97,27 @@ public class MainController implements ActionListener {
     }
 
     /**
+     * Returns the qualifiers controller.
+     * 
+     * @return the qualifiers controller
+     */
+    public QualifiersController getQualifiersController() {
+        return qualifiersController;
+    }
+
+    /**
      * Starts the GUI.
      *
      * @param loginFrame the login GUI frame
      * @param mainFrame the main GUI frame
      */
     public void start(LoginFrame loginFrame, MainFrame mainFrame) {
+        
         this.loginFrame = loginFrame;
         this.mainFrame = mainFrame;
+        
+        qualifiersController = new QualifiersController(this, contextService, ehrService);
+        this.mainFrame.setQualifiersController(qualifiersController);
         
         this.loginFrame.setVisible(true);
     }
@@ -154,37 +184,35 @@ public class MainController implements ActionListener {
      *
      * @return the XML document
      */
-    private Document getTamiXml() {
+    private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException {
 
-        String filename = "tamidict.xml";
+        String filename = "tami-dict.xml";
         File file = FileHelper.getFileInCurrentDir(filename);
         Document doc = null;
 
-        try {
-            // Get the current version of the XML file
-            if (file.canRead()) {
+        // Get the current version of the XML file
+        if (file.canRead()) {
+            try {
                 doc = XmlHelper.getDocument(file);
-                XPathExpression expr = XmlHelper.getXPathExpression("//itemDictionary/@version");
+                XPathExpression expr = XmlHelper.getXPathExpression("//TamiDictionary/@version");
                 NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
                 currentTamiVersion = Integer.parseInt(nodes.item(0).getNodeValue());
+                
+            } catch (XPathExpressionException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
             }
-
-            Document docFromServer = contextService.getTamiXml(currentTamiVersion);
-
-            // If a new version is available, overwrite the file
-            if(docFromServer != null) {
-                XmlHelper.writeDocumentToFile(docFromServer, file);
-                doc = docFromServer;
-            }
-
-            return doc;
-
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
         }
 
-        return null;
+        Document docFromServer = contextService.getTamiXml(currentTamiVersion);
+
+        // If a new version is available, overwrite the file
+        if(docFromServer != null) {
+            XmlHelper.writeDocumentToFile(docFromServer, file);
+            doc = docFromServer;
+        }
+
+        return doc;
     }
 
     /**
@@ -192,46 +220,181 @@ public class MainController implements ActionListener {
      *
      * @return the XML document
      */
-    private Document getGuiXml() {
+    private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException {
 
-        String filename = "guipanels.xml";
+        String filename = "gui-dict.xml";
         int currentVersion = 0;
         File file = FileHelper.getFileInCurrentDir(filename);
         Document doc = null;
 
-        try {
-            // Get the current version of the XML file
-            if (file.canRead()) {
+        // Get the current version of the XML file
+        if (file.canRead()) {
+            try {
                 doc = XmlHelper.getDocument(file);
-                XPathExpression expr = XmlHelper.getXPathExpression("//guiDictionary/@version");
+                XPathExpression expr = XmlHelper.getXPathExpression("//GuiDictionary/@version");
                 NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
                 currentVersion = Integer.parseInt(nodes.item(0).getNodeValue());
+                
+            } catch (XPathExpressionException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        Document docFromServer = contextService.getGuiXml(currentVersion);
+
+        // If a new version is available, overwrite the file
+        if(docFromServer != null) {
+            XmlHelper.writeDocumentToFile(docFromServer, file);
+            doc = docFromServer;
+        }
+
+        return doc;
+    }
+
+    /**
+     * Returns a map of selection lists.
+     *
+     * @param xmlDoc the XML document from which to get the selection lists
+     * @param translations the translations of the keys
+     * @return a map of selection lists
+     */
+    private Map<String, SelectionList> getSelectionLists(Document xmlDoc, HashMap<String, String> translations) {
+
+        HashMap<String, SelectionList> selectionLists = new HashMap<String, SelectionList>();
+
+        try {
+            XPathExpression selectionListsExpr = XmlHelper.getXPathExpression("//SelectionList");
+            NodeList selectionListsNodes = (NodeList) selectionListsExpr.evaluate(xmlDoc, XPathConstants.NODESET);
+
+            for (int i = 0; i < selectionListsNodes.getLength(); i++) {
+                Node node = selectionListsNodes.item(i);
+
+                String slKey = node.getAttributes().getNamedItem("id").getNodeValue();
+                String slName = translations.get(slKey);
+                HashMap<String, SelectionListItem> items = new HashMap<String, SelectionListItem>();
+
+                // Get the items of the selection list
+                for (int j = 0; j < node.getChildNodes().getLength(); j++) {
+                    Node childNode = node.getChildNodes().item(j);
+                    if (childNode.getNodeName().equals("Item")) {
+
+                        String itemKey = childNode.getAttributes().getNamedItem("id").getNodeValue();
+                        String itemName = translations.get(itemKey);
+                        SelectionListItem item = new SelectionListItem(itemKey, itemName);
+                        items.put(itemKey, item);
+                    }
+                }
+
+                selectionLists.put(slKey, new SelectionList(slKey, items));
             }
 
-            Document docFromServer = contextService.getGuiXml(currentVersion);
-
-            // If a new version is available, overwrite the file
-            if(docFromServer != null) {
-                XmlHelper.writeDocumentToFile(docFromServer, file);
-                doc = docFromServer;
-            }
-
-            return doc;
-
-        } catch(Exception e) {
+        } catch(XPathExpressionException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
 
-        return null;
+        return selectionLists;
+    }
+
+    /**
+     * Returns a list of the default qualifier types.
+     *
+     * @param doc the XML document from which to get the default qualifier types
+     * @param translations the translation of the keys
+     * @return a list of the default qualifier types
+     */
+    private List<QualifierType> getDefaultQualifierTypes(Document doc, HashMap<String, String> translations) {
+
+        ArrayList<QualifierType> defaultQualifiersTypes = new ArrayList<QualifierType>();
+
+        try {
+            XPathExpression defaultQualifierTypesExpr = XmlHelper.getXPathExpression("//DefaultQualifier");
+            NodeList defaultQualifierTypesNodes = (NodeList) defaultQualifierTypesExpr.evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < defaultQualifierTypesNodes.getLength(); i++) {
+                Node node = defaultQualifierTypesNodes.item(i);
+                String key = node.getAttributes().getNamedItem("id").getNodeValue();
+                String value = "";
+
+                if (key.equals("default.note"))
+                    value = "Note";
+                else if (key.equals("default.stars"))
+                    continue;
+                else
+                    value = translations.get(key);
+
+                defaultQualifiersTypes.add(new QualifierType(key, value));
+            }
+        } catch(XPathExpressionException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return defaultQualifiersTypes;
+    }
+
+    /**
+     * Returns a list of the qualifier types of a TAMI.
+     *
+     * @param defaultQualifierTypes the list of all default qualifier types
+     * @param translations the translation of the keys
+     * @param tamiNode the XML node of a TAMI
+     * @param selectionLists all the available selection lists
+     * @return a list of the qualifier types of a TAMI
+     */
+    private List<QualifierType> getQualifierTypes(List<QualifierType> defaultQualifierTypes,
+            HashMap<String, String> translations, Node tamiNode, Map<String, SelectionList> selectionLists) {
+
+        List<QualifierType> qualifierTypes = new ArrayList<QualifierType>();
+        qualifierTypes.addAll(defaultQualifierTypes);
+
+        NodeList childNodes = tamiNode.getChildNodes();
+
+        // Process all qualifiers
+        for (int j = 0; j < childNodes.getLength(); j++) {
+
+            Node qualifierNode = childNodes.item(j);
+
+            if(!qualifierNode.getNodeName().equals("Qualifier"))
+                continue;
+
+            String key = qualifierNode.getAttributes().getNamedItem("id").getNodeValue();
+            String name;
+
+            // Use the key as name if the key is not found in the translations
+            if(translations.containsKey(key))
+                name = translations.get(key);
+            else
+                name = key;
+
+            String type = qualifierNode.getAttributes().getNamedItem("type").getNodeValue();
+
+            // If the qualifier is multivalued
+            if (type.equals("oneSelection") || type.equals("multiSelection")) {
+                String selectionListId = qualifierNode.getAttributes().getNamedItem("selectionListId").getNodeValue();
+                SelectionList selectionList = selectionLists.get(selectionListId);
+
+                MultivaluedQualifierType qualifierType = new MultivaluedQualifierType(key, name, selectionList);
+                qualifierTypes.add(qualifierType);
+
+            // Otherwise
+            } else {
+                QualifierType qualifierType = new QualifierType(key, name);
+                qualifierTypes.add(qualifierType);
+            }
+        }
+
+        return qualifierTypes;
     }
 
     /**
      * Returns the TAMIs from the most recent XML file.
      *
      * @return a list of the TAMIs
+     * @throws java.io.IOException 
      */
-    public TAMI[] getTamis() throws IOException {
+    public TAMI[] getTamis() throws IOException, SAXException, ParserConfigurationException {
 
         MessageDTO[] messages = contextService.getTranslations();
         HashMap<String, String> translations = new HashMap<String, String>();
@@ -245,15 +408,38 @@ public class MainController implements ActionListener {
         getGuiXml();
 
         try {
-            XPathExpression expr = XmlHelper.getXPathExpression("//tami/@id");
+            // Get the selection lists
+            Map<String, SelectionList> selectionLists = getSelectionLists(doc, translations);
+
+            // Get the default qualifier types
+            List<QualifierType> defaultQualifierTypes = getDefaultQualifierTypes(doc, translations);
+
+            // Get the TAMIs
+            XPathExpression expr = XmlHelper.getXPathExpression("//Tami");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
-                String key = node.getNodeValue();
+                String key = node.getAttributes().getNamedItem("id").getNodeValue();
+                String type = node.getAttributes().getNamedItem("type").getNodeValue();
+                String name;
 
-                if (translations.containsKey(key)) {
-                    TAMI tami = new TAMI(key, translations.get(key));
+                if(translations.containsKey(key))
+                    name = translations.get(key);
+                else
+                    name = key;
+
+                List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
+
+                if(type.equals("oneSelection") ||type.equals("multiSelection")) {
+                    String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
+                    SelectionList selectionList = selectionLists.get(selectionListId);
+
+                    MultivaluedTAMI tami = new MultivaluedTAMI(key, name, selectionList, qualifierTypes);
+                    tamis.add(tami);
+
+                } else {
+                    TAMI tami = new TAMI(key, name, qualifierTypes);
                     tamis.add(tami);
                 }
             }
@@ -273,6 +459,7 @@ public class MainController implements ActionListener {
      *
      * @param keyword the keyword on which the search is based
      * @return a list of found {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
+     * @throws java.io.IOException
      */
     public AndamanUserDTO[] searchUsers(String keyword) throws IOException {
 
@@ -320,6 +507,7 @@ public class MainController implements ActionListener {
      * @param contextId the context identifier
      * @return {@code true} if the destination registrar is already a member of the source registrar's community,
      *         {@code false} otherwise
+     * @throws java.io.IOException
      */
     public boolean sendMedicalData(AndamanUserDTO destinationRegistrar, List<AMIContainer> amiContainers,
             String contextId) throws IOException {
@@ -348,23 +536,28 @@ public class MainController implements ActionListener {
      * Returns a map of AMIs from an CSV file.
      *
      * @param file the CSV file
-     * @return a map with the TAMI keys as key and the AMI values as value
+     * @return a list of AMIs
      * @throws IOException if the CSV file is not found
      */
-    public HashMap<String, String> getAmisFromCsvFile(File file) throws IOException {
+    public List<AMI> getAmisFromCsvFile(File file) throws IOException {
 
         // Get the AMIs from the CSV file
         Reader in = new FileReader(file);
         CSVParser csvParser = new CSVParser(in, CSVFormat.EXCEL.withDelimiter(';').withHeader());
         Iterable<CSVRecord> records = csvParser.getRecords();
 
-        HashMap<String, String> amis = new HashMap<String, String>();
+        List<AMI> amis = new ArrayList<AMI>();
 
         for (CSVRecord record : records) {
-            String tami = record.get("tami");
+            String type = record.get("tami");
             String value = record.get("value");
 
-            amis.put(tami, value);
+            TAMI tami = new TAMI();
+            tami.setKey(type);
+
+            AMI ami = new AMI();
+            ami.setType(tami);
+            ami.setValue(value);
         }
 
         return amis;
@@ -382,46 +575,46 @@ public class MainController implements ActionListener {
 
         JButton button = (JButton) evt.getSource();
 
+        // Login action
         if(button.getName().equalsIgnoreCase("login")) {
 
-            // Get the settings from the login frame and login the user
-            Settings settings = loginFrame.getSettings();
+            // Get the settings from the login frame and log the user in
+            try {
+            
+                Settings settings = loginFrame.getSettings();
+                setSettings(settings);
+                mainFrame.setTamiList();
+                currentUser = login();
 
-            if(settings != null) {
+                if (currentUser != null) {
+                    List<DeviceDTO> devices = currentUser.getDevices();
 
-                try {
-                    setSettings(settings);
-                    mainFrame.setTamiList();
-                    currentUser = login();
+                    if (devices == null) {
+                        devices = new ArrayList<DeviceDTO>();
+                        DeviceDTO[] devicesArray = contextService.getDevices();
 
-                    if (currentUser != null) {
-                        List<DeviceDTO> devices = currentUser.getDevices();
-
-                        if (devices == null) {
-                            devices = new ArrayList<DeviceDTO>();
-                            DeviceDTO[] devicesArray = contextService.getDevices();
-
-                            if (devicesArray != null) {
-                                devices.addAll(Arrays.asList(devicesArray));
-                                currentUser.setDevices(devices);
-                            }
-
-                        } else if (!devices.isEmpty()) {
-                            mainFrame.setContextId(devices.get(0).getUuid());
+                        if (devicesArray != null) {
+                            devices.addAll(Arrays.asList(devicesArray));
+                            currentUser.setDevices(devices);
                         }
 
-                        loginFrame.setVisible(false);
-                        mainFrame.setVisible(true);
+                    } else if (!devices.isEmpty()) {
+                        mainFrame.setContextId(devices.get(0).getUuid());
                     }
 
-                } catch(IOException e) {
-                    JOptionPane.showMessageDialog(button.getRootPane(), e.getMessage(),
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    loginFrame.setVisible(false);
+                    mainFrame.setVisible(true);
                 }
-            }
 
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(button.getRootPane(), e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+
+        // Logout action
         } else if(button.getName().equalsIgnoreCase("logout")) {
             currentUser = null;
+            mainFrame.clearForm();
             mainFrame.setVisible(false);
             loginFrame.setVisible(true);
         }

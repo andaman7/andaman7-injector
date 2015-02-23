@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector.models;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -22,7 +23,7 @@ public class AMIContainer {
     /**
      * The AMIs.
      */
-    private HashMap<String, String> amis;
+    private List<AMI> amis;
 
 
     /**
@@ -31,7 +32,7 @@ public class AMIContainer {
      * @param uuid the UUID of the AMI container
      * @param amis the AMIs of the AMI container
      */
-    public AMIContainer(String uuid, HashMap<String, String> amis) {
+    public AMIContainer(String uuid, List<AMI> amis) {
         this.uuid = uuid;
         this.amis = amis;
     }
@@ -59,7 +60,7 @@ public class AMIContainer {
      *
      * @return the AMIs
      */
-    public HashMap<String, String> getAmis() {
+    public List<AMI> getAmis() {
         return amis;
     }
 
@@ -68,18 +69,17 @@ public class AMIContainer {
      *
      * @param amis the AMIs
      */
-    public void setAmis(HashMap<String, String> amis) {
+    public void setAmis(List<AMI> amis) {
         this.amis = amis;
     }
 
     /**
      * Add an AMI to the AMI container.
      *
-     * @param tamiKey the key of the AMI to add
-     * @param value the value of the AMI to add
+     * @param ami the AMI to add
      */
-    public void addAmi(String tamiKey, String value) {
-        amis.put(tamiKey, value);
+    public void addAmi(AMI ami) {
+        amis.add(ami);
     }
 
     /**
@@ -87,12 +87,8 @@ public class AMIContainer {
      *
      * @param amis the AMIs to add
      */
-    public void addAmis(HashMap<String, String> amis) {
-
-        Set<Entry<String, String>> set = amis.entrySet();
-
-        for(Entry<String, String> entry : set)
-            this.amis.put(entry.getKey(), entry.getValue());
+    public void addAmis(List<AMI> amis) {
+        this.amis.addAll(amis);
     }
 
     /**

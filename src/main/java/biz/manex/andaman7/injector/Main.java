@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector;
 
 import biz.manex.andaman7.injector.controllers.MainController;
+import biz.manex.andaman7.injector.controllers.QualifiersController;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.PropertyUtils;
 import biz.manex.andaman7.injector.views.LoginFrame;
@@ -32,8 +33,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        File propertyFile = FileHelper.getFileInCurrentDir("config_local.properties");
-        //File propertyFile = FileHelper.getFileInCurrentDir("config_prod.properties");
+        //File propertyFile = FileHelper.getFileInCurrentDir("config_local.properties");
+        File propertyFile = FileHelper.getFileInCurrentDir("config_prod.properties");
         PropertyUtils propertyUtils = new PropertyUtils(propertyFile);
 
         MainController mainController = new MainController();

@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.views;
 
+import biz.manex.andaman7.injector.exceptions.IncompleteSettingsException;
 import biz.manex.andaman7.injector.models.Settings;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -43,6 +44,8 @@ public class LoginFrame extends JFrame {
     public LoginFrame(ActionListener loginListener, Properties properties) {
         initComponents();
 
+        setTitle("Andaman 7 - Login");
+        
         jButtonLogin.addActionListener(loginListener);
 
         jTextFieldSettingsServerPort.setText(properties.getProperty("serverPort"));
@@ -70,76 +73,77 @@ public class LoginFrame extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelSettingsUser = new JPanel();
-        jLabelSettingsUsername = new JLabel();
-        jTextFieldSettingsUsername = new JTextField();
-        jLabelSettingsPassword = new JLabel();
-        jPasswordFieldSettingsPassword = new JPasswordField();
-        jLabelSettingTestConnection = new JLabel();
-        jPanelSettingsServer = new JPanel();
-        jLabelSettingsServerHostname = new JLabel();
-        jTextFieldSettingsServerHostname = new JTextField();
-        jLabelSettingsServerPort = new JLabel();
-        jTextFieldSettingsServerPort = new JTextField();
-        jLabelSettingsApiKey = new JLabel();
-        jTextFieldSettingsApiKey = new JTextField();
-        jLabelProtocol = new JLabel();
-        jComboBoxProtocol = new JComboBox();
-        jButtonLogin = new JButton();
+        jPanelSettingsUser = new javax.swing.JPanel();
+        jLabelSettingsUsername = new javax.swing.JLabel();
+        jTextFieldSettingsUsername = new javax.swing.JTextField();
+        jLabelSettingsPassword = new javax.swing.JLabel();
+        jPasswordFieldSettingsPassword = new javax.swing.JPasswordField();
+        jLabelSettingTestConnection = new javax.swing.JLabel();
+        jPanelSettingsServer = new javax.swing.JPanel();
+        jLabelSettingsServerHostname = new javax.swing.JLabel();
+        jTextFieldSettingsServerHostname = new javax.swing.JTextField();
+        jLabelSettingsServerPort = new javax.swing.JLabel();
+        jTextFieldSettingsServerPort = new javax.swing.JTextField();
+        jLabelSettingsApiKey = new javax.swing.JLabel();
+        jTextFieldSettingsApiKey = new javax.swing.JTextField();
+        jLabelProtocol = new javax.swing.JLabel();
+        jComboBoxProtocol = new javax.swing.JComboBox();
+        jButtonLogin = new javax.swing.JButton();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(600, 280));
         setResizable(false);
 
-        jPanelSettingsUser.setBorder(BorderFactory.createTitledBorder("User"));
+        jPanelSettingsUser.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
 
         jLabelSettingsUsername.setText("Username");
 
         jTextFieldSettingsUsername.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsUsername.setName("username"); // NOI18N
-        jTextFieldSettingsUsername.setPreferredSize(new Dimension(125, 22));
+        jTextFieldSettingsUsername.setPreferredSize(new java.awt.Dimension(125, 22));
 
         jLabelSettingsPassword.setText("Password");
 
         jPasswordFieldSettingsPassword.setInputVerifier(new NoEmptyInputVerifier());
         jPasswordFieldSettingsPassword.setName("password"); // NOI18N
-        jPasswordFieldSettingsPassword.setPreferredSize(new Dimension(125, 22));
+        jPasswordFieldSettingsPassword.setPreferredSize(new java.awt.Dimension(125, 22));
 
-        GroupLayout jPanelSettingsUserLayout = new GroupLayout(jPanelSettingsUser);
+        javax.swing.GroupLayout jPanelSettingsUserLayout = new javax.swing.GroupLayout(jPanelSettingsUser);
         jPanelSettingsUser.setLayout(jPanelSettingsUserLayout);
         jPanelSettingsUserLayout.setHorizontalGroup(
-            jPanelSettingsUserLayout.createParallelGroup(Alignment.LEADING)
+            jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSettingsUserLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelSettingsUserLayout.createParallelGroup(Alignment.LEADING)
+                .addGroup(jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelSettingsUserLayout.createSequentialGroup()
                         .addGap(141, 141, 141)
                         .addComponent(jLabelSettingTestConnection))
                     .addGroup(jPanelSettingsUserLayout.createSequentialGroup()
-                        .addGroup(jPanelSettingsUserLayout.createParallelGroup(Alignment.LEADING)
+                        .addGroup(jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelSettingsUsername)
                             .addComponent(jLabelSettingsPassword))
-                        .addPreferredGap(ComponentPlacement.UNRELATED)
-                        .addGroup(jPanelSettingsUserLayout.createParallelGroup(Alignment.LEADING, false)
-                            .addComponent(jTextFieldSettingsUsername, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(jPasswordFieldSettingsPassword, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldSettingsUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jPasswordFieldSettingsPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(282, 282, 282))
         );
         jPanelSettingsUserLayout.setVerticalGroup(
-            jPanelSettingsUserLayout.createParallelGroup(Alignment.LEADING)
+            jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSettingsUserLayout.createSequentialGroup()
-                .addGroup(jPanelSettingsUserLayout.createParallelGroup(Alignment.BASELINE)
+                .addGroup(jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSettingsUsername)
-                    .addComponent(jTextFieldSettingsUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(ComponentPlacement.RELATED)
-                .addGroup(jPanelSettingsUserLayout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(jTextFieldSettingsUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelSettingsUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSettingsPassword)
-                    .addComponent(jPasswordFieldSettingsPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPasswordFieldSettingsPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelSettingTestConnection)
                 .addContainerGap())
         );
 
-        jPanelSettingsServer.setBorder(BorderFactory.createTitledBorder("Server"));
+        jPanelSettingsServer.setBorder(javax.swing.BorderFactory.createTitledBorder("Server"));
 
         jLabelSettingsServerHostname.setText("Server hostname");
 
@@ -150,8 +154,8 @@ public class LoginFrame extends JFrame {
 
         jTextFieldSettingsServerPort.setInputVerifier(new NoEmptyInputVerifier());
         jTextFieldSettingsServerPort.setName("server port"); // NOI18N
-        jTextFieldSettingsServerPort.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent evt) {
+        jTextFieldSettingsServerPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldSettingsServerPortKeyReleased(evt);
             }
         });
@@ -163,75 +167,76 @@ public class LoginFrame extends JFrame {
 
         jLabelProtocol.setText("Protocol");
 
-        jComboBoxProtocol.setModel(new DefaultComboBoxModel(new String[] { "http", "https" }));
+        jComboBoxProtocol.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http", "https" }));
 
-        GroupLayout jPanelSettingsServerLayout = new GroupLayout(jPanelSettingsServer);
+        javax.swing.GroupLayout jPanelSettingsServerLayout = new javax.swing.GroupLayout(jPanelSettingsServer);
         jPanelSettingsServer.setLayout(jPanelSettingsServerLayout);
         jPanelSettingsServerLayout.setHorizontalGroup(
-            jPanelSettingsServerLayout.createParallelGroup(Alignment.LEADING)
+            jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelSettingsServerLayout.createParallelGroup(Alignment.LEADING)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelSettingsServerHostname)
                     .addComponent(jLabelSettingsApiKey))
-                .addPreferredGap(ComponentPlacement.UNRELATED)
-                .addGroup(jPanelSettingsServerLayout.createParallelGroup(Alignment.LEADING)
-                    .addComponent(jTextFieldSettingsApiKey, GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldSettingsApiKey, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                     .addComponent(jTextFieldSettingsServerHostname))
                 .addGap(18, 18, 18)
-                .addGroup(jPanelSettingsServerLayout.createParallelGroup(Alignment.TRAILING)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSettingsServerLayout.createSequentialGroup()
+                        .addComponent(jLabelProtocol)
+                        .addGap(26, 26, 26))
                     .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
                         .addComponent(jLabelSettingsServerPort)
-                        .addPreferredGap(ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldSettingsServerPort, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
-                        .addComponent(jLabelProtocol)
-                        .addPreferredGap(ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxProtocol, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
+                        .addGap(7, 7, 7)))
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTextFieldSettingsServerPort)
+                    .addComponent(jComboBoxProtocol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelSettingsServerLayout.setVerticalGroup(
-            jPanelSettingsServerLayout.createParallelGroup(Alignment.LEADING)
+            jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSettingsServerLayout.createSequentialGroup()
-                .addGroup(jPanelSettingsServerLayout.createParallelGroup(Alignment.BASELINE)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSettingsServerHostname)
-                    .addComponent(jTextFieldSettingsServerHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldSettingsServerHostname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelSettingsServerPort)
-                    .addComponent(jTextFieldSettingsServerPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(ComponentPlacement.RELATED)
-                .addGroup(jPanelSettingsServerLayout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(jTextFieldSettingsServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelSettingsServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSettingsApiKey)
-                    .addComponent(jTextFieldSettingsApiKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldSettingsApiKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelProtocol)
-                    .addComponent(jComboBoxProtocol, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jComboBoxProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButtonLogin.setText("Login");
         jButtonLogin.setName("login"); // NOI18N
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                    .addComponent(jPanelSettingsUser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelSettingsServer, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelSettingsUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelSettingsServer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonLogin)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelSettingsServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanelSettingsUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
+                .addComponent(jPanelSettingsServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelSettingsUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonLogin)
                 .addContainerGap())
         );
@@ -250,7 +255,7 @@ public class LoginFrame extends JFrame {
     }//GEN-LAST:event_jTextFieldSettingsServerPortKeyReleased
 
     /**
-     * Verifies if no value of the settings is empty.
+     * Verifies if no name of the settings is empty.
      *
      * @return {@code true} if the settings are all initialized, {@code false} otherwise
      */
@@ -293,7 +298,7 @@ public class LoginFrame extends JFrame {
      * @return the {@link biz.manex.andaman7.injector.models.Settings}
      * @see biz.manex.andaman7.injector.models.Settings
      */
-    public Settings getSettings() {
+    public Settings getSettings() throws IncompleteSettingsException {
 
         if(verifySettings()) {
             
@@ -317,27 +322,27 @@ public class LoginFrame extends JFrame {
             settings.setHttps(isHttps);
             
             return settings;
+        } else {
+            throw new IncompleteSettingsException("The settings are incomplete.");
         }
-        
-        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton jButtonLogin;
-    private JComboBox jComboBoxProtocol;
-    private JLabel jLabelProtocol;
-    private JLabel jLabelSettingTestConnection;
-    private JLabel jLabelSettingsApiKey;
-    private JLabel jLabelSettingsPassword;
-    private JLabel jLabelSettingsServerHostname;
-    private JLabel jLabelSettingsServerPort;
-    private JLabel jLabelSettingsUsername;
-    private JPanel jPanelSettingsServer;
-    private JPanel jPanelSettingsUser;
-    private JPasswordField jPasswordFieldSettingsPassword;
-    private JTextField jTextFieldSettingsApiKey;
-    private JTextField jTextFieldSettingsServerHostname;
-    private JTextField jTextFieldSettingsServerPort;
-    private JTextField jTextFieldSettingsUsername;
+    private javax.swing.JButton jButtonLogin;
+    private javax.swing.JComboBox jComboBoxProtocol;
+    private javax.swing.JLabel jLabelProtocol;
+    private javax.swing.JLabel jLabelSettingTestConnection;
+    private javax.swing.JLabel jLabelSettingsApiKey;
+    private javax.swing.JLabel jLabelSettingsPassword;
+    private javax.swing.JLabel jLabelSettingsServerHostname;
+    private javax.swing.JLabel jLabelSettingsServerPort;
+    private javax.swing.JLabel jLabelSettingsUsername;
+    private javax.swing.JPanel jPanelSettingsServer;
+    private javax.swing.JPanel jPanelSettingsUser;
+    private javax.swing.JPasswordField jPasswordFieldSettingsPassword;
+    private javax.swing.JTextField jTextFieldSettingsApiKey;
+    private javax.swing.JTextField jTextFieldSettingsServerHostname;
+    private javax.swing.JTextField jTextFieldSettingsServerPort;
+    private javax.swing.JTextField jTextFieldSettingsUsername;
     // End of variables declaration//GEN-END:variables
 }

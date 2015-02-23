@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Contains methods to interact with the context service of Andaman7.
@@ -90,7 +91,7 @@ public class AndamanContextService extends CustomRestService {
      * @throws java.io.IOException if there was an error with the connection to the server
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
      */
-    public Document getTamiXml(int currentXmlVersion) throws IOException, SAXException {
+    public Document getTamiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
         HttpResponse response = restTemplate.get("tami-xml/next/" + currentXmlVersion, true);
 
         if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)
@@ -109,7 +110,7 @@ public class AndamanContextService extends CustomRestService {
      * @throws java.io.IOException if there was an error with the connection to the server
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
      */
-    public Document getGuiXml(int currentXmlVersion) throws IOException, SAXException {
+    public Document getGuiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
         HttpResponse response = restTemplate.get("gui-xml/last/" + currentXmlVersion, true);
 
         if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)

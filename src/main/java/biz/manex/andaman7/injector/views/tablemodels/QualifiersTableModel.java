@@ -1,24 +1,26 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package biz.manex.andaman7.injector.views.tablemodels;
 
-import biz.manex.andaman7.injector.models.AMI;
+import biz.manex.andaman7.injector.models.Qualifier;
 
 /**
- * A table model that contains AMIs.
  *
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 11/02/2015.<br/>
+ * @author Pierre-Yves
  */
-public class AmisTableModel extends AbstractTableModel<AMI> {
+public class QualifiersTableModel  extends AbstractTableModel<Qualifier> {
 
     /**
-     * The columns of an AMI.
+     * The columns of a qualifier.
      */
-    public enum AmiColumn {
+    public enum QualifierColumn {
         /**
-         * The TAMI.
+         * The type.
          */
-        TAMI("TAMI"),
+        TYPE("Type"),
 
         /**
          * The name.
@@ -31,11 +33,11 @@ public class AmisTableModel extends AbstractTableModel<AMI> {
         private final String name;
 
         /**
-         * Builds an AMI column.
+         * Builds a qualifier column.
          *
          * @param name the name of the column
          */
-        AmiColumn(String name) {
+        QualifierColumn(String name) {
             this.name = name;
         }
 
@@ -53,17 +55,17 @@ public class AmisTableModel extends AbstractTableModel<AMI> {
      * The names of the columns.
      */
     private static final String[] COLUMN_NAMES = {
-            AmiColumn.TAMI.getName(),
-            AmiColumn.VALUE.getName()
+            QualifierColumn.TYPE.getName(),
+            QualifierColumn.VALUE.getName()
     };
-
+    
     @Override
     public String[] getColumnNames() {
         return COLUMN_NAMES;
     }
 
     @Override
-    protected Object getValueInItem(AMI item, int columnIndex) {
+    protected Object getValueInItem(Qualifier item, int columnIndex) {
         
         String result;
 
