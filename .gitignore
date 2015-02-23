@@ -2,9 +2,11 @@
 target/
 
 *.iml
+*.sql
 *.properties
 *.csv
 *.xlsx
+*.bak
 
-tamidict.xml
-guipanels.xml
+tami-dict.xml
+gui-dict.xml
