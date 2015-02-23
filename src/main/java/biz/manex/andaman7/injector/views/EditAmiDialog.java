@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.MainController;
@@ -81,6 +76,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
      * @param parent the parent frame
      * @param modal says if the dialog is modal or not
      * @param controller the main controller
+     * @param ami the AMI to edit
      */
     public EditAmiDialog(java.awt.Frame parent, boolean modal, MainController controller, AMI ami) {
         super(parent, modal);
@@ -139,6 +135,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
         
         // Value text field
         manageQualifiersPanel.getValueTextField().addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 
                 if(evt.getKeyCode() == KeyEvent.VK_ENTER)
@@ -148,6 +145,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
         
         // Values combo box
         manageQualifiersPanel.getValuesComboBox().addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                  
                if(evt.getKeyCode() == KeyEvent.VK_ENTER)
@@ -205,7 +203,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
         
         } catch(InjectorException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

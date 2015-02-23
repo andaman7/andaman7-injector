@@ -6,8 +6,8 @@ import org.codehaus.jackson.map.ObjectMapper;
  * An base class for any implementation of a REST service.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 24/01/2015.<br/>
+ *         Copyright A7 Software (http://www.manex.biz)<br/>
+ *         Date: 24/01/2015.
  */
 public class CustomRestService {
 

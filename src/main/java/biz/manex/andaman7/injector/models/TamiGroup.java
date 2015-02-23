@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- *         Copyright A7 Software (http://a7-software.com/)
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
  *         Date : 19/02/2015.
  */
 public class TamiGroup extends AbstractGroup<TAMI> implements Comparable<TamiGroup> {
 
-    private List<TAMI> tamis;
+    private final List<TAMI> tamis;
 
     /**
      * Builds an empty TAMI group.
@@ -21,10 +21,11 @@ public class TamiGroup extends AbstractGroup<TAMI> implements Comparable<TamiGro
     }
 
     /**
-     * Builds an item from a key and a display name.
+     * Builds a group of TAMIs from a key, a display name and some TAMIs.
      *
-     * @param key   the key of the item
-     * @param value the display name of the item
+     * @param key   the key of the group of TAMI
+     * @param value the display name of the group of TAMI
+     * @param tamis the list of TAMIs of the group of TAMI
      */
     public TamiGroup(String key, String value, List<TAMI> tamis) {
         super(key, value);

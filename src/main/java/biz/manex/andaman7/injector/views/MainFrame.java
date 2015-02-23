@@ -39,8 +39,8 @@ import org.xml.sax.SAXException;
  * The main GUI frame.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 02/02/2015.
+ *         Copyright A7 Software (http://www.manex.biz)<br/>
+ *         Date: 02/02/2015.
  */
 public class MainFrame extends JFrame implements ListSelectionListener {
 
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     /**
      * The model of the table containing the AMIs.
      */
-    private AmisTableModel amisTableModel;
+    private final AmisTableModel amisTableModel;
 
 
     /**
@@ -370,12 +370,12 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                     List<Qualifier> qualifiers = selectedAMI.getQualifiers();
                     List<QualifierType> qualifierTypes = selectedAMI.getType().getQualifierTypes();
                     
-                    selectedAMI = mainController.showEditAmiDialog(selectedAMI);
+                    mainController.showEditAmiDialog(selectedAMI);
                     manageAmisPanel.updateTable();
                     
                 } catch (InjectorException e) {
                     System.err.println(e.getMessage());
-                    e.printStackTrace();
+                    e.printStackTrace(System.err);
                     JOptionPane.showMessageDialog(MainFrame.this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -383,6 +383,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         
         // Value text field
         manageAmisPanel.getValueTextField().addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 
                 if(evt.getKeyCode() == KeyEvent.VK_ENTER)
@@ -392,6 +393,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         
         // Values combo box
         manageAmisPanel.getValuesComboBox().addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                  
                if(evt.getKeyCode() == KeyEvent.VK_ENTER)
@@ -413,6 +415,8 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      * Initializes the combobox of TAMI groups with those that come from the XML file.
      * 
      * @throws IOException if there was an error with the connection to the server
+     * @throws org.xml.sax.SAXException
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException {
 
@@ -451,7 +455,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 
             } catch(IOException e) {
                 System.err.println(e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -483,7 +487,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 
             } catch (InjectorException e) {
                 System.err.println(e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -513,7 +517,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -577,7 +581,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -603,7 +607,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         } catch(IOException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -638,7 +642,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         } catch(IOException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -694,7 +698,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

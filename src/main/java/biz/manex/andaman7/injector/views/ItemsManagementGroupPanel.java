@@ -19,6 +19,9 @@ import javax.swing.JTextField;
 /**
  *
  * @author Pierre-Yves
+ * @param <I>
+ * @param <V>
+ * @param <T>
  */
 public class ItemsManagementGroupPanel<I, V, T extends Type> extends AbstractItemsManagementPanel<I, V> {
 
@@ -35,6 +38,7 @@ public class ItemsManagementGroupPanel<I, V, T extends Type> extends AbstractIte
     /**
      * Builds an items management panel using a table model.
      * 
+     * @param mainController
      * @param tableModel the table model
      */
     public ItemsManagementGroupPanel(MainController mainController, AbstractTableModel<I> tableModel) {

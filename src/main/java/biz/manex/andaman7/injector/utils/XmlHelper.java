@@ -21,8 +21,8 @@ import java.io.*;
  * A utility class to deal with XML files.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 09/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 09/02/2015.
  */
 public class XmlHelper {
 
@@ -32,6 +32,7 @@ public class XmlHelper {
      * @return the XML document
      * @throws IOException if there was an error with the file
      * @throws SAXException if there was an error while parsing the XML document
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public static Document getDocument(File file)
             throws IOException, SAXException, ParserConfigurationException {
@@ -45,6 +46,7 @@ public class XmlHelper {
      * @return the XML document or null if 
      * @throws IOException if there was an error while getting the XML from the stream
      * @throws SAXException if there was an error while parsing the XML document
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public static Document getDocument(InputStream inputStream)
             throws IOException, SAXException, ParserConfigurationException {
@@ -62,6 +64,7 @@ public class XmlHelper {
      * @return the string representation of the XML document
      */
     public static String documentToString(Document doc) {
+        
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -73,7 +76,7 @@ public class XmlHelper {
 
         } catch(Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         return "";
@@ -113,7 +116,7 @@ public class XmlHelper {
 
         } catch(TransformerException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 }

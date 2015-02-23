@@ -18,8 +18,8 @@ import java.util.*;
  * Contains methods to interact with the EHR service of Andaman7.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 24/01/2015.<br/>
+ *         Copyright A7 Software (http://www.manex.biz)<br/>
+ *         Date: 24/01/2015.
  */
 public class AndamanEhrService extends CustomRestService {
 
@@ -73,6 +73,7 @@ public class AndamanEhrService extends CustomRestService {
      * @param amiContainers the AMI containers where to inject AMIs
      * @param contextId the ID of the context
      * @param tamiVersion the version of the XML file describing the TAMIs
+     * @throws java.io.IOException
      */
     public void sendAmiBasesToRegistrar(RegistrarDTO sourceRegistrar, AndamanUserDTO destinationRegistrar,
             List<AMIContainer> amiContainers, String contextId, int tamiVersion) throws IOException {
@@ -126,6 +127,7 @@ public class AndamanEhrService extends CustomRestService {
      *
      * @param deviceId the UUID of the device to retrieve medical data from
      * @return the HTTP response to the request
+     * @throws java.io.IOException
      */
     public HttpResponse getMedicalDataInQueue(String deviceId) throws IOException {
         return restTemplate.get("devices/medical-records?device-uuid=" + deviceId + "&brand=android", true);
@@ -138,6 +140,7 @@ public class AndamanEhrService extends CustomRestService {
      *                 retrieved
      * @param medicalRecordIds a list of UUIDs of the retrieved medical data
      * @return the HTTP response to the request
+     * @throws java.io.IOException
      */
     public HttpResponse acknowledgeMedicalData(String deviceId, String[] medicalRecordIds) throws IOException {
 

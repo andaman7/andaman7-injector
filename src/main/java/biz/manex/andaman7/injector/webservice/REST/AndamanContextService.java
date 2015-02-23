@@ -19,8 +19,8 @@ import javax.xml.parsers.ParserConfigurationException;
  * Contains methods to interact with the context service of Andaman7.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 24/01/2015.<br/>
+ *         Copyright A7 Software (http://www.manex.biz)<br/>
+ *         Date: 24/01/2015.
  */
 public class AndamanContextService extends CustomRestService {
 
@@ -90,6 +90,7 @@ public class AndamanContextService extends CustomRestService {
      *         or null if no new version exists
      * @throws java.io.IOException if there was an error with the connection to the server
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public Document getTamiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
         HttpResponse response = restTemplate.get("tami-xml/next/" + currentXmlVersion, true);
@@ -109,6 +110,7 @@ public class AndamanContextService extends CustomRestService {
      *         or null if no new version exists
      * @throws java.io.IOException if there was an error with the connection to the server
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public Document getGuiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
         HttpResponse response = restTemplate.get("gui-xml/last/" + currentXmlVersion, true);
@@ -153,9 +155,9 @@ public class AndamanContextService extends CustomRestService {
      * @param newCommunityMembers the list of registrars UUIDs to send the request to
      * @return the list of {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      * of the new community members
+     * @throws java.io.IOException
      */
-    public RegistrarDTO[] sendCommunityRequest(String senderDeviceId, String[] newCommunityMembers)
-            throws IOException {
+    public RegistrarDTO[] sendCommunityRequest(String senderDeviceId, String[] newCommunityMembers) throws IOException {
 
         String body = jsonMapper.writeValueAsString(newCommunityMembers);
         HttpResponse response = restTemplate.post("community/" + senderDeviceId, body);

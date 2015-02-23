@@ -3,8 +3,8 @@ package biz.manex.andaman7.injector.models.types;
 import biz.manex.andaman7.injector.models.SelectionList;
 
 /**
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- *         Copyright A7 Software (http://a7-software.com/)
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
  *         Date : 18/02/2015.
  */
 public class MultivaluedQualifierType extends QualifierType implements MultivaluedType {
@@ -33,6 +33,7 @@ public class MultivaluedQualifierType extends QualifierType implements Multivalu
         this.values = values;
     }
 
+    @Override
     public int compareTo(Type o) {
         
         if(o instanceof MultivaluedQualifierType) {

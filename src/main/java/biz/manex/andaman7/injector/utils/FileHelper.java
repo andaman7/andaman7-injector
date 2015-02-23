@@ -8,8 +8,8 @@ import java.net.URL;
  * A utility class to deal with files.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 09/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 09/02/2015.
  */
 public class FileHelper {
 

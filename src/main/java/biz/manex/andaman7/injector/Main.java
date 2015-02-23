@@ -29,7 +29,7 @@ public class Main {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         File propertyFile = FileHelper.getFileInCurrentDir("config_local.properties");

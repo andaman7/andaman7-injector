@@ -1,17 +1,13 @@
 package biz.manex.andaman7.injector.models;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 /**
  * Stores the identifier and the AMIs of an EHR.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 11/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 11/02/2015.
  */
 public class AMIContainer {
 

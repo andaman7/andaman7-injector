@@ -7,8 +7,8 @@ import java.util.List;
  * A type of AMI.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 07/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 07/02/2015.
  */
 public class TAMI extends KeyNameItem implements Type {
 

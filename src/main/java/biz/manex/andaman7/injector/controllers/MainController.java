@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
  * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 19/01/2015.<br/>
+ * Date: 19/01/2015.
  */
 public class MainController {
 
@@ -146,6 +146,8 @@ public class MainController {
 
     /**
      * Logs the user in.
+     * 
+     * @param settings the settings used to connect to the server and to login
      */
     public void login(Settings settings) {
         
@@ -178,7 +180,7 @@ public class MainController {
 
         } catch(Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(loginFrame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -215,7 +217,7 @@ public class MainController {
                 
             } catch (XPathExpressionException e) {
                 System.err.println(e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(System.err);
             }
         }
 
@@ -252,7 +254,7 @@ public class MainController {
                 
             } catch (XPathExpressionException e) {
                 System.err.println(e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(System.err);
             }
         }
 
@@ -306,7 +308,7 @@ public class MainController {
 
         } catch(XPathExpressionException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         return selectionLists;
@@ -330,7 +332,7 @@ public class MainController {
             for (int i = 0; i < defaultQualifierTypesNodes.getLength(); i++) {
                 Node node = defaultQualifierTypesNodes.item(i);
                 String key = node.getAttributes().getNamedItem("id").getNodeValue();
-                String value = "";
+                String value;
 
                 if (key.equals("default.note"))
                     value = "Note";
@@ -343,7 +345,7 @@ public class MainController {
             }
         } catch(XPathExpressionException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         return defaultQualifiersTypes;
@@ -448,6 +450,8 @@ public class MainController {
      *
      * @return a list of the TAMIs
      * @throws java.io.IOException 
+     * @throws org.xml.sax.SAXException 
+     * @throws javax.xml.parsers.ParserConfigurationException 
      */
     public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException {
 

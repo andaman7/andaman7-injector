@@ -10,8 +10,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -21,8 +19,8 @@ import javax.swing.JOptionPane;
  * The login GUI frame.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 06/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 06/02/2015.
  */
 public class LoginFrame extends JFrame {
 
@@ -51,6 +49,7 @@ public class LoginFrame extends JFrame {
         });
         
         jTextFieldSettingsApiKey.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if(evt.getKeyCode() == KeyEvent.VK_ENTER)
                     login();
@@ -100,7 +99,6 @@ public class LoginFrame extends JFrame {
         jButtonLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 280));
         setResizable(false);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -317,7 +315,7 @@ public class LoginFrame extends JFrame {
             
         } catch (IncompleteSettingsException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -330,6 +328,7 @@ public class LoginFrame extends JFrame {
      * Returns the {@link biz.manex.andaman7.injector.models.Settings} according to the form.
      *
      * @return the {@link biz.manex.andaman7.injector.models.Settings}
+     * @throws biz.manex.andaman7.injector.exceptions.IncompleteSettingsException
      * @see biz.manex.andaman7.injector.models.Settings
      */
     public Settings getSettings() throws IncompleteSettingsException {

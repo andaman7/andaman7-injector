@@ -6,8 +6,8 @@ import biz.manex.andaman7.injector.models.KeyNameItem;
  * A qualifier type.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 18/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 18/02/2015.
  */
 public class QualifierType extends KeyNameItem implements Type {
     
@@ -21,6 +21,12 @@ public class QualifierType extends KeyNameItem implements Type {
         super(key, name);
     }
 
+    /**
+     * Compares the current object to another object of same type.
+     * @param o the other object to compare to
+     * @return a negative integer, zero, or a positive integer as this object
+     *         is less than, equal to, or greater than the specified object.
+     */
     public int compareTo(Type o) {
         
         if(o instanceof QualifierType) {

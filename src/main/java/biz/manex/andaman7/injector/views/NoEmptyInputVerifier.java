@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biz.manex.andaman7.injector.views;
 
 import javax.swing.InputVerifier;
@@ -13,8 +8,8 @@ import javax.swing.JTextField;
  * An {@link javax.swing.InputVerifier} to check if a form component is not empty.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 06/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 06/02/2015.
  */
 public class NoEmptyInputVerifier extends InputVerifier {
 

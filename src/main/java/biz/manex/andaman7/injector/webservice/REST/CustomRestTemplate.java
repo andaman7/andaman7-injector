@@ -14,8 +14,8 @@ import java.util.Base64;
  * Contains methods to interact with a RESTful server.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
- * Date: 19/01/2015.<br/>
+ *         Copyright A7 Software (http://www.manex.biz)<br/>
+ *         Date: 19/01/2015.
  */
 public class CustomRestTemplate {
 

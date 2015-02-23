@@ -4,8 +4,8 @@ import biz.manex.andaman7.injector.models.SelectionList;
 import java.util.List;
 
 /**
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- *         Copyright A7 Software (http://a7-software.com/)
+ * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
  *         Date : 18/02/2015.
  */
 public class MultivaluedTAMI extends TAMI implements MultivaluedType {

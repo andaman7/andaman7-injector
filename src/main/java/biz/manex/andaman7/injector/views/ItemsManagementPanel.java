@@ -16,6 +16,8 @@ import javax.swing.event.ListSelectionListener;
 /**
  *
  * @author Pierre-Yves
+ * @param <I>
+ * @param <V>
  */
 public class ItemsManagementPanel<I, V> extends AbstractItemsManagementPanel implements ListSelectionListener {
 
@@ -32,6 +34,7 @@ public class ItemsManagementPanel<I, V> extends AbstractItemsManagementPanel imp
     /**
      * Builds an items management panel using a table model.
      * 
+     * @param mainController the main controller
      * @param tableModel the table model
      */
     public ItemsManagementPanel(MainController mainController, AbstractTableModel<I> tableModel) {

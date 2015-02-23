@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.MainController;
@@ -29,6 +24,8 @@ import javax.swing.event.ListSelectionListener;
 /**
  *
  * @author Pierre-Yves
+ * @param <I>
+ * @param <V>
  */
 public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implements ListSelectionListener {
     
@@ -223,6 +220,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
      * Adds an item to the table.
      * 
      * @param item the item to add
+     * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      */
     public void addItem(I item) throws MissingTableModelException {
         
@@ -240,6 +238,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
      * Returns the selected item.
      * 
      * @return the selected item
+     * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      * @throws NoSelectedItemException if no item is selected
      */
     public I getSelectedItem() throws MissingTableModelException, NoSelectedItemException {
@@ -258,6 +257,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
     
     /**
      * Removes the selected item from the table.
+     * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      */
     public void removeSelectedItem() throws MissingTableModelException {
         
@@ -278,6 +278,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
      * Returns all items of the table.
      * 
      * @return the items of the table
+     * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      */
     public Enumeration<I> getAllItems() throws MissingTableModelException {
         
@@ -322,6 +323,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
     
     /**
      * Clear all data of the panel : form and table.
+     * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      */
     public void clearData() throws MissingTableModelException {
         

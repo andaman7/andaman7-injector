@@ -6,8 +6,8 @@ import biz.manex.andaman7.injector.models.types.QualifierType;
  * A qualifier.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 18/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 18/02/2015.
  */
 public class Qualifier {
     

@@ -4,8 +4,8 @@ package biz.manex.andaman7.injector.models;
  * An item that has a name and is identified by a key.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 18/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 18/02/2015.
  */
 public class KeyNameItem {
     

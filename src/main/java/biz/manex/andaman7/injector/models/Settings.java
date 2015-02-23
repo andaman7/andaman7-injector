@@ -4,8 +4,8 @@ package biz.manex.andaman7.injector.models;
  * The settings needed to connect to the server.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 02/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 02/02/2015.
  */
 public class Settings {
 

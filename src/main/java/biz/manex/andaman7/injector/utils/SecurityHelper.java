@@ -9,8 +9,8 @@ import java.security.NoSuchAlgorithmException;
  * A utility class to deal with security and cryptography.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date: 19/01/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date: 19/01/2015.
  */
 public class SecurityHelper {
 
@@ -49,7 +49,7 @@ public class SecurityHelper {
             hash = getHexDigest(data, "SHA-256");
         } catch (NoSuchAlgorithmException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         return hash;

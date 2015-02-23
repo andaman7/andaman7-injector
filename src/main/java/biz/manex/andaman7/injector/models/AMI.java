@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biz.manex.andaman7.injector.models;
 
 import biz.manex.andaman7.injector.models.types.TAMI;
@@ -13,8 +8,8 @@ import java.util.List;
  * Stores the TAMI and the value of an AMI.
  *
  * @author Pierre-Yves (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://a7-software.com/)<br/>
- * Date : 06/02/2015.<br/>
+ *         Copyright A7 Software (http://a7-software.com/)<br/>
+ *         Date : 06/02/2015.
  */
 public class AMI {
 
