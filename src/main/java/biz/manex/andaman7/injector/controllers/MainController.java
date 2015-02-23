@@ -153,7 +153,7 @@ public class MainController {
         try {
 
             setSettings(settings);
-            mainFrame.setTamiList(); // TODO : Should build the main frame here
+            mainFrame.setTamiGroupsList(); // TODO : Should build the main frame here
             currentUser = contextService.login();
 
             if (currentUser != null) {
@@ -177,6 +177,8 @@ public class MainController {
             }
 
         } catch(Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(loginFrame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -400,6 +402,46 @@ public class MainController {
 
         return qualifierTypes;
     }
+    
+    public List<TAMI> getTamis(HashMap<String, String> translations, List<QualifierType> defaultQualifierTypes,
+            Map<String, SelectionList> selectionLists, Node tamiGroupNode) {
+        
+        List<TAMI> tamis = new ArrayList<TAMI>();
+        NodeList tamiNodes = tamiGroupNode.getChildNodes();
+
+        for (int i = 0; i < tamiNodes.getLength(); i++) {
+            
+            Node node = tamiNodes.item(i);
+            
+            if(!node.getNodeName().equals("Tami"))
+                continue;
+            
+            String key = node.getAttributes().getNamedItem("id").getNodeValue();
+            String type = node.getAttributes().getNamedItem("type").getNodeValue();
+            String name;
+
+            if(translations.containsKey(key))
+                name = translations.get(key);
+            else
+                name = key;
+
+            List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
+
+            if(type.equals("oneSelection") ||type.equals("multiSelection")) {
+                String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
+                SelectionList selectionList = selectionLists.get(selectionListId);
+
+                MultivaluedTAMI tami = new MultivaluedTAMI(key, name, selectionList, qualifierTypes);
+                tamis.add(tami);
+
+            } else {
+                TAMI tami = new TAMI(key, name, qualifierTypes);
+                tamis.add(tami);
+            }
+        }
+        
+        return tamis;
+    }
 
     /**
      * Returns the TAMIs from the most recent XML file.
@@ -407,11 +449,11 @@ public class MainController {
      * @return a list of the TAMIs
      * @throws java.io.IOException 
      */
-    public TAMI[] getTamis() throws IOException, SAXException, ParserConfigurationException {
+    public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException {
 
         MessageDTO[] messages = contextService.getTranslations();
         HashMap<String, String> translations = new HashMap<String, String>();
-        ArrayList<TAMI> tamis = new ArrayList<TAMI>();
+        List<TamiGroup> tamiGroups = new ArrayList<TamiGroup>();
 
         for(MessageDTO message : messages)
             if(message.getLanguageCode().equals("EN"))
@@ -426,41 +468,32 @@ public class MainController {
 
             // Get the default qualifier types
             List<QualifierType> defaultQualifierTypes = getDefaultQualifierTypes(doc, translations);
-
-            // Get the TAMIs
-            XPathExpression expr = XmlHelper.getXPathExpression("//Tami");
+            
+            // Get the TAMI groups
+            XPathExpression expr = XmlHelper.getXPathExpression("//TamiGroup");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                String key = node.getAttributes().getNamedItem("id").getNodeValue();
-                String type = node.getAttributes().getNamedItem("type").getNodeValue();
+            
+            for(int i = 0; i < nodes.getLength(); i++) {
+                
+                Node tamiGroupNode = nodes.item(i);
+                String key = tamiGroupNode.getAttributes().getNamedItem("id").getNodeValue();
                 String name;
-
+                
                 if(translations.containsKey(key))
                     name = translations.get(key);
                 else
                     name = key;
 
-                List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
+                List<TAMI> tamis = getTamis(translations, defaultQualifierTypes, selectionLists, tamiGroupNode);
 
-                if(type.equals("oneSelection") ||type.equals("multiSelection")) {
-                    String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
-                    SelectionList selectionList = selectionLists.get(selectionListId);
-
-                    MultivaluedTAMI tami = new MultivaluedTAMI(key, name, selectionList, qualifierTypes);
-                    tamis.add(tami);
-
-                } else {
-                    TAMI tami = new TAMI(key, name, qualifierTypes);
-                    tamis.add(tami);
-                }
+                TamiGroup tamiGroup = new TamiGroup(key, name, tamis);
+                tamiGroups.add(tamiGroup);
             }
 
-            return tamis.toArray(new TAMI[tamis.size()]);
+            return tamiGroups;
 
         } catch(XPathExpressionException e) {
-            return new TAMI[0];
+            return new ArrayList<TamiGroup>();
         }
     }
 
@@ -571,6 +604,8 @@ public class MainController {
             AMI ami = new AMI();
             ami.setType(tami);
             ami.setValue(value);
+            
+            amis.add(ami);
         }
 
         return amis;

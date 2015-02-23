@@ -283,7 +283,7 @@
       <SubComponents>
         <Component class="biz.manex.andaman7.injector.views.ItemsManagementGroupPanel" name="manageAmisPanel">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ItemsManagementGroupPanel&lt;AMI, SelectionListItem&gt;(mainController, amisTableModel)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ItemsManagementGroupPanel&lt;AMI, SelectionListItem, TAMI&gt;(mainController, amisTableModel)"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">

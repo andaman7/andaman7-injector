@@ -205,6 +205,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
         
         } catch(InjectorException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

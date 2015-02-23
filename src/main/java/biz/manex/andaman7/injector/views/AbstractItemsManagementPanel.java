@@ -59,7 +59,6 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
 
         jComboBoxDataValues = new JComboBox<V>();
         jComboBoxDataValues.setModel(new DefaultComboBoxModel<V>());
-        //jComboBoxDataValues.setPreferredSize(new Dimension(150, 22));
         jComboBoxDataValues.setSelectedIndex(-1);
 
         getTable().getSelectionModel().addListSelectionListener(this);
@@ -99,6 +98,7 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
     public void setTypes(Type[] types) {
         
         DefaultComboBoxModel<Type> model = (DefaultComboBoxModel<Type>) getTypeComboBox().getModel();
+        model.removeAllElements();
         
         for(Type item : types)
             model.addElement(item);

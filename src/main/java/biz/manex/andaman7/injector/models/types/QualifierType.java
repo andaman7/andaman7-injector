@@ -20,4 +20,15 @@ public class QualifierType extends KeyNameItem implements Type {
     public QualifierType(String key, String name) {
         super(key, name);
     }
+
+    public int compareTo(Type o) {
+        
+        if(o instanceof QualifierType) {
+            
+            QualifierType qualifierType = (QualifierType) o;
+            return name.compareTo(qualifierType.getName());
+        }
+        
+        return -1;
+    }
 }

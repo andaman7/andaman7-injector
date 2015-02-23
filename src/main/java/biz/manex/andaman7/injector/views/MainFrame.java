@@ -13,6 +13,7 @@ import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.SelectionList;
 import biz.manex.andaman7.injector.models.SelectionListItem;
+import biz.manex.andaman7.injector.models.TamiGroup;
 import biz.manex.andaman7.injector.models.types.TAMI;
 import biz.manex.andaman7.injector.views.tablemodels.TableRowSelectionModel;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
@@ -110,7 +111,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         jButtonContextNewEHR = new javax.swing.JButton();
         jButtonContextRegistrarsEHR = new javax.swing.JButton();
         jTabbedPaneData = new javax.swing.JTabbedPane();
-        manageAmisPanel = new ItemsManagementGroupPanel<AMI, SelectionListItem>(mainController, amisTableModel);
+        manageAmisPanel = new ItemsManagementGroupPanel<AMI, SelectionListItem, TAMI>(mainController, amisTableModel);
         jPanelUpload = new javax.swing.JPanel();
         jLabelUploadFile = new javax.swing.JLabel();
         jTextFieldUploadFile = new javax.swing.JTextField();
@@ -374,6 +375,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                     
                 } catch (InjectorException e) {
                     System.err.println(e.getMessage());
+                    e.printStackTrace();
                     JOptionPane.showMessageDialog(MainFrame.this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -408,18 +410,23 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     }
     
     /**
-     * Initializes the combobox of TAMIs with those that come from the XML file.
+     * Initializes the combobox of TAMI groups with those that come from the XML file.
      * 
      * @throws IOException if there was an error with the connection to the server
      */
-    public void setTamiList() throws IOException, SAXException, ParserConfigurationException {
+    public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException {
 
         DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<TAMI>();
-        TAMI[] tamis = mainController.getTamis();
-
-        Arrays.sort(tamis);
+        List<TamiGroup> tamiGroups = mainController.getTamiGroups();
         
-        manageAmisPanel.setTypes(tamis);
+        tamiGroups.sort(new Comparator<TamiGroup>() {
+
+            public int compare(TamiGroup group1, TamiGroup group2) {
+                return group1.getName().compareTo(group2.getName());
+            }
+        });
+        
+        manageAmisPanel.setGroups(tamiGroups);
     }
 
     /**
@@ -444,6 +451,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 
             } catch(IOException e) {
                 System.err.println(e.getMessage());
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -475,6 +483,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 
             } catch (InjectorException e) {
                 System.err.println(e.getMessage());
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -504,6 +513,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -567,6 +577,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -592,6 +603,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         } catch(IOException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -626,6 +638,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         } catch(IOException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -681,6 +694,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -10,7 +10,7 @@ import java.util.List;
  * Copyright A7 Software (http://a7-software.com/)<br/>
  * Date : 07/02/2015.<br/>
  */
-public class TAMI extends KeyNameItem implements Comparable<TAMI>, Type {
+public class TAMI extends KeyNameItem implements Type {
 
     /**
      * The types of the qualifiers supported by the TAMI
@@ -65,7 +65,14 @@ public class TAMI extends KeyNameItem implements Comparable<TAMI>, Type {
         return name;
     }
 
-    public int compareTo(TAMI o) {
-        return name.compareTo(o.getName());
+    public int compareTo(Type o) {
+        
+        if(o instanceof TAMI) {
+            
+            TAMI tami = (TAMI) o;
+            return name.compareTo(tami.getName());
+        }
+        
+        return -1;
     }
 }

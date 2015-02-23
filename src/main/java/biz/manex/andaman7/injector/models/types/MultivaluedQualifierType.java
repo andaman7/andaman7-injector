@@ -32,4 +32,15 @@ public class MultivaluedQualifierType extends QualifierType implements Multivalu
     public void setValues(SelectionList values) {
         this.values = values;
     }
+
+    public int compareTo(Type o) {
+        
+        if(o instanceof MultivaluedQualifierType) {
+            
+            MultivaluedQualifierType multiQualifierType = (MultivaluedQualifierType) o;
+            return name.compareTo(multiQualifierType.getName());
+        }
+        
+        return -1;
+    }
 }

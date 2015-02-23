@@ -56,8 +56,6 @@ public class LoginFrame extends JFrame {
                     login();
             }
         });
-        
-        
 
         jTextFieldSettingsServerPort.setText(properties.getProperty("serverPort"));
         jTextFieldSettingsServerHostname.setText(properties.getProperty("serverHostname"));
@@ -303,9 +301,7 @@ public class LoginFrame extends JFrame {
             InputVerifier iv = component.getInputVerifier();
             
             if((iv != null) && (!iv.verify(component))) {
-                JOptionPane.showMessageDialog(this,
-                        "The " + item.getName() + " must not be empty. Check the settings tab.",
-                        "Missing setting", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "The " + item.getName() + " must not be empty.", "Missing setting", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
@@ -314,11 +310,14 @@ public class LoginFrame extends JFrame {
     }
     
     private void login() {
+        
         try {
             Settings settings = getSettings();
             mainController.login(settings);
+            
         } catch (IncompleteSettingsException e) {
             System.err.println(e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

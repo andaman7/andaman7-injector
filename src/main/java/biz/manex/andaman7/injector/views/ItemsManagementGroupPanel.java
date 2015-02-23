@@ -2,8 +2,11 @@ package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.MainController;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
+import biz.manex.andaman7.injector.models.AbstractGroup;
 import biz.manex.andaman7.injector.models.types.Type;
 import biz.manex.andaman7.injector.views.tablemodels.AbstractTableModel;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,7 +20,7 @@ import javax.swing.JTextField;
  *
  * @author Pierre-Yves
  */
-public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPanel {
+public class ItemsManagementGroupPanel<I, V, T extends Type> extends AbstractItemsManagementPanel<I, V> {
 
     /**
      * Builds an items management panel.
@@ -39,6 +42,17 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
 
         setMainController(mainController);
         setTableModel(tableModel);
+    }
+    
+    public void setGroups(List<AbstractGroup<T>> groups) {
+        
+        DefaultComboBoxModel<AbstractGroup<T>> model = (DefaultComboBoxModel<AbstractGroup<T>>) jComboBoxGroup.getModel();
+        
+        for(AbstractGroup<T> group : groups)
+            model.addElement(group);
+        
+        jComboBoxGroup.setSelectedIndex(-1);
+        jComboBoxType.setSelectedIndex(-1);
     }
 
     protected void switchDataValueComponent(JComponent oldComponent, JComponent newComponent) {
@@ -72,7 +86,6 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
                             .addComponent(newComponent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButtonQualifiers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -101,8 +114,6 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
                             .addComponent(jButtonRemove)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButtonEdit)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButtonQualifiers)
                             .addGap(0, 0, Short.MAX_VALUE))
                         .addComponent(jScrollPaneData, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addContainerGap()))
@@ -111,6 +122,26 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
         invalidate();
     }
 
+    private void selectedGroupUpdated() {
+        AbstractGroup<T> group = (AbstractGroup<T>) jComboBoxGroup.getSelectedItem();
+        
+        if(group == null)
+            return;
+        
+        List<T> items = group.getItems();
+        
+        Type[] itemsArray = items.toArray(new Type[items.size()]);
+        Arrays.sort(itemsArray);
+        setTypes(itemsArray);
+    }
+    
+    @Override
+    public void clearForm() {
+        super.clearForm();
+        
+        jComboBoxGroup.setSelectedIndex(-1);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -124,7 +155,6 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
         jComboBoxType = new javax.swing.JComboBox();
         jScrollPaneData = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
-        jButtonQualifiers = new javax.swing.JButton();
         jComboBoxGroup = new javax.swing.JComboBox();
         jLabelGroup = new javax.swing.JLabel();
 
@@ -168,8 +198,12 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
         jTable.setName("amis"); // NOI18N
         jScrollPaneData.setViewportView(jTable);
 
-        jButtonQualifiers.setText("Qualifiers");
-        jButtonQualifiers.setEnabled(false);
+        jComboBoxGroup.setModel(new DefaultComboBoxModel<AbstractGroup<T>>());
+        jComboBoxGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxGroupActionPerformed(evt);
+            }
+        });
 
         jLabelGroup.setText("Group");
 
@@ -191,14 +225,13 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                        .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabelValue)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jTextFieldValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButtonQualifiers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -227,10 +260,8 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
                             .addComponent(jButtonRemove)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButtonEdit)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButtonQualifiers)
                             .addGap(0, 0, Short.MAX_VALUE))
-                        .addComponent(jScrollPaneData, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
                     .addContainerGap()))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -247,16 +278,16 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
         }
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
+    private void jComboBoxGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxGroupActionPerformed
+        selectedGroupUpdated();
+    }//GEN-LAST:event_jComboBoxGroupActionPerformed
+
     public JButton getAddButton() {
         return jButtonAdd;
     }
 
     public JButton getEditButton() {
         return jButtonEdit;
-    }
-
-    public JButton getQualifiersButton() {
-        return jButtonQualifiers;
     }
 
     public JButton getRemoveButton() {
@@ -294,7 +325,6 @@ public class ItemsManagementGroupPanel<I, V> extends AbstractItemsManagementPane
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JButton jButtonAdd;
     protected javax.swing.JButton jButtonEdit;
-    protected javax.swing.JButton jButtonQualifiers;
     protected javax.swing.JButton jButtonRemove;
     private javax.swing.JComboBox jComboBoxGroup;
     protected javax.swing.JComboBox jComboBoxType;
