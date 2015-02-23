@@ -16,7 +16,7 @@ import java.util.List;
  * Copyright A7 Software (http://a7-software.com/)<br/>
  * Date : 06/02/2015.<br/>
  */
-public class AMI implements QualifiableItem {
+public class AMI {
 
     /**
      * The type of the AMI.

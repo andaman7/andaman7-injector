@@ -1,30 +1,21 @@
 package biz.manex.andaman7.injector.views;
 
+import biz.manex.andaman7.injector.controllers.MainController;
 import biz.manex.andaman7.injector.exceptions.IncompleteSettingsException;
 import biz.manex.andaman7.injector.models.Settings;
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Properties;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.InputVerifier;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.WindowConstants;
 
 /**
  * The login GUI frame.
@@ -36,17 +27,37 @@ import javax.swing.WindowConstants;
 public class LoginFrame extends JFrame {
 
     /**
+     * The main controller.
+     */
+    private final MainController mainController;
+    
+    /**
      * Creates new form LoginFrame
-     * @param loginListener the listener that will listen for actions on the
-     *                      login button
+     * 
+     * @param mainController the main controller
      * @param properties the properties used to pre-fill the login form
      */
-    public LoginFrame(ActionListener loginListener, Properties properties) {
+    public LoginFrame(MainController mainController, Properties properties) {
         initComponents();
+        
+        this.mainController = mainController;
 
         setTitle("Andaman 7 - Login");
         
-        jButtonLogin.addActionListener(loginListener);
+        jButtonLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+        
+        jTextFieldSettingsApiKey.addKeyListener(new KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+                    login();
+            }
+        });
+        
+        
 
         jTextFieldSettingsServerPort.setText(properties.getProperty("serverPort"));
         jTextFieldSettingsServerHostname.setText(properties.getProperty("serverHostname"));
@@ -93,6 +104,11 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 280));
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jPanelSettingsUser.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
 
@@ -254,6 +270,11 @@ public class LoginFrame extends JFrame {
             jComboBoxProtocol.setSelectedItem("https");
     }//GEN-LAST:event_jTextFieldSettingsServerPortKeyReleased
 
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+            login();
+    }//GEN-LAST:event_formKeyPressed
+
     /**
      * Verifies if no name of the settings is empty.
      *
@@ -290,6 +311,20 @@ public class LoginFrame extends JFrame {
         }
         
         return true;
+    }
+    
+    private void login() {
+        try {
+            Settings settings = getSettings();
+            mainController.login(settings);
+        } catch (IncompleteSettingsException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void logout() {
+        mainController.logout();
     }
 
     /**

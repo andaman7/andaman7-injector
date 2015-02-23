@@ -17,17 +17,21 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabelGroup" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Component id="jComboBoxGroup" min="-2" pref="182" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabelType" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-              <Component id="jComboBoxType" pref="330" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
+              <Component id="jComboBoxType" pref="180" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPaneData" alignment="0" pref="384" max="32767" attributes="0"/>
+                      <Component id="jScrollPaneData" alignment="0" pref="376" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabelValue" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -36,6 +40,7 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jButtonQualifiers" alignment="0" max="32767" attributes="0"/>
                       <Component id="jButtonEdit" alignment="0" max="32767" attributes="0"/>
                       <Component id="jButtonRemove" alignment="0" max="32767" attributes="0"/>
                       <Component id="jButtonAdd" alignment="0" max="32767" attributes="0"/>
@@ -52,6 +57,8 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelType" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jComboBoxType" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboBoxGroup" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelGroup" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="358" max="32767" attributes="0"/>
           </Group>
@@ -69,9 +76,11 @@
                           <Component id="jButtonRemove" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButtonEdit" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButtonQualifiers" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPaneData" alignment="0" pref="306" max="32767" attributes="0"/>
+                      <Component id="jScrollPaneData" alignment="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -178,5 +187,26 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="jButtonQualifiers">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Qualifiers"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jComboBoxGroup">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelGroup">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Group"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

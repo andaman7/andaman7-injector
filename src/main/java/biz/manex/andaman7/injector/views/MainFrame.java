@@ -3,7 +3,8 @@ package biz.manex.andaman7.injector.views;
 import biz.manex.andaman7.injector.views.tablemodels.AmisTableModel;
 import biz.manex.andaman7.injector.views.tablemodels.AndamanUsersTableModel;
 import biz.manex.andaman7.injector.controllers.MainController;
-import biz.manex.andaman7.injector.controllers.QualifiersController;
+import biz.manex.andaman7.injector.exceptions.InjectorException;
+import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
@@ -53,11 +54,6 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     private File selectedCsvFile;
     
     /**
-     * The panel that manages the AMIs.
-     */
-    private ItemsManagementPanel<AMI, SelectionListItem> manageAmisPanel;
-    
-    /**
      * The model of the table containing the AMIs.
      */
     private AmisTableModel amisTableModel;
@@ -67,24 +63,16 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      * Builds a main frame.
      *
      * @param mainController the main controller
-     * @param logoutListener the logout listener
      */
-    public MainFrame(MainController mainController, ActionListener logoutListener) {
+    public MainFrame(MainController mainController) {
         
         this.mainController = mainController;
         amisTableModel = new AmisTableModel();
         
         initComponents();
-        
-        jButtonLogout.addActionListener(logoutListener);
 
-        // Initialize the manage AMIs panel
-        manageAmisPanel = new ItemsManagementPanel<AMI, SelectionListItem>(true, amisTableModel);
-        manageAmisPanel.setName("form");
-        wireManageAmisPanel();
-        
-        jTabbedPaneData.insertTab("Form", null, manageAmisPanel, null, 0);
-        jTabbedPaneData.setSelectedIndex(0);
+        // Wire the events sent by the AMIs management panel
+        wireAmisManagementPanel();
         
         // Initialize the registrars table
         TableRowSelectionModel registrarsSelectionModel = new TableRowSelectionModel(jTableRegistrars);
@@ -122,6 +110,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         jButtonContextNewEHR = new javax.swing.JButton();
         jButtonContextRegistrarsEHR = new javax.swing.JButton();
         jTabbedPaneData = new javax.swing.JTabbedPane();
+        manageAmisPanel = new ItemsManagementGroupPanel<AMI, SelectionListItem>(mainController, amisTableModel);
         jPanelUpload = new javax.swing.JPanel();
         jLabelUploadFile = new javax.swing.JLabel();
         jTextFieldUploadFile = new javax.swing.JTextField();
@@ -257,6 +246,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         jTabbedPaneData.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
         jTabbedPaneData.setName(""); // NOI18N
+        jTabbedPaneData.addTab("Form", manageAmisPanel);
 
         jPanelUpload.setName("upload"); // NOI18N
 
@@ -308,7 +298,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 .addContainerGap(362, Short.MAX_VALUE))
         );
 
-        jTabbedPaneData.addTab("Upload", jPanelUpload);
+        jTabbedPaneData.addTab("File", jPanelUpload);
 
         jButtonSend.setText("Send");
         jButtonSend.addActionListener(new java.awt.event.ActionListener() {
@@ -360,7 +350,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     /**
      * Subscribe to all needed components of the panel that manages the AMIs.
      */
-    private void wireManageAmisPanel() {
+    private void wireAmisManagementPanel() {
         
         // Add button
         manageAmisPanel.getAddButton().addActionListener(new ActionListener() {
@@ -368,37 +358,23 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 addAmi();
             }
         });
-
+        
         // Edit button
         manageAmisPanel.getEditButton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                
-                try {
-                    editAmi();
-                    
-                } catch (NoSelectedItemException ex) {
-                    System.err.println(ex.getMessage());
-                    JOptionPane.showMessageDialog(MainFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        
-        // Qualifiers button
-        manageAmisPanel.getQualifiersButton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent evt) {
 
                 try {
-                    AMI selectedAMI = manageAmisPanel.getSelectedItem();
+                    AMI selectedAMI = (AMI) manageAmisPanel.getSelectedItem();
                     
                     List<Qualifier> qualifiers = selectedAMI.getQualifiers();
                     List<QualifierType> qualifierTypes = selectedAMI.getType().getQualifierTypes();
                     
-                    selectedAMI = (AMI) manageAmisPanel.showQualifiersDialog(selectedAMI, qualifierTypes);
-                    manageAmisPanel.updateItem(selectedAMI);
+                    selectedAMI = mainController.showEditAmiDialog(selectedAMI);
+                    manageAmisPanel.updateTable();
                     
-                } catch (NoSelectedItemException ex) {
-                    System.err.println(ex.getMessage());
-                    JOptionPane.showMessageDialog(MainFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (InjectorException e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(MainFrame.this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -444,10 +420,6 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         Arrays.sort(tamis);
         
         manageAmisPanel.setTypes(tamis);
-    }
-    
-    public void setQualifiersController(QualifiersController qualifiersController) {
-        manageAmisPanel.setQualifierController(qualifiersController);
     }
 
     /**
@@ -497,8 +469,14 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         }
 
         if(!strValue.isEmpty()) {
-            AMI ami = new AMI(type, strValue);
-            manageAmisPanel.addItem(ami);
+            try {
+                AMI ami = new AMI(type, strValue);
+                manageAmisPanel.addItem(ami);
+                
+            } catch (InjectorException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -507,21 +485,27 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      */
     private void editAmi() throws NoSelectedItemException {
         
-        AMI ami = manageAmisPanel.getSelectedItem();
-        manageAmisPanel.setSelectedType(ami.getType());
-        
-        if(ami.getType() instanceof MultivaluedTAMI) {
+        try {
+            AMI ami = (AMI) manageAmisPanel.getSelectedItem();
+            manageAmisPanel.setSelectedType(ami.getType());
             
-            MultivaluedTAMI multiTAMI = (MultivaluedTAMI) ami.getType();
-            SelectionList selectionList = multiTAMI.getValues();
-            SelectionListItem item = selectionList.getItem(ami.getValue());
-            manageAmisPanel.setSelectedValue(true, item);
+            if(ami.getType() instanceof MultivaluedTAMI) {
+                
+                MultivaluedTAMI multiTAMI = (MultivaluedTAMI) ami.getType();
+                SelectionList selectionList = multiTAMI.getValues();
+                SelectionListItem item = selectionList.getItem(ami.getValue());
+                manageAmisPanel.setSelectedValue(true, item);
+                
+            } else {
+                manageAmisPanel.setSelectedValue(false, ami.getValue());
+            }
             
-        } else {
-            manageAmisPanel.setSelectedValue(false, ami.getValue());
+            manageAmisPanel.removeSelectedItem();
+            
+        } catch (MissingTableModelException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        manageAmisPanel.removeSelectedItem();
     }
 
     /**
@@ -566,19 +550,25 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      */
     private void sendAmisFromGui() {
 
-        if(!verifyBeforeSendingAmis())
-            return;
-
-        if(amisTableModel.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "At least one data must be entered.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        try {
+            if(!verifyBeforeSendingAmis())
+                return;
+            
+            if(amisTableModel.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "At least one data must be entered.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            List<AMI> amis = new ArrayList<AMI>();
+            Enumeration<AMI> enu = manageAmisPanel.getAllItems();
+            amis.addAll(Collections.list(enu));
+            
+            sendAmis(amis);
+            
+        } catch (MissingTableModelException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        List<AMI> amis = new ArrayList<AMI>();
-        Enumeration<AMI> enu = manageAmisPanel.getAllItems();
-        amis.addAll(Collections.list(enu));
-
-        sendAmis(amis);
     }
 
     /**
@@ -686,7 +676,13 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         andamanUsersTableModel = (AndamanUsersTableModel) jTableRegistrars.getModel();
         andamanUsersTableModel.clear();
         
-        manageAmisPanel.clearData();
+        try {
+            manageAmisPanel.clearData();
+            
+        } catch (MissingTableModelException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -704,6 +700,8 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      * @param evt the action event
      */
     private void jButtonLogoutActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
+        
+        mainController.logout();
         clearForm();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
@@ -788,5 +786,6 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     private javax.swing.JTextField jTextFieldEhrId;
     private javax.swing.JTextField jTextFieldRegistrarKeyword;
     private javax.swing.JTextField jTextFieldUploadFile;
+    private biz.manex.andaman7.injector.views.ItemsManagementGroupPanel manageAmisPanel;
     // End of variables declaration//GEN-END:variables
 }

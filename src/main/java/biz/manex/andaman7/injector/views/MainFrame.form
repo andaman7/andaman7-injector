@@ -281,14 +281,26 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
+        <Component class="biz.manex.andaman7.injector.views.ItemsManagementGroupPanel" name="manageAmisPanel">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ItemsManagementGroupPanel&lt;AMI, SelectionListItem&gt;(mainController, amisTableModel)"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Form">
+                <Property name="tabTitle" type="java.lang.String" value="Form"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+        </Component>
         <Container class="javax.swing.JPanel" name="jPanelUpload">
           <Properties>
             <Property name="name" type="java.lang.String" value="upload" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Upload">
-                <Property name="tabTitle" type="java.lang.String" value="Upload"/>
+              <JTabbedPaneConstraints tabName="File">
+                <Property name="tabTitle" type="java.lang.String" value="File"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

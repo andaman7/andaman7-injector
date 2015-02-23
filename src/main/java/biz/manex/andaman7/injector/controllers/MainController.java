@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.controllers;
 
+import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.types.TAMI;
@@ -7,9 +8,9 @@ import biz.manex.andaman7.injector.models.types.MultivaluedQualifierType;
 import biz.manex.andaman7.injector.models.*;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.XmlHelper;
+import biz.manex.andaman7.injector.views.EditAmiDialog;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
-import biz.manex.andaman7.injector.views.QualifiersDialog;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
 import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
@@ -23,12 +24,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
@@ -44,7 +41,7 @@ import org.xml.sax.SAXException;
  * Copyright A7 Software (http://www.manex.biz)<br/>
  * Date: 19/01/2015.<br/>
  */
-public class MainController implements ActionListener {
+public class MainController {
 
     /**
      * The context web service.
@@ -55,11 +52,6 @@ public class MainController implements ActionListener {
      * The EHR web service.
      */
     private AndamanEhrService ehrService;
-
-    /**
-     * The qualifiers controller.
-     */
-    private QualifiersController qualifiersController;
     
     /**
      * The login GUI frame.
@@ -80,11 +72,6 @@ public class MainController implements ActionListener {
      * The current version of the XML file where the TAMIs are described.
      */
     private int currentTamiVersion;
-    
-    
-    public void setQualifiersController(QualifiersController qualifiersController) {
-        this.qualifiersController = qualifiersController;
-    }
 
 
     /**
@@ -97,15 +84,6 @@ public class MainController implements ActionListener {
     }
 
     /**
-     * Returns the qualifiers controller.
-     * 
-     * @return the qualifiers controller
-     */
-    public QualifiersController getQualifiersController() {
-        return qualifiersController;
-    }
-
-    /**
      * Starts the GUI.
      *
      * @param loginFrame the login GUI frame
@@ -115,10 +93,6 @@ public class MainController implements ActionListener {
         
         this.loginFrame = loginFrame;
         this.mainFrame = mainFrame;
-        
-        qualifiersController = new QualifiersController(this, contextService, ehrService);
-        this.mainFrame.setQualifiersController(qualifiersController);
-        
         this.loginFrame.setVisible(true);
     }
 
@@ -172,11 +146,50 @@ public class MainController implements ActionListener {
 
     /**
      * Logs the user in.
-     *
-     * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO} of the logged user.
      */
-    private RegistrarDTO login() throws IOException {
-        return contextService.login();
+    public void login(Settings settings) {
+        
+        // Get the settings from the login frame and log the user in
+        try {
+
+            setSettings(settings);
+            mainFrame.setTamiList(); // TODO : Should build the main frame here
+            currentUser = contextService.login();
+
+            if (currentUser != null) {
+                List<DeviceDTO> devices = currentUser.getDevices();
+
+                if (devices == null) {
+                    devices = new ArrayList<DeviceDTO>();
+                    DeviceDTO[] devicesArray = contextService.getDevices();
+
+                    if (devicesArray != null) {
+                        devices.addAll(Arrays.asList(devicesArray));
+                        currentUser.setDevices(devices);
+                    }
+
+                } else if (!devices.isEmpty()) {
+                    mainFrame.setContextId(devices.get(0).getUuid());
+                }
+
+                loginFrame.setVisible(false);
+                mainFrame.setVisible(true);
+            }
+
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(loginFrame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Logs the user out.
+     */
+    public void logout() {
+        
+        currentUser = null;
+        mainFrame.clearForm();
+        mainFrame.setVisible(false);
+        loginFrame.setVisible(true);
     }
 
     /**
@@ -562,61 +575,15 @@ public class MainController implements ActionListener {
 
         return amis;
     }
-
-    /**
-     * Listens to a login and logout button press.
-     *
-     * @param evt the event raised by the button press
-     */
-    public void actionPerformed(ActionEvent evt) {
+    
+    public AMI showEditAmiDialog(AMI ami) throws MissingTableModelException {
         
-        if(!(evt.getSource() instanceof JButton))
-            return;
-
-        JButton button = (JButton) evt.getSource();
-
-        // Login action
-        if(button.getName().equalsIgnoreCase("login")) {
-
-            // Get the settings from the login frame and log the user in
-            try {
-            
-                Settings settings = loginFrame.getSettings();
-                setSettings(settings);
-                mainFrame.setTamiList();
-                currentUser = login();
-
-                if (currentUser != null) {
-                    List<DeviceDTO> devices = currentUser.getDevices();
-
-                    if (devices == null) {
-                        devices = new ArrayList<DeviceDTO>();
-                        DeviceDTO[] devicesArray = contextService.getDevices();
-
-                        if (devicesArray != null) {
-                            devices.addAll(Arrays.asList(devicesArray));
-                            currentUser.setDevices(devices);
-                        }
-
-                    } else if (!devices.isEmpty()) {
-                        mainFrame.setContextId(devices.get(0).getUuid());
-                    }
-
-                    loginFrame.setVisible(false);
-                    mainFrame.setVisible(true);
-                }
-
-            } catch(Exception e) {
-                JOptionPane.showMessageDialog(button.getRootPane(), e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            } 
-
-        // Logout action
-        } else if(button.getName().equalsIgnoreCase("logout")) {
-            currentUser = null;
-            mainFrame.clearForm();
-            mainFrame.setVisible(false);
-            loginFrame.setVisible(true);
-        }
+        EditAmiDialog editAmiDialog = new EditAmiDialog(mainFrame, true, this, ami);
+        editAmiDialog.setVisible(true);
+        
+        if(editAmiDialog.getCloseStatus() == EditAmiDialog.Status.VALIDATED)
+            return editAmiDialog.getEditedAmi();
+        else
+            return ami;
     }
 }
