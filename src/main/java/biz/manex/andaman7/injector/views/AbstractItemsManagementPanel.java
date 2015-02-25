@@ -9,7 +9,7 @@ import biz.manex.andaman7.injector.models.types.Type;
 import biz.manex.andaman7.injector.views.tablemodels.AbstractTableModel;
 import biz.manex.andaman7.injector.views.tablemodels.TableRowSelectionModel;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -280,13 +280,13 @@ public abstract class AbstractItemsManagementPanel<I, V> extends JPanel implemen
      * @return the items of the table
      * @throws biz.manex.andaman7.injector.exceptions.MissingTableModelException
      */
-    public Enumeration<I> getAllItems() throws MissingTableModelException {
+    public List<I> getAllItems() throws MissingTableModelException {
         
         if(getTable().getModel() == null)
             throw new MissingTableModelException("A table model must be set for the items table.");
         
         AbstractTableModel<I> model = (AbstractTableModel<I>) getTable().getModel();
-        return model.elements();
+        return Collections.list(model.elements());
     }
     
     public void setItems(List<I> items) throws MissingTableModelException {

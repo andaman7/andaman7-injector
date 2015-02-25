@@ -43,7 +43,14 @@ public class ItemsManagementPanel<I, V> extends AbstractItemsManagementPanel imp
         setMainController(mainController);
         setTableModel(tableModel);
     }
-    
+
+    @Override
+    public void setTypes(Type[] types) {
+        super.setTypes(types);
+        
+        jComboBoxType.setSelectedIndex(-1);
+    }
+
     protected void switchDataValueComponent(JComponent oldComponent, JComponent newComponent) {
         
         // Update the GUI

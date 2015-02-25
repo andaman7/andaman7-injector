@@ -25,6 +25,10 @@ public class SelectionListItem extends KeyNameItem implements Comparable<Selecti
     }
 
     public int compareTo(SelectionListItem o) {
-        return name.compareTo(o.getName());
+        
+        if(name != null && o != null)
+            return name.compareTo(o.getName());
+        else
+            return -1;
     }
 }

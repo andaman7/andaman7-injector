@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.controllers;
 
+import biz.manex.andaman7.injector.exceptions.InjectorException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
@@ -25,6 +26,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -297,7 +300,13 @@ public class MainController {
                     if (childNode.getNodeName().equals("Item")) {
 
                         String itemKey = childNode.getAttributes().getNamedItem("id").getNodeValue();
-                        String itemName = translations.get(itemKey);
+                        String itemName;
+                        
+                        if(translations.containsKey(itemKey))
+                            itemName = translations.get(itemKey);
+                        else
+                            itemName = itemKey;
+                        
                         SelectionListItem item = new SelectionListItem(itemKey, itemName);
                         items.put(itemKey, item);
                     }
@@ -551,73 +560,153 @@ public class MainController {
     /**
      * Sends some medical data into a specific AMI container of a specified
      * registrar.
-     *
-     * @param destinationRegistrar the destination registrar
-     * @param amiContainers the AMI container UUID and the AMIs to send
-     * @param contextId the context identifier
-     * @return {@code true} if the destination registrar is already a member of the source registrar's community,
-     *         {@code false} otherwise
-     * @throws java.io.IOException
      */
-    public boolean sendMedicalData(AndamanUserDTO destinationRegistrar, List<AMIContainer> amiContainers,
-            String contextId) throws IOException {
+    public int sendMedicalData(List<DestinationRegistrar> destinationRegistrars) throws IOException {
 
-        RegistrarDTO[] members = contextService.getCommunityMembers();
+        int invitationCount = 0;
+        
+        for(DestinationRegistrar destinationRegistrar : destinationRegistrars) {
+            
+            RegistrarDTO[] members = contextService.getCommunityMembers();
 
-        boolean alreadyMember = false;
+            boolean alreadyMember = false;
+
+            // Check if the destination registrar is already a community member
+            for(RegistrarDTO member : members)
+                if(member.getUuid().equalsIgnoreCase(destinationRegistrar.getUuid()))
+                    alreadyMember = true;
+
+            // If not, send an invitation
+            if(!alreadyMember) {
+                
+                sendCommunityInvitation(currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
+                invitationCount++;
+            }
+
+            // Send the data
+            ehrService.sendAmiBasesToRegistrar(currentUser, destinationRegistrars, currentTamiVersion);
+        }
         
-        // Check if the destination registrar is already a community member
-        for(RegistrarDTO member : members)
-            if(member.getUuid().equalsIgnoreCase(destinationRegistrar.getUuid()))
-                alreadyMember = true;
-        
-        // If not, send an invitation
-        if(!alreadyMember)
-            sendCommunityInvitation(currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
-        
-        // Send the data
-        ehrService.sendAmiBasesToRegistrar(currentUser, destinationRegistrar,
-                amiContainers, contextId, currentTamiVersion);
-        
-        return alreadyMember;
+        return invitationCount;
     }
 
     /**
      * Returns a map of AMIs from an CSV file.
      *
      * @param file the CSV file
-     * @return a list of AMIs
+     * @return data to send to the destination registrar
      * @throws IOException if the CSV file is not found
      */
-    public List<AMI> getAmisFromCsvFile(File file) throws IOException {
+    public List<DestinationRegistrar> getDataFromCsvFile(File file) throws IOException, InjectorException, ParseException {
 
         // Get the AMIs from the CSV file
         Reader in = new FileReader(file);
         CSVParser csvParser = new CSVParser(in, CSVFormat.EXCEL.withDelimiter(';').withHeader());
-        Iterable<CSVRecord> records = csvParser.getRecords();
-
-        List<AMI> amis = new ArrayList<AMI>();
+        Iterable<CSVRecord> records = csvParser.getRecords(); 
+        String separator = "\\|";
+        
+        Map<String, DestinationRegistrar> destinationRegistrars = new HashMap<String, DestinationRegistrar>();
+        List<QualifierMapping> qualifiersMappings = new ArrayList<QualifierMapping>();
 
         for (CSVRecord record : records) {
-            String type = record.get("tami");
-            String value = record.get("value");
-
-            TAMI tami = new TAMI();
-            tami.setKey(type);
-
-            AMI ami = new AMI();
-            ami.setType(tami);
-            ami.setValue(value);
             
-            amis.add(ami);
+            String recordEhrContextIds = record.get("ehrContextIds");
+            String recordEhrIds = record.get("ehrIds");
+            
+            String[] ehrContextIds = recordEhrContextIds.split(separator);
+            String[] ehrIds = recordEhrIds.split(separator);
+            
+            if(ehrContextIds.length != ehrIds.length)
+                throw new InjectorException("Mismatch between the number of EHR context ids and the number of EHR ids.");
+            
+            String recordDestinationRegistrarIds = record.get("destinationRegistrarIds");
+            String[] destinationRegistrarIds = recordDestinationRegistrarIds.split(separator);
+            
+            String amiId = record.get("amiId");
+            String tamiId = record.get("tamiId");
+            String value = record.get("value");
+            
+            String recordCreationDate = record.get("creationDate");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+            Date creationDate = sdf.parse(recordCreationDate);
+
+            // Build an AMI container for each destination registrars
+            DestinationRegistrar destinationRegistrar;
+            Map<String, String> contextMap;
+            AMIContainer amiContainer;
+            
+            for(String destinationRegistrarId : destinationRegistrarIds) {
+            
+                // If th destination registrar already exists
+                if(destinationRegistrars.containsKey(destinationRegistrarId)) {
+
+                    destinationRegistrar = destinationRegistrars.get(destinationRegistrarId);
+                    amiContainer = destinationRegistrar.getAmiContainer();
+                    contextMap = amiContainer.getContextMap();
+
+                // Otherwise, create it
+                } else {
+                    
+                    contextMap = new HashMap<String, String>();
+                    amiContainer = new AMIContainer(ehrIds[0]);
+                    destinationRegistrar = new DestinationRegistrar(destinationRegistrarId, amiContainer);
+                    destinationRegistrars.put(destinationRegistrarId, destinationRegistrar);
+                }
+
+                String parentId = record.get("parentId");
+
+                // Create the AMI
+                if(parentId == null || parentId.isEmpty()) {
+
+                    TAMI tami = new TAMI(tamiId);
+                    AMI ami = new AMI(amiId, tami, value, creationDate);
+                    amiContainer.addAmi(ami);
+
+                // Create the qualifier and add it to the mapping list
+                } else {
+                    
+                    QualifierType qualifierType = new QualifierType(tamiId);
+                    Qualifier qualifier = new Qualifier(qualifierType, value);
+                    
+                    QualifierMapping qualifierMapping = new QualifierMapping(qualifier, parentId, amiContainer);
+                    qualifiersMappings.add(qualifierMapping);
+                }
+
+                // Update the context map
+                for(int i = 0; i < ehrContextIds.length; i++) {
+
+                    String ehrContextId = ehrContextIds[i];
+                    String ehrId = ehrIds[i];
+
+                    contextMap.put(ehrContextId, ehrId);
+                }
+            }
+        }
+        
+        // Add the qualifiers into the right AMIs
+        for(QualifierMapping qualifierMapping : qualifiersMappings) {
+            
+            Qualifier qualifier = qualifierMapping.getQualifier();
+            String parentId = qualifierMapping.getParentId();
+            AMIContainer amiContainer = qualifierMapping.getAmiContainer();
+            
+            AMI ami = amiContainer.getAmis().get(parentId);
+            ami.getQualifiers().add(qualifierMapping.getQualifier());
         }
 
-        return amis;
+        return new ArrayList<DestinationRegistrar>(destinationRegistrars.values());
     }
     
     public AMI showEditAmiDialog(AMI ami) throws MissingTableModelException {
         
-        EditAmiDialog editAmiDialog = new EditAmiDialog(mainFrame, true, this, ami);
+        EditAmiDialog editAmiDialog;
+        
+        if(ami.getType() instanceof MultivaluedTAMI) {
+            MultivaluedTAMI multiTami = (MultivaluedTAMI) ami.getType();
+            editAmiDialog = new EditAmiDialog(mainFrame, true, this, ami, multiTami.getValues().getItems());
+        } else {
+            editAmiDialog = new EditAmiDialog(mainFrame, true, this, ami);
+        }
         editAmiDialog.setVisible(true);
         
         if(editAmiDialog.getCloseStatus() == EditAmiDialog.Status.VALIDATED)

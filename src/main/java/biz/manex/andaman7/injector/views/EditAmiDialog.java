@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -56,7 +57,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
      */
     private Status closeStatus;
     
-    public EditAmiDialog(java.awt.Frame parent, boolean modal, MainController controller, AMI ami, HashMap<String, SelectionListItem> values) {
+    public EditAmiDialog(java.awt.Frame parent, boolean modal, MainController controller, AMI ami, Map<String, SelectionListItem> values) {
         this(parent, modal, controller, ami);
         
         DefaultComboBoxModel<SelectionListItem> model =
@@ -215,7 +216,7 @@ public class EditAmiDialog extends javax.swing.JDialog {
      * @throws MissingTableModelException if the table model has not been set
      */
     public List<Qualifier> getQualifiers() throws MissingTableModelException {
-        return (List<Qualifier>) Collections.list(manageQualifiersPanel.getAllItems());
+        return manageQualifiersPanel.getAllItems();
     }
     
     /**

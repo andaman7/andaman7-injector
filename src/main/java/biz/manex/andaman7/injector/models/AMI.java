@@ -2,7 +2,9 @@ package biz.manex.andaman7.injector.models;
 
 import biz.manex.andaman7.injector.models.types.TAMI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Stores the TAMI and the value of an AMI.
@@ -13,6 +15,11 @@ import java.util.List;
  */
 public class AMI {
 
+    /**
+     * The UUID of the AMI.
+     */
+    String id;
+    
     /**
      * The type of the AMI.
      * @see biz.manex.andaman7.injector.models.TAMI
@@ -25,6 +32,11 @@ public class AMI {
     private String value;
     
     /**
+     * The creation date of the AMI.
+     */
+    private Date creationDate;
+    
+    /**
      * The qualifiers.
      */
     private List<Qualifier> qualifiers;
@@ -34,6 +46,7 @@ public class AMI {
      */
     public AMI() {
         
+        id = UUID.randomUUID().toString();
         qualifiers = new ArrayList<Qualifier>();
     }
 
@@ -43,10 +56,31 @@ public class AMI {
      * @param type the type of the AMI
      * @param value the value of the AMI
      */
-    public AMI(TAMI type, String value) {
+    public AMI(String id, TAMI type, String value, Date creationDate) {
+        
+        this.id = id;
         this.type = type;
         this.value = value;
+        this.creationDate = creationDate;
         qualifiers = new ArrayList<Qualifier>();
+    }
+
+    /**
+     * Returns the UUID of the AMI.
+     * 
+     * @return the UUID of the AMI
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the UUID of the AMI.
+     * 
+     * @param id the UUID of the AMI
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -85,6 +119,14 @@ public class AMI {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     /**

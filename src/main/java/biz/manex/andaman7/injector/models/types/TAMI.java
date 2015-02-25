@@ -20,6 +20,10 @@ public class TAMI extends KeyNameItem implements Type {
     public TAMI() {
         super();
     }
+    
+    public TAMI(String key) {
+        this.key = key;
+    }
 
     /**
      * Builds a TAMI from a key, a display name and some qualifier types.

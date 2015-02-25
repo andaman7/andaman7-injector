@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector.models;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores the identifier and the AMIs of an EHR.
@@ -19,7 +20,9 @@ public class AMIContainer {
     /**
      * The AMIs.
      */
-    private List<AMI> amis;
+    private Map<String, AMI> amis;
+    
+    private Map<String, String> contextMap;
 
 
     /**
@@ -27,11 +30,20 @@ public class AMIContainer {
      *
      * @param uuid the UUID of the AMI container
      * @param amis the AMIs of the AMI container
+     * @param contextMap
      */
-    public AMIContainer(String uuid, List<AMI> amis) {
+    public AMIContainer(String uuid, Map<String, AMI> amis, Map<String, String> contextMap) {
         this.uuid = uuid;
         this.amis = amis;
+        this.contextMap = contextMap;
     }
+
+    public AMIContainer(String uuid) {
+        this.uuid = uuid;
+        this.amis = new HashMap<String, AMI>();
+        this.contextMap = new HashMap<String, String>();
+    }
+
 
     /**
      * Returns the UUID.
@@ -56,7 +68,7 @@ public class AMIContainer {
      *
      * @return the AMIs
      */
-    public List<AMI> getAmis() {
+    public Map<String, AMI> getAmis() {
         return amis;
     }
 
@@ -65,8 +77,16 @@ public class AMIContainer {
      *
      * @param amis the AMIs
      */
-    public void setAmis(List<AMI> amis) {
+    public void setAmis(Map<String, AMI> amis) {
         this.amis = amis;
+    }
+
+    public Map<String, String> getContextMap() {
+        return contextMap;
+    }
+
+    public void setContextMap(Map<String, String> contextMap) {
+        this.contextMap = contextMap;
     }
 
     /**
@@ -75,7 +95,7 @@ public class AMIContainer {
      * @param ami the AMI to add
      */
     public void addAmi(AMI ami) {
-        amis.add(ami);
+        amis.put(ami.getId(), ami);
     }
 
     /**
@@ -83,8 +103,8 @@ public class AMIContainer {
      *
      * @param amis the AMIs to add
      */
-    public void addAmis(List<AMI> amis) {
-        this.amis.addAll(amis);
+    public void addAmis(Map<String, AMI> amis) {
+        this.amis.putAll(amis);
     }
 
     /**

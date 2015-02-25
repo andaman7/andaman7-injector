@@ -8,6 +8,7 @@ import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
+import biz.manex.andaman7.injector.models.DestinationRegistrar;
 import biz.manex.andaman7.injector.models.Qualifier;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
@@ -96,13 +97,10 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     private void initComponents() {
 
         jFileChooserCsv = new javax.swing.JFileChooser();
-        jPanelRegistrar = new javax.swing.JPanel();
-        jLabelRegistrarKeyword = new javax.swing.JLabel();
-        jTextFieldRegistrarKeyword = new javax.swing.JTextField();
-        jButtonRegistrarSearch = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableRegistrars = new javax.swing.JTable();
         jButtonLogout = new javax.swing.JButton();
+        jButtonSend = new javax.swing.JButton();
+        jTabbedPaneData = new javax.swing.JTabbedPane();
+        jPanelForm = new javax.swing.JPanel();
         jPanelContext = new javax.swing.JPanel();
         jLabelContextId = new javax.swing.JLabel();
         jTextFieldContextId = new javax.swing.JTextField();
@@ -110,15 +108,19 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         jTextFieldEhrId = new javax.swing.JTextField();
         jButtonContextNewEHR = new javax.swing.JButton();
         jButtonContextRegistrarsEHR = new javax.swing.JButton();
-        jTabbedPaneData = new javax.swing.JTabbedPane();
+        jPanelRegistrar = new javax.swing.JPanel();
+        jLabelRegistrarKeyword = new javax.swing.JLabel();
+        jTextFieldRegistrarKeyword = new javax.swing.JTextField();
+        jButtonRegistrarSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableRegistrars = new javax.swing.JTable();
         manageAmisPanel = new ItemsManagementGroupPanel<AMI, SelectionListItem, TAMI>(mainController, amisTableModel);
-        jPanelUpload = new javax.swing.JPanel();
+        jPanelFile = new javax.swing.JPanel();
         jLabelUploadFile = new javax.swing.JLabel();
         jTextFieldUploadFile = new javax.swing.JTextField();
         jButtonUploadBrowse = new javax.swing.JButton();
         jLabelUploadFormat = new javax.swing.JLabel();
         jComboBoxUploadFormat = new javax.swing.JComboBox();
-        jButtonSend = new javax.swing.JButton();
 
         jFileChooserCsv.setCurrentDirectory(new File(System.getProperty("user.dir")));
         jFileChooserCsv.setDialogTitle("Select CSV file");
@@ -126,10 +128,82 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Andaman 7 - Injector");
-        setMinimumSize(new java.awt.Dimension(1050, 550));
+        setMinimumSize(new java.awt.Dimension(1050, 625));
+
+        jButtonLogout.setText("Logout");
+        jButtonLogout.setName("logout"); // NOI18N
+        jButtonLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLogoutActionPerformed(evt);
+            }
+        });
+
+        jButtonSend.setText("Send");
+        jButtonSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSendActionPerformed(evt);
+            }
+        });
+
+        jPanelContext.setBorder(javax.swing.BorderFactory.createTitledBorder("Context"));
+
+        jLabelContextId.setText("Context ID");
+
+        jTextFieldContextId.setPreferredSize(new java.awt.Dimension(300, 22));
+
+        jLabelEhrId.setText("EHR ID");
+
+        jTextFieldEhrId.setPreferredSize(new java.awt.Dimension(300, 22));
+
+        jButtonContextNewEHR.setText("New EHR");
+        jButtonContextNewEHR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonContextNewEHRActionPerformed(evt);
+            }
+        });
+
+        jButtonContextRegistrarsEHR.setText("Registrar's EHR");
+        jButtonContextRegistrarsEHR.setEnabled(false);
+        jButtonContextRegistrarsEHR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonContextRegistrarsEHRActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelContextLayout = new javax.swing.GroupLayout(jPanelContext);
+        jPanelContext.setLayout(jPanelContextLayout);
+        jPanelContextLayout.setHorizontalGroup(
+            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContextLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelContextId)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldContextId, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
+                .addComponent(jLabelEhrId)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonContextRegistrarsEHR, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonContextNewEHR)
+                .addContainerGap())
+        );
+        jPanelContextLayout.setVerticalGroup(
+            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContextLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelContextId)
+                    .addComponent(jTextFieldContextId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelEhrId)
+                    .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonContextNewEHR)
+                    .addComponent(jButtonContextRegistrarsEHR))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanelRegistrar.setBorder(javax.swing.BorderFactory.createTitledBorder("Registrar"));
-        jPanelRegistrar.setPreferredSize(new java.awt.Dimension(438, 397));
 
         jLabelRegistrarKeyword.setText("Keyword");
 
@@ -163,7 +237,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                         .addComponent(jTextFieldRegistrarKeyword)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonRegistrarSearch))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelRegistrarLayout.setVerticalGroup(
@@ -179,77 +253,37 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 .addContainerGap())
         );
 
-        jButtonLogout.setText("Logout");
-        jButtonLogout.setName("logout"); // NOI18N
-        jButtonLogout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonLogoutActionPerformed(evt);
-            }
-        });
+        manageAmisPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("AMIs"));
 
-        jPanelContext.setBorder(javax.swing.BorderFactory.createTitledBorder("Context"));
-
-        jLabelContextId.setText("Context ID");
-
-        jTextFieldContextId.setMinimumSize(new java.awt.Dimension(300, 22));
-
-        jLabelEhrId.setText("EHR ID");
-
-        jTextFieldEhrId.setMinimumSize(new java.awt.Dimension(300, 22));
-
-        jButtonContextNewEHR.setText("New EHR");
-        jButtonContextNewEHR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonContextNewEHRActionPerformed(evt);
-            }
-        });
-
-        jButtonContextRegistrarsEHR.setText("Registrar's EHR");
-        jButtonContextRegistrarsEHR.setEnabled(false);
-        jButtonContextRegistrarsEHR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonContextRegistrarsEHRActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanelContextLayout = new javax.swing.GroupLayout(jPanelContext);
-        jPanelContext.setLayout(jPanelContextLayout);
-        jPanelContextLayout.setHorizontalGroup(
-            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelContextLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelFormLayout = new javax.swing.GroupLayout(jPanelForm);
+        jPanelForm.setLayout(jPanelFormLayout);
+        jPanelFormLayout.setHorizontalGroup(
+            jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFormLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabelContextId)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldContextId, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                .addGap(55, 55, 55)
-                .addComponent(jLabelEhrId)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonContextRegistrarsEHR, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonContextNewEHR)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelContext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelFormLayout.createSequentialGroup()
+                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(manageAmisPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanelContextLayout.setVerticalGroup(
-            jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelContextLayout.createSequentialGroup()
+        jPanelFormLayout.setVerticalGroup(
+            jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFormLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelContextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelContextId)
-                    .addComponent(jTextFieldContextId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelEhrId)
-                    .addComponent(jTextFieldEhrId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonContextNewEHR)
-                    .addComponent(jButtonContextRegistrarsEHR))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanelContext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                    .addComponent(manageAmisPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jTabbedPaneData.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
-        jTabbedPaneData.setName(""); // NOI18N
-        jTabbedPaneData.addTab("Form", manageAmisPanel);
+        jTabbedPaneData.addTab("Form", jPanelForm);
 
-        jPanelUpload.setName("upload"); // NOI18N
+        jPanelFile.setName("upload"); // NOI18N
 
         jLabelUploadFile.setText("File");
 
@@ -266,82 +300,62 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         jComboBoxUploadFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "CSV" }));
 
-        javax.swing.GroupLayout jPanelUploadLayout = new javax.swing.GroupLayout(jPanelUpload);
-        jPanelUpload.setLayout(jPanelUploadLayout);
-        jPanelUploadLayout.setHorizontalGroup(
-            jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelUploadLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelFileLayout = new javax.swing.GroupLayout(jPanelFile);
+        jPanelFile.setLayout(jPanelFileLayout);
+        jPanelFileLayout.setHorizontalGroup(
+            jPanelFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFileLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelUploadFormat)
-                    .addComponent(jLabelUploadFile))
+                .addComponent(jLabelUploadFile)
+                .addGap(33, 33, 33)
+                .addComponent(jTextFieldUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonUploadBrowse)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelUploadFormat)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelUploadLayout.createSequentialGroup()
-                        .addComponent(jTextFieldUploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonUploadBrowse))
-                    .addComponent(jComboBoxUploadFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addComponent(jComboBoxUploadFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(467, 467, 467))
         );
-        jPanelUploadLayout.setVerticalGroup(
-            jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelUploadLayout.createSequentialGroup()
+        jPanelFileLayout.setVerticalGroup(
+            jPanelFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFileLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelUploadFile)
                     .addComponent(jTextFieldUploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonUploadBrowse))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelUploadFormat)
-                    .addComponent(jComboBoxUploadFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(362, Short.MAX_VALUE))
+                    .addComponent(jButtonUploadBrowse)
+                    .addGroup(jPanelFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelUploadFormat)
+                        .addComponent(jComboBoxUploadFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(475, Short.MAX_VALUE))
         );
 
-        jTabbedPaneData.addTab("File", jPanelUpload);
-
-        jButtonSend.setText("Send");
-        jButtonSend.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSendActionPerformed(evt);
-            }
-        });
+        jTabbedPaneData.addTab("File", jPanelFile);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelContext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTabbedPaneData)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonLogout)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSend))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTabbedPaneData)))
+                        .addComponent(jButtonSend)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelContext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPaneData)
-                        .addGap(32, 32, 32))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonLogout)
-                            .addComponent(jButtonSend))))
+                .addComponent(jTabbedPaneData)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonLogout)
+                    .addComponent(jButtonSend))
                 .addContainerGap())
         );
 
@@ -479,10 +493,12 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         } else {
             strValue = value.toString();
         }
+        
+        String id = UUID.randomUUID().toString();
 
         if(!strValue.isEmpty()) {
             try {
-                AMI ami = new AMI(type, strValue);
+                AMI ami = new AMI(id, type, strValue, new Date());
                 manageAmisPanel.addItem(ami);
                 
             } catch (InjectorException e) {
@@ -573,11 +589,29 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 return;
             }
             
-            List<AMI> amis = new ArrayList<AMI>();
-            Enumeration<AMI> enu = manageAmisPanel.getAllItems();
-            amis.addAll(Collections.list(enu));
+            Map<String, AMI> amis = new HashMap<String, AMI>();
+            List<AMI> amisList = manageAmisPanel.getAllItems();
             
-            sendAmis(amis);
+            for(AMI ami : amisList)
+                amis.put(ami.getId(), ami);
+            
+            int patientIndex = jTableRegistrars.getSelectedRow();
+            AndamanUsersTableModel destinationUserModel = (AndamanUsersTableModel) jTableRegistrars.getModel();
+            AndamanUserDTO destinationUser = destinationUserModel.getValueAt(patientIndex);
+            
+            String contextId = jTextFieldContextId.getText();
+            String amiContainerId = jTextFieldEhrId.getText();
+
+            HashMap<String, String> contextMap = new HashMap<String, String>();
+            contextMap.put(contextId, amiContainerId);
+            
+            AMIContainer amiContainer = new AMIContainer(amiContainerId, amis, contextMap);
+
+            DestinationRegistrar destinationRegistrar = new DestinationRegistrar(destinationUser.getUuid(), amiContainer);
+            List<DestinationRegistrar> destinationRegistrars = new ArrayList<DestinationRegistrar>();
+            destinationRegistrars.add(destinationRegistrar);
+            
+            sendAmis(destinationRegistrars);
             
         } catch (MissingTableModelException e) {
             System.err.println(e.getMessage());
@@ -591,21 +625,18 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      */
     private void sendAmisFromCsvFile() {
 
-        if(!verifyBeforeSendingAmis())
-            return;
-
         if(selectedCsvFile == null) {
             JOptionPane.showMessageDialog(this, "You need to select a CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            List<AMI> amis = mainController.getAmisFromCsvFile(selectedCsvFile);
+            List<DestinationRegistrar> destinationRegistrars = mainController.getDataFromCsvFile(selectedCsvFile);
             jFileChooserCsv.setSelectedFile(null);
             jTextFieldUploadFile.setText("");
-            sendAmis(amis);
+            sendAmis(destinationRegistrars);
 
-        } catch(IOException e) {
+        } catch(Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -617,30 +648,22 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      *
      * @param amis the AMIs to send
      */
-    private void sendAmis(List<AMI> amis) {
-
-        int patientIndex = jTableRegistrars.getSelectedRow();
-        AndamanUsersTableModel patientsModel = (AndamanUsersTableModel) jTableRegistrars.getModel();
-        AndamanUserDTO patient = patientsModel.getValueAt(patientIndex);
-
-        String contextId = jTextFieldContextId.getText();
-
-        String amiContainerId = jTextFieldEhrId.getText();
-        AMIContainer amiContainer = new AMIContainer(amiContainerId, amis);
-        List<AMIContainer> amiContainers = new ArrayList<AMIContainer>();
-        amiContainers.add(amiContainer);
+    private void sendAmis(List<DestinationRegistrar> destinationRegistrars) {
 
         try {
-            boolean alreadyMember = mainController.sendMedicalData(patient, amiContainers, contextId);
+            int invitationsSent = mainController.sendMedicalData(destinationRegistrars);
 
-            if (!alreadyMember)
-                JOptionPane.showMessageDialog(this, "An invitation has been sent to the user.",
+            if (invitationsSent != 0) {
+                
+                JOptionPane.showMessageDialog(this,
+                        String.format("%d invitation(s) has been sent to the user(s).", invitationsSent),
                         "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
 
-            JOptionPane.showMessageDialog(this, "The data has been successfully sent !",
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "The data has been successfully sent !", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } catch(IOException e) {
+            
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -795,8 +818,9 @@ public class MainFrame extends JFrame implements ListSelectionListener {
     private javax.swing.JLabel jLabelUploadFile;
     private javax.swing.JLabel jLabelUploadFormat;
     private javax.swing.JPanel jPanelContext;
+    private javax.swing.JPanel jPanelFile;
+    private javax.swing.JPanel jPanelForm;
     private javax.swing.JPanel jPanelRegistrar;
-    private javax.swing.JPanel jPanelUpload;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPaneData;
     private javax.swing.JTable jTableRegistrars;

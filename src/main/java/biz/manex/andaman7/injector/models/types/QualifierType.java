@@ -21,6 +21,10 @@ public class QualifierType extends KeyNameItem implements Type {
         super(key, name);
     }
 
+    public QualifierType(String key) {
+        super(key, null);
+    }
+
     /**
      * Compares the current object to another object of same type.
      * @param o the other object to compare to
