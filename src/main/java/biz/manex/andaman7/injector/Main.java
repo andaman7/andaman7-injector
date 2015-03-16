@@ -1,6 +1,8 @@
 package biz.manex.andaman7.injector;
 
+import biz.manex.andaman7.injector.controllers.CsvController;
 import biz.manex.andaman7.injector.controllers.MainController;
+import biz.manex.andaman7.injector.controllers.XmlController;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.PropertyUtils;
 import biz.manex.andaman7.injector.views.LoginFrame;
@@ -12,7 +14,7 @@ import java.io.File;
  * The entry point class of the program that launches the GUI.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)</br>
+ * Copyright A7 Software (http://www.manex.biz)<br/>
  * Date: 19/01/2015.
  */
 public class Main {
@@ -33,12 +35,20 @@ public class Main {
         }
 
         File propertyFile = FileHelper.getFileInCurrentDir("config_local.properties");
+        //File propertyFile = FileHelper.getFileInCurrentDir("config_antoine.properties");
         //File propertyFile = FileHelper.getFileInCurrentDir("config_prod.properties");
         PropertyUtils propertyUtils = new PropertyUtils(propertyFile);
 
-        MainController mainController = new MainController();
+        // Initialize the controllers
+        XmlController xmlController = new XmlController();
+        MainController mainController = new MainController(xmlController);
+        CsvController csvController = new CsvController();
+
+        // Initialize the frames
         LoginFrame loginFrame = new LoginFrame(mainController, propertyUtils.getProperties());
-        MainFrame mainFrame = new MainFrame(mainController);
+        MainFrame mainFrame = new MainFrame(mainController, csvController);
+
+        // Start the GUI
         mainController.start(loginFrame, mainFrame);
     }
 }

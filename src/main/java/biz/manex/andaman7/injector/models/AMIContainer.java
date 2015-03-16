@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector.models;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +24,8 @@ public class AMIContainer {
     private Map<String, AMI> amis;
     
     private Map<String, String> contextMap;
+    
+    private List<String> destinationRegistrarsIds;
 
 
     /**
@@ -32,16 +35,18 @@ public class AMIContainer {
      * @param amis the AMIs of the AMI container
      * @param contextMap
      */
-    public AMIContainer(String uuid, Map<String, AMI> amis, Map<String, String> contextMap) {
+    public AMIContainer(String uuid, Map<String, AMI> amis, Map<String, String> contextMap, List<String> destinationRegistrarsIds) {
         this.uuid = uuid;
         this.amis = amis;
         this.contextMap = contextMap;
+        this.destinationRegistrarsIds = destinationRegistrarsIds;
     }
 
-    public AMIContainer(String uuid) {
+    public AMIContainer(String uuid, List<String> destnationRegistrarsIds) {
         this.uuid = uuid;
         this.amis = new HashMap<String, AMI>();
         this.contextMap = new HashMap<String, String>();
+        this.destinationRegistrarsIds = destnationRegistrarsIds;
     }
 
 
@@ -87,6 +92,14 @@ public class AMIContainer {
 
     public void setContextMap(Map<String, String> contextMap) {
         this.contextMap = contextMap;
+    }
+
+    public List<String> getDestinationRegistrarsIds() {
+        return destinationRegistrarsIds;
+    }
+
+    public void setDestinationRegistrarsIds(List<String> destinationRegistrarsIds) {
+        this.destinationRegistrarsIds = destinationRegistrarsIds;
     }
 
     /**

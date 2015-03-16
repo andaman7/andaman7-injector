@@ -15,6 +15,8 @@ import biz.manex.andaman7.injector.views.MainFrame;
 import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
 import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.ehrSynchro.RegistrarSyncContentDTO;
+import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
 import biz.manex.andaman7.server.api.dto.others.MessageDTO;
 import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
@@ -55,6 +57,11 @@ public class MainController {
      * The EHR web service.
      */
     private AndamanEhrService ehrService;
+
+    /**
+     * The XML controller.
+     */
+    private XmlController xmlController;
     
     /**
      * The login GUI frame.
@@ -76,6 +83,14 @@ public class MainController {
      */
     private int currentTamiVersion;
 
+
+    /**
+     * Builds a main controller using a specific XML controller.
+     * @param xmlController
+     */
+    public MainController(XmlController xmlController) {
+        this.xmlController = xmlController;
+    }
 
     /**
      * Returns the current user.
@@ -273,194 +288,12 @@ public class MainController {
     }
 
     /**
-     * Returns a map of selection lists.
-     *
-     * @param xmlDoc the XML document from which to get the selection lists
-     * @param translations the translations of the keys
-     * @return a map of selection lists
-     */
-    private Map<String, SelectionList> getSelectionLists(Document xmlDoc, HashMap<String, String> translations) {
-
-        HashMap<String, SelectionList> selectionLists = new HashMap<String, SelectionList>();
-
-        try {
-            XPathExpression selectionListsExpr = XmlHelper.getXPathExpression("//SelectionList");
-            NodeList selectionListsNodes = (NodeList) selectionListsExpr.evaluate(xmlDoc, XPathConstants.NODESET);
-
-            for (int i = 0; i < selectionListsNodes.getLength(); i++) {
-                Node node = selectionListsNodes.item(i);
-
-                String slKey = node.getAttributes().getNamedItem("id").getNodeValue();
-                String slName = translations.get(slKey);
-                HashMap<String, SelectionListItem> items = new HashMap<String, SelectionListItem>();
-
-                // Get the items of the selection list
-                for (int j = 0; j < node.getChildNodes().getLength(); j++) {
-                    Node childNode = node.getChildNodes().item(j);
-                    if (childNode.getNodeName().equals("Item")) {
-
-                        String itemKey = childNode.getAttributes().getNamedItem("id").getNodeValue();
-                        String itemName;
-                        
-                        if(translations.containsKey(itemKey))
-                            itemName = translations.get(itemKey);
-                        else
-                            itemName = itemKey;
-                        
-                        SelectionListItem item = new SelectionListItem(itemKey, itemName);
-                        items.put(itemKey, item);
-                    }
-                }
-
-                selectionLists.put(slKey, new SelectionList(slKey, items));
-            }
-
-        } catch(XPathExpressionException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
-        }
-
-        return selectionLists;
-    }
-
-    /**
-     * Returns a list of the default qualifier types.
-     *
-     * @param doc the XML document from which to get the default qualifier types
-     * @param translations the translation of the keys
-     * @return a list of the default qualifier types
-     */
-    private List<QualifierType> getDefaultQualifierTypes(Document doc, HashMap<String, String> translations) {
-
-        ArrayList<QualifierType> defaultQualifiersTypes = new ArrayList<QualifierType>();
-
-        try {
-            XPathExpression defaultQualifierTypesExpr = XmlHelper.getXPathExpression("//DefaultQualifier");
-            NodeList defaultQualifierTypesNodes = (NodeList) defaultQualifierTypesExpr.evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < defaultQualifierTypesNodes.getLength(); i++) {
-                Node node = defaultQualifierTypesNodes.item(i);
-                String key = node.getAttributes().getNamedItem("id").getNodeValue();
-                String value;
-
-                if (key.equals("default.note"))
-                    value = "Note";
-                else if (key.equals("default.stars"))
-                    continue;
-                else
-                    value = translations.get(key);
-
-                defaultQualifiersTypes.add(new QualifierType(key, value));
-            }
-        } catch(XPathExpressionException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
-        }
-
-        return defaultQualifiersTypes;
-    }
-
-    /**
-     * Returns a list of the qualifier types of a TAMI.
-     *
-     * @param defaultQualifierTypes the list of all default qualifier types
-     * @param translations the translation of the keys
-     * @param tamiNode the XML node of a TAMI
-     * @param selectionLists all the available selection lists
-     * @return a list of the qualifier types of a TAMI
-     */
-    private List<QualifierType> getQualifierTypes(List<QualifierType> defaultQualifierTypes,
-            HashMap<String, String> translations, Node tamiNode, Map<String, SelectionList> selectionLists) {
-
-        List<QualifierType> qualifierTypes = new ArrayList<QualifierType>();
-        qualifierTypes.addAll(defaultQualifierTypes);
-
-        NodeList childNodes = tamiNode.getChildNodes();
-
-        // Process all qualifiers
-        for (int j = 0; j < childNodes.getLength(); j++) {
-
-            Node qualifierNode = childNodes.item(j);
-
-            if(!qualifierNode.getNodeName().equals("Qualifier"))
-                continue;
-
-            String key = qualifierNode.getAttributes().getNamedItem("id").getNodeValue();
-            String name;
-
-            // Use the key as name if the key is not found in the translations
-            if(translations.containsKey(key))
-                name = translations.get(key);
-            else
-                name = key;
-
-            String type = qualifierNode.getAttributes().getNamedItem("type").getNodeValue();
-
-            // If the qualifier is multivalued
-            if (type.equals("oneSelection") || type.equals("multiSelection")) {
-                String selectionListId = qualifierNode.getAttributes().getNamedItem("selectionListId").getNodeValue();
-                SelectionList selectionList = selectionLists.get(selectionListId);
-
-                MultivaluedQualifierType qualifierType = new MultivaluedQualifierType(key, name, selectionList);
-                qualifierTypes.add(qualifierType);
-
-            // Otherwise
-            } else {
-                QualifierType qualifierType = new QualifierType(key, name);
-                qualifierTypes.add(qualifierType);
-            }
-        }
-
-        return qualifierTypes;
-    }
-    
-    public List<TAMI> getTamis(HashMap<String, String> translations, List<QualifierType> defaultQualifierTypes,
-            Map<String, SelectionList> selectionLists, Node tamiGroupNode) {
-        
-        List<TAMI> tamis = new ArrayList<TAMI>();
-        NodeList tamiNodes = tamiGroupNode.getChildNodes();
-
-        for (int i = 0; i < tamiNodes.getLength(); i++) {
-            
-            Node node = tamiNodes.item(i);
-            
-            if(!node.getNodeName().equals("Tami"))
-                continue;
-            
-            String key = node.getAttributes().getNamedItem("id").getNodeValue();
-            String type = node.getAttributes().getNamedItem("type").getNodeValue();
-            String name;
-
-            if(translations.containsKey(key))
-                name = translations.get(key);
-            else
-                name = key;
-
-            List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
-
-            if(type.equals("oneSelection") ||type.equals("multiSelection")) {
-                String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
-                SelectionList selectionList = selectionLists.get(selectionListId);
-
-                MultivaluedTAMI tami = new MultivaluedTAMI(key, name, selectionList, qualifierTypes);
-                tamis.add(tami);
-
-            } else {
-                TAMI tami = new TAMI(key, name, qualifierTypes);
-                tamis.add(tami);
-            }
-        }
-        
-        return tamis;
-    }
-
-    /**
      * Returns the TAMIs from the most recent XML file.
      *
      * @return a list of the TAMIs
-     * @throws java.io.IOException 
-     * @throws org.xml.sax.SAXException 
-     * @throws javax.xml.parsers.ParserConfigurationException 
+     * @throws java.io.IOException
+     * @throws org.xml.sax.SAXException
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException {
 
@@ -477,27 +310,27 @@ public class MainController {
 
         try {
             // Get the selection lists
-            Map<String, SelectionList> selectionLists = getSelectionLists(doc, translations);
+            Map<String, SelectionList> selectionLists = xmlController.getSelectionLists(doc, translations);
 
             // Get the default qualifier types
-            List<QualifierType> defaultQualifierTypes = getDefaultQualifierTypes(doc, translations);
-            
+            List<QualifierType> defaultQualifierTypes = xmlController.getDefaultQualifierTypes(doc, translations);
+
             // Get the TAMI groups
             XPathExpression expr = XmlHelper.getXPathExpression("//TamiGroup");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-            
+
             for(int i = 0; i < nodes.getLength(); i++) {
-                
+
                 Node tamiGroupNode = nodes.item(i);
                 String key = tamiGroupNode.getAttributes().getNamedItem("id").getNodeValue();
                 String name;
-                
+
                 if(translations.containsKey(key))
                     name = translations.get(key);
                 else
                     name = key;
 
-                List<TAMI> tamis = getTamis(translations, defaultQualifierTypes, selectionLists, tamiGroupNode);
+                List<TAMI> tamis = xmlController.getTamis(translations, defaultQualifierTypes, selectionLists, tamiGroupNode);
 
                 TamiGroup tamiGroup = new TamiGroup(key, name, tamis);
                 tamiGroups.add(tamiGroup);
@@ -547,154 +380,67 @@ public class MainController {
      * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      *         of the added community members.
      */
-    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) {
+    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) throws IOException {
+        return contextService.sendCommunityRequest(senderDeviceId, newCommunityMembers);
+    }
 
-        try {
-            return contextService.sendCommunityRequest(senderDeviceId, newCommunityMembers);
+    /**
+     * Returns all received invitations.
+     *
+     * @return the received invitations
+     * @throws IOException if there was an error with the connection to the server
+     */
+    public FriendshipRequest[] getCommunityInvitations() throws IOException {
+        return contextService.getInvitations();
+    }
 
-        } catch (IOException e) {
-            return new RegistrarDTO[0];
-        }
+    public void setCommunityInvitationAcceptance(String otherRegistrarUuid, boolean acceptanceLevel) throws IOException {
+        contextService.setAcceptance(otherRegistrarUuid, acceptanceLevel);
     }
 
     /**
      * Sends some medical data into a specific AMI container of a specified
      * registrar.
      */
-    public int sendMedicalData(List<DestinationRegistrar> destinationRegistrars) throws IOException {
+    public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException {
 
-        int invitationCount = 0;
+        Set<String> idsToSendInvitation = new HashSet<String>();
         
-        for(DestinationRegistrar destinationRegistrar : destinationRegistrars) {
-            
+        for(AMIContainer amiContainerToSync : amiContainersToSync) {
+
             RegistrarDTO[] members = contextService.getCommunityMembers();
+            List<String> destinationRegistrarsIds = amiContainerToSync.getDestinationRegistrarsIds();
+            
+            for(String destinationRegistrarId : destinationRegistrarsIds) {
+            
+                boolean alreadyMember = false;
 
-            boolean alreadyMember = false;
+                // Check if the destination registrar is already a community member
+                for (RegistrarDTO member : members)
+                    if (member.getUuid().equalsIgnoreCase(destinationRegistrarId))
+                        alreadyMember = true;
 
-            // Check if the destination registrar is already a community member
-            for(RegistrarDTO member : members)
-                if(member.getUuid().equalsIgnoreCase(destinationRegistrar.getUuid()))
-                    alreadyMember = true;
-
-            // If not, send an invitation
-            if(!alreadyMember) {
-                
-                sendCommunityInvitation(currentUser.getUuid(), new String[] { destinationRegistrar.getUuid() });
-                invitationCount++;
+                if(!alreadyMember)
+                    idsToSendInvitation.add(destinationRegistrarId);
             }
-
-            // Send the data
-            ehrService.sendAmiBasesToRegistrar(currentUser, destinationRegistrars, currentTamiVersion);
+            
+            String[] newMembersIds = idsToSendInvitation.toArray(new String[idsToSendInvitation.size()]);
+            contextService.sendCommunityRequest(currentUser.getDevices().get(0).getUuid(), newMembersIds);
         }
+
+        // Send the data
+        ehrService.sendAmiBasesToRegistrar(currentUser, amiContainersToSync, currentTamiVersion);
+
         
-        return invitationCount;
+        return idsToSendInvitation.size();
     }
 
-    /**
-     * Returns a map of AMIs from an CSV file.
-     *
-     * @param file the CSV file
-     * @return data to send to the destination registrar
-     * @throws IOException if the CSV file is not found
-     */
-    public List<DestinationRegistrar> getDataFromCsvFile(File file) throws IOException, InjectorException, ParseException {
+    public RegistrarSyncContentDTO[] getMedicalDataInQueue(String deviceId) throws IOException {
+        return ehrService.getMedicalDataInQueue(deviceId);
+    }
 
-        // Get the AMIs from the CSV file
-        Reader in = new FileReader(file);
-        CSVParser csvParser = new CSVParser(in, CSVFormat.EXCEL.withDelimiter(';').withHeader());
-        Iterable<CSVRecord> records = csvParser.getRecords(); 
-        String separator = "\\|";
-        
-        Map<String, DestinationRegistrar> destinationRegistrars = new HashMap<String, DestinationRegistrar>();
-        List<QualifierMapping> qualifiersMappings = new ArrayList<QualifierMapping>();
-
-        for (CSVRecord record : records) {
-            
-            String recordEhrContextIds = record.get("ehrContextIds");
-            String recordEhrIds = record.get("ehrIds");
-            
-            String[] ehrContextIds = recordEhrContextIds.split(separator);
-            String[] ehrIds = recordEhrIds.split(separator);
-            
-            if(ehrContextIds.length != ehrIds.length)
-                throw new InjectorException("Mismatch between the number of EHR context ids and the number of EHR ids.");
-            
-            String recordDestinationRegistrarIds = record.get("destinationRegistrarIds");
-            String[] destinationRegistrarIds = recordDestinationRegistrarIds.split(separator);
-            
-            String amiId = record.get("amiId");
-            String tamiId = record.get("tamiId");
-            String value = record.get("value");
-            
-            String recordCreationDate = record.get("creationDate");
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-            Date creationDate = sdf.parse(recordCreationDate);
-
-            // Build an AMI container for each destination registrars
-            DestinationRegistrar destinationRegistrar;
-            Map<String, String> contextMap;
-            AMIContainer amiContainer;
-            
-            for(String destinationRegistrarId : destinationRegistrarIds) {
-            
-                // If th destination registrar already exists
-                if(destinationRegistrars.containsKey(destinationRegistrarId)) {
-
-                    destinationRegistrar = destinationRegistrars.get(destinationRegistrarId);
-                    amiContainer = destinationRegistrar.getAmiContainer();
-                    contextMap = amiContainer.getContextMap();
-
-                // Otherwise, create it
-                } else {
-                    
-                    contextMap = new HashMap<String, String>();
-                    amiContainer = new AMIContainer(ehrIds[0]);
-                    destinationRegistrar = new DestinationRegistrar(destinationRegistrarId, amiContainer);
-                    destinationRegistrars.put(destinationRegistrarId, destinationRegistrar);
-                }
-
-                String parentId = record.get("parentId");
-
-                // Create the AMI
-                if(parentId == null || parentId.isEmpty()) {
-
-                    TAMI tami = new TAMI(tamiId);
-                    AMI ami = new AMI(amiId, tami, value, creationDate);
-                    amiContainer.addAmi(ami);
-
-                // Create the qualifier and add it to the mapping list
-                } else {
-                    
-                    QualifierType qualifierType = new QualifierType(tamiId);
-                    Qualifier qualifier = new Qualifier(qualifierType, value);
-                    
-                    QualifierMapping qualifierMapping = new QualifierMapping(qualifier, parentId, amiContainer);
-                    qualifiersMappings.add(qualifierMapping);
-                }
-
-                // Update the context map
-                for(int i = 0; i < ehrContextIds.length; i++) {
-
-                    String ehrContextId = ehrContextIds[i];
-                    String ehrId = ehrIds[i];
-
-                    contextMap.put(ehrContextId, ehrId);
-                }
-            }
-        }
-        
-        // Add the qualifiers into the right AMIs
-        for(QualifierMapping qualifierMapping : qualifiersMappings) {
-            
-            Qualifier qualifier = qualifierMapping.getQualifier();
-            String parentId = qualifierMapping.getParentId();
-            AMIContainer amiContainer = qualifierMapping.getAmiContainer();
-            
-            AMI ami = amiContainer.getAmis().get(parentId);
-            ami.getQualifiers().add(qualifierMapping.getQualifier());
-        }
-
-        return new ArrayList<DestinationRegistrar>(destinationRegistrars.values());
+    public void acknowledgeMedicalData(String deviceId, String[] medicalRecordsId) throws IOException {
+        ehrService.acknowledgeMedicalData(deviceId, medicalRecordsId);
     }
     
     public AMI showEditAmiDialog(AMI ami) throws MissingTableModelException {

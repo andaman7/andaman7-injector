@@ -1,6 +1,6 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * An base class for any implementation of a REST service.

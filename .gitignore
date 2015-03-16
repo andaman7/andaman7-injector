@@ -10,3 +10,4 @@ target/
 
 tami-dict.xml
 gui-dict.xml
+/nbactions.xml

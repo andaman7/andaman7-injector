@@ -2,6 +2,7 @@ package biz.manex.andaman7.injector.webservice.REST;
 
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
 import biz.manex.andaman7.server.api.dto.others.MessageDTO;
 import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
@@ -12,6 +13,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -165,6 +167,29 @@ public class AndamanContextService extends CustomRestService {
     }
 
     /**
+     * Returns all received invitations.
+     *
+     * @return the received invitations
+     * @throws IOException if there was an error with the connection to the server
+     */
+    public FriendshipRequest[] getInvitations() throws IOException {
+
+        HttpResponse response = restTemplate.get("invitations/", true);
+        return jsonMapper.readValue(response.getEntity().getContent(), FriendshipRequest[].class);
+    }
+
+    /**
+     * Sets the acceptance level of an invitation.
+     *
+     * @param otherRegistrarUuid the UUID of the other registrar
+     * @param acceptance the acceptance level
+     * @throws IOException if there was an error with the connection to the server
+     */
+    public void setAcceptance(String otherRegistrarUuid, boolean acceptance) throws IOException {
+        restTemplate.post(String.format("/registrars/%s/acceptance/%s", otherRegistrarUuid, acceptance), "", true);
+    }
+
+    /**
      * Returns the community members of the logged registrar.
      *
      * @return the community members of the logged registrar
@@ -172,7 +197,7 @@ public class AndamanContextService extends CustomRestService {
      */
     public RegistrarDTO[] getCommunityMembers() throws IOException {
 
-        HttpResponse response = restTemplate.get("community/");
+        HttpResponse response = restTemplate.get("community/", true);
         return jsonMapper.readValue(response.getEntity().getContent(), RegistrarDTO[].class);
     }
 

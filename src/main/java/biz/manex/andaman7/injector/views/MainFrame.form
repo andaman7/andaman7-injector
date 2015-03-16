@@ -2,12 +2,24 @@
 
 <Form version="1.6" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="jFileChooserCsv">
+    <Component class="javax.swing.JFileChooser" name="jFileChooserOpenCsv">
       <Properties>
         <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new File(System.getProperty(&quot;user.dir&quot;))" type="code"/>
         </Property>
         <Property name="dialogTitle" type="java.lang.String" value="Select CSV file"/>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new FileNameExtensionFilter(&quot;CSV files&quot;, &quot;csv&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="jFileChooserSaveCsv">
+      <Properties>
+        <Property name="dialogType" type="int" value="1"/>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new File(System.getProperty(&quot;user.dir&quot;))" type="code"/>
+        </Property>
+        <Property name="dialogTitle" type="java.lang.String" value="Save CSV file"/>
         <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new FileNameExtensionFilter(&quot;CSV files&quot;, &quot;csv&quot;)" type="code"/>
         </Property>
@@ -20,6 +32,7 @@
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1050, 625]"/>
     </Property>
+    <Property name="name" type="java.lang.String" value="" noResource="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -46,8 +59,7 @@
                   <Component id="jTabbedPaneData" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jButtonLogout" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButtonSend" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -60,10 +72,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPaneData" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButtonLogout" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonSend" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="jButtonLogout" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -79,19 +88,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLogoutActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonSend">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Send"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSendActionPerformed"/>
-      </Events>
-    </Component>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPaneData">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="jPanelForm">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="form" noResource="true"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Form">
@@ -103,17 +107,21 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jPanelContext" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="jPanelRegistrar" pref="373" max="32767" attributes="0"/>
+                              <Component id="jPanelRegistrar" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="manageAmisPanel" max="32767" attributes="0"/>
+                              <Component id="manageAmisPanel" pref="460" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jButtonSend" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -123,11 +131,13 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanelContext" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanelRegistrar" pref="404" max="32767" attributes="0"/>
-                          <Component id="manageAmisPanel" pref="404" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="manageAmisPanel" pref="407" max="32767" attributes="0"/>
+                          <Component id="jPanelRegistrar" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="10" max="32767" attributes="0"/>
+                      <Component id="jButtonSend" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -149,11 +159,11 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelContextId" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldContextId" pref="312" max="32767" attributes="0"/>
+                          <Component id="jTextFieldContextId" pref="245" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                           <Component id="jLabelEhrId" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldEhrId" pref="312" max="32767" attributes="0"/>
+                          <Component id="jTextFieldEhrId" pref="245" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonContextRegistrarsEHR" min="-2" pref="121" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -245,7 +255,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButtonRegistrarSearch" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="384" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -317,6 +327,14 @@
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ItemsManagementGroupPanel&lt;AMI, SelectionListItem, TAMI&gt;(mainController, amisTableModel)"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JButton" name="jButtonSend">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Send"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSendActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanelFile">
@@ -335,17 +353,12 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelUploadFile" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jTextFieldUploadFile" pref="300" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonUploadBrowse" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jLabelUploadFormat" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jComboBoxUploadFormat" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="467" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jPanelFileUpload" max="32767" attributes="0"/>
+                          <Component id="jPanelDownload" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -353,53 +366,147 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabelUploadFile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldUploadFile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonUploadBrowse" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                              <Component id="jLabelUploadFormat" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBoxUploadFormat" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace pref="475" max="32767" attributes="0"/>
+                      <Component id="jPanelFileUpload" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanelDownload" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="379" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabelUploadFile">
+            <Container class="javax.swing.JPanel" name="jPanelFileUpload">
               <Properties>
-                <Property name="text" type="java.lang.String" value="File"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextFieldUploadFile">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButtonUploadBrowse">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Browse"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonUploadBrowseActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabelUploadFormat">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Format"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBoxUploadFormat">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="CSV"/>
-                  </StringArray>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Upload"/>
+                  </Border>
                 </Property>
               </Properties>
-            </Component>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelUploadFile" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jTextFieldUploadFile" pref="489" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButtonUploadBrowse" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jLabelUploadFormat" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jComboBoxUploadFormat" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                          <Component id="jButtonUpload" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabelUploadFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldUploadFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonUploadBrowse" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelUploadFormat" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxUploadFormat" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonUpload" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JComboBox" name="jComboBoxUploadFormat">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="1">
+                        <StringItem index="0" value="CSV"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabelUploadFormat">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Format"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButtonUploadBrowse">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Browse"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonUploadBrowseActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JTextField" name="jTextFieldUploadFile">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTextFieldUploadFileMouseClicked"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabelUploadFile">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="File"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButtonUpload">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Upload"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonUploadActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="jPanelDownload">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Download"/>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButtonDownloadCheck" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jButtonDownloadCheck" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="jButtonDownloadCheck">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Check"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDownloadCheckActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
       </SubComponents>
