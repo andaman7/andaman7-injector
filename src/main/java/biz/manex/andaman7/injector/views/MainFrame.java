@@ -38,7 +38,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
 import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.xml.sax.SAXException;
 
 
@@ -942,7 +942,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             for(RegistrarSyncContentDTO medicalRecord : medicalRecords) {
 
                 AmiContainerDTO[] amiContainerDTOs = mapper.readValue(medicalRecord.getEhrsContent(), AmiContainerDTO[].class);
-                JOptionPane.showMessageDialog(this, mapper.defaultPrettyPrintingWriter().writeValueAsString(amiContainerDTOs));
+                JOptionPane.showMessageDialog(this, mapper.writeValueAsString(amiContainerDTOs));
 
                 int result = jFileChooserSaveCsv.showDialog(this, "Save");
 

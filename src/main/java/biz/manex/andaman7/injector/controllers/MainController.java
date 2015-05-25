@@ -1,12 +1,10 @@
 package biz.manex.andaman7.injector.controllers;
 
-import biz.manex.andaman7.injector.exceptions.InjectorException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
+import biz.manex.andaman7.injector.models.*;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.types.TAMI;
-import biz.manex.andaman7.injector.models.types.MultivaluedQualifierType;
-import biz.manex.andaman7.injector.models.*;
 import biz.manex.andaman7.injector.utils.FileHelper;
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.injector.views.EditAmiDialog;
@@ -20,30 +18,25 @@ import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
 import biz.manex.andaman7.server.api.dto.others.MessageDTO;
 import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
- * The main controller that coordinates the views and performs all the business
- * logic.
+ * The main controller that coordinates the views and performs all the business logic.
  *
  * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
- * Copyright A7 Software (http://www.manex.biz)<br/>
+ * Copyright A7 Software (http://www.a7-software.com)<br/>
  * Date: 19/01/2015.
  */
 public class MainController {
@@ -86,7 +79,7 @@ public class MainController {
 
     /**
      * Builds a main controller using a specific XML controller.
-     * @param xmlController
+     * @param xmlController TODO
      */
     public MainController(XmlController xmlController) {
         this.xmlController = xmlController;
@@ -218,6 +211,9 @@ public class MainController {
      * Returns the XML file where the TAMIs are described.
      *
      * @return the XML document
+     * @throws IOException TODO
+     * @throws SAXException TODO
+     * @throws ParserConfigurationException TODO
      */
     private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException {
 
@@ -254,6 +250,9 @@ public class MainController {
      * Returns the XML file where the GUI panels layouts are described.
      *
      * @return the XML document
+     * @throws IOException TODO
+     * @throws SAXException TODO
+     * @throws ParserConfigurationException TODO
      */
     private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException {
 
@@ -291,9 +290,9 @@ public class MainController {
      * Returns the TAMIs from the most recent XML file.
      *
      * @return a list of the TAMIs
-     * @throws java.io.IOException
-     * @throws org.xml.sax.SAXException
-     * @throws javax.xml.parsers.ParserConfigurationException
+     * @throws java.io.IOException TODO
+     * @throws org.xml.sax.SAXException TODO
+     * @throws javax.xml.parsers.ParserConfigurationException TODO
      */
     public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException {
 
@@ -394,13 +393,17 @@ public class MainController {
         return contextService.getInvitations();
     }
 
+    // TODO
     public void setCommunityInvitationAcceptance(String otherRegistrarUuid, boolean acceptanceLevel) throws IOException {
         contextService.setAcceptance(otherRegistrarUuid, acceptanceLevel);
     }
 
     /**
-     * Sends some medical data into a specific AMI container of a specified
-     * registrar.
+     * Sends some medical data into a specific AMI container of a specified registrar.
+     *
+     * @param amiContainersToSync the list of AMI containers to send
+     * @return how many invitations were sent to registrars that weren't in the community of the sender.
+     * @throws IOException TODO
      */
     public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException {
 
@@ -435,14 +438,17 @@ public class MainController {
         return idsToSendInvitation.size();
     }
 
+    // TODO
     public RegistrarSyncContentDTO[] getMedicalDataInQueue(String deviceId) throws IOException {
         return ehrService.getMedicalDataInQueue(deviceId);
     }
 
+    // TODO
     public void acknowledgeMedicalData(String deviceId, String[] medicalRecordsId) throws IOException {
         ehrService.acknowledgeMedicalData(deviceId, medicalRecordsId);
     }
-    
+
+    // TODO
     public AMI showEditAmiDialog(AMI ami) throws MissingTableModelException {
         
         EditAmiDialog editAmiDialog;

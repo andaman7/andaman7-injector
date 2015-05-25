@@ -11,7 +11,6 @@ import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 
-import javax.ws.rs.core.Response;
 import java.util.*;
 
 /**

@@ -21,8 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- *         Copyright A7 Software (http://a7-software.com/)
+ * The controller that handles (de)serialization in CSV format.
+ *
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
+ *         Copyright A7 Software (http://www.a7-software.com)<br/>
  *         Date : 07/03/2015.
  */
 public class CsvController {
@@ -31,7 +33,7 @@ public class CsvController {
      * Get the CSV records from a file.
      *
      * @param file the file to get the records from
-     * @return an set of CSV records
+     * @return a set of CSV records
      * @throws IOException if the CSV file is not found
      */
     private Iterable<CSVRecord> getRecords(File file) throws IOException {
@@ -48,6 +50,8 @@ public class CsvController {
      * @param file the CSV file
      * @return data to send to the destination registrar
      * @throws java.io.IOException if the CSV file is not found
+     * @throws InjectorException TODO
+     * @throws ParseException TODO
      */
     public List<AMIContainer> getDataFromCsvFile(File file) throws IOException, InjectorException, ParseException {
 
@@ -68,6 +72,7 @@ public class CsvController {
         return new ArrayList<AMIContainer>(amiContainersToSync.values());
     }
 
+    // TODO
     private void processRecord(CSVRecord record, String separator, Map<String,
             AMIContainer> amiContainersToSync, List<QualifierMapping> qualifiersMappings) throws InjectorException, ParseException {
 
@@ -157,6 +162,13 @@ public class CsvController {
         }
     }
 
+    /**
+     * Write a flat representation of a list of AMI containers to the specified file.
+     *
+     * @param amiContainers the list of AMI containers to serialize in CSV format
+     * @param file the file in which to save the CSV representation of the AMI containers
+     * @throws IOException if an error occured while manipulating the specified file.
+     */
     public void generateCsvFile(List<AmiContainerDTO> amiContainers, File file) throws IOException {
 
         FileWriter writer = new FileWriter(file);
@@ -200,7 +212,7 @@ public class CsvController {
             for(AmiBaseDTO amiBaseDTO : amiContainer.getAmiBases()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-                // Write AMI
+                // Write a record per AMI
                 String amiId = amiBaseDTO.getUuid();
                 String tamiId = amiBaseDTO.getTamiId();
                 String value = amiBaseDTO.getValue();
@@ -218,7 +230,7 @@ public class CsvController {
                         parentId
                 );
 
-                // Write qualifiers
+                // Write a record per qualifier
                 for(AmiQualDTO amiQualDTO : amiBaseDTO.getQualifiers()) {
 
                     amiId = amiQualDTO.getUuid();

@@ -2,31 +2,28 @@ package biz.manex.andaman7.injector.controllers;
 
 import biz.manex.andaman7.injector.models.SelectionList;
 import biz.manex.andaman7.injector.models.SelectionListItem;
-import biz.manex.andaman7.injector.models.TamiGroup;
 import biz.manex.andaman7.injector.models.types.MultivaluedQualifierType;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.types.TAMI;
 import biz.manex.andaman7.injector.utils.XmlHelper;
-import biz.manex.andaman7.server.api.dto.others.MessageDTO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author Pierre-Yves (pierreyves.derbaix@gmail.com)
- *         Copyright A7 Software (http://a7-software.com/)
+ * The controller that is used to parse the TAMI dictionary.
+ *
+ * @author Pierre-Yves Derbaix (pierreyves.derbaix@gmail.com)<br/>
+ *         Copyright A7 Software (http://www.a7-software.com)<br/>
  *         Date : 07/03/2015.
  */
 public class XmlController {
@@ -173,6 +170,7 @@ public class XmlController {
         return qualifierTypes;
     }
 
+    // TODO
     public List<TAMI> getTamis(HashMap<String, String> translations, List<QualifierType> defaultQualifierTypes,
             Map<String, SelectionList> selectionLists, Node tamiGroupNode) {
 
@@ -212,6 +210,4 @@ public class XmlController {
 
         return tamis;
     }
-
-
 }
