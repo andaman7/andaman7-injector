@@ -9,6 +9,8 @@ import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiContainerDTO;
 import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiQualDTO;
 import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.http.HttpResponse;
 
 import java.util.*;
@@ -224,7 +226,7 @@ public class AndamanEhrService extends CustomRestService {
      * @return the built RegistrarSyncContentDTO
      */
     private RegistrarSyncContentDTO buildRegistrarSyncContentDTO(RegistrarDTO sourceRegistrar,
-            List<String> destinationRegistrarsIds, AmiContainerDTO[] amiContainerDTOs) {
+            List<String> destinationRegistrarsIds, AmiContainerDTO[] amiContainerDTOs) throws JsonProcessingException {
 
         String sourceRegistrarId = sourceRegistrar.getUuid();
         String sourceDeviceId = sourceRegistrar.getDevices().get(0).getUuid();
@@ -235,10 +237,8 @@ public class AndamanEhrService extends CustomRestService {
         syncContentDTO.setSourceDeviceId(sourceDeviceId);
         syncContentDTO.setSourceRegistrarId(sourceRegistrarId);
         syncContentDTO.setDestinationRegistrars(destinationRegistrarsIds);
-        syncContentDTO.setAmiContainerDTOs(Arrays.asList(amiContainerDTOs));
-        syncContentDTO.setFileUuidToFileContent(new HashMap<String, String>());
-        //syncContentDTO.setFileUuidToFileContentString("");
-        //syncContentDTO.setLastUploadDateFromDevice();
+        syncContentDTO.setMedicalRecords(jsonMapper.writeValueAsString(Arrays.asList(amiContainerDTOs)));
+        syncContentDTO.setFileMap(jsonMapper.writeValueAsString(new HashMap<String, String>()));
         syncContentDTO.setCreationDate(new Date());
         syncContentDTO.setCreatorId(sourceDeviceId);
         syncContentDTO.setUuid(UUID.randomUUID().toString());

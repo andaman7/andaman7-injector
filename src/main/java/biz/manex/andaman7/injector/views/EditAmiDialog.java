@@ -3,6 +3,7 @@ package biz.manex.andaman7.injector.views;
 import biz.manex.andaman7.injector.controllers.MainController;
 import biz.manex.andaman7.injector.exceptions.InjectorException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
+import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.Qualifier;
 import biz.manex.andaman7.injector.models.types.QualifierType;
@@ -151,6 +152,31 @@ public class EditAmiDialog extends javax.swing.JDialog {
                  
                if(evt.getKeyCode() == KeyEvent.VK_ENTER)
                     addQualifier();
+            }
+        });
+
+        manageQualifiersPanel.getEditButton().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Qualifier qualifier = (Qualifier) manageQualifiersPanel.getSelectedItem();
+
+                    if(qualifier.getType() instanceof MultivaluedType) {
+                        manageQualifiersPanel.switchDataValueComponent(manageQualifiersPanel.getValueTextField(), manageQualifiersPanel.getValuesComboBox());
+                        manageQualifiersPanel.getValuesComboBox().setSelectedItem(qualifier.getValue());
+
+                    } else {
+                        manageQualifiersPanel.switchDataValueComponent(manageQualifiersPanel.getValuesComboBox(), manageQualifiersPanel.getValueTextField());
+                        manageQualifiersPanel.getValueTextField().setText(qualifier.getValue());
+                    }
+
+                    manageQualifiersPanel.getTypeComboBox().setSelectedItem(qualifier.getType());
+                    manageQualifiersPanel.removeSelectedItem();
+
+                } catch (MissingTableModelException e1) {
+                    e1.printStackTrace();
+                } catch (NoSelectedItemException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }

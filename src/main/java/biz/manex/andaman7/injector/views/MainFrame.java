@@ -941,7 +941,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
             for(RegistrarSyncContentDTO medicalRecord : medicalRecords) {
 
-                AmiContainerDTO[] amiContainerDTOs = mapper.readValue(medicalRecord.getEhrsContent(), AmiContainerDTO[].class);
+                AmiContainerDTO[] amiContainerDTOs = mapper.readValue(medicalRecord.getMedicalRecords(), AmiContainerDTO[].class);
                 JOptionPane.showMessageDialog(this, mapper.writeValueAsString(amiContainerDTOs));
 
                 int result = jFileChooserSaveCsv.showDialog(this, "Save");
