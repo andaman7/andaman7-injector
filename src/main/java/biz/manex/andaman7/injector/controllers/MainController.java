@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.controllers;
 
+import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.models.*;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
@@ -215,7 +216,7 @@ public class MainController {
      * @throws SAXException TODO
      * @throws ParserConfigurationException TODO
      */
-    private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException {
+    private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
 
         String filename = "tami-dict.xml";
         File file = FileHelper.getFileInCurrentDir(filename);
@@ -254,7 +255,7 @@ public class MainController {
      * @throws SAXException TODO
      * @throws ParserConfigurationException TODO
      */
-    private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException {
+    private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
 
         String filename = "gui-dict.xml";
         int currentVersion = 0;
@@ -294,7 +295,7 @@ public class MainController {
      * @throws org.xml.sax.SAXException TODO
      * @throws javax.xml.parsers.ParserConfigurationException TODO
      */
-    public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException {
+    public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
 
         MessageDTO[] messages = contextService.getTranslations();
         HashMap<String, String> translations = new HashMap<String, String>();
@@ -352,7 +353,7 @@ public class MainController {
      * @return a list of found {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
      * @throws java.io.IOException
      */
-    public AndamanUserDTO[] searchUsers(String keyword) throws IOException {
+    public AndamanUserDTO[] searchUsers(String keyword) throws IOException, AuthenticationException {
 
         AndamanUserDTO[] results = contextService.searchUsers(keyword);
         RegistrarDTO[] members = contextService.getCommunityMembers();
@@ -379,7 +380,7 @@ public class MainController {
      * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      *         of the added community members.
      */
-    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) throws IOException {
+    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) throws IOException, AuthenticationException {
         return contextService.sendCommunityRequest(senderDeviceId, newCommunityMembers);
     }
 
@@ -389,12 +390,12 @@ public class MainController {
      * @return the received invitations
      * @throws IOException if there was an error with the connection to the server
      */
-    public FriendshipRequest[] getCommunityInvitations() throws IOException {
+    public FriendshipRequest[] getCommunityInvitations() throws IOException, AuthenticationException {
         return contextService.getInvitations();
     }
 
     // TODO
-    public void setCommunityInvitationAcceptance(String otherRegistrarUuid, boolean acceptanceLevel) throws IOException {
+    public void setCommunityInvitationAcceptance(String otherRegistrarUuid, boolean acceptanceLevel) throws IOException, AuthenticationException {
         contextService.setAcceptance(otherRegistrarUuid, acceptanceLevel);
     }
 
@@ -405,7 +406,7 @@ public class MainController {
      * @return how many invitations were sent to registrars that weren't in the community of the sender.
      * @throws IOException TODO
      */
-    public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException {
+    public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException, AuthenticationException {
 
         Set<String> idsToSendInvitation = new HashSet<String>();
         

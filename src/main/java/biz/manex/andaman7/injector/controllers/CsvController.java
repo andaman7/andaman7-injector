@@ -15,6 +15,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -93,8 +94,8 @@ public class CsvController {
         String value = record.get("value");
 
         String recordCreationDate = record.get("creationDate");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        Date creationDate = sdf.parse(recordCreationDate);
+        Calendar calendar = DatatypeConverter.parseDateTime(recordCreationDate);
+        Date creationDate = calendar.getTime();
 
         // Build an AMI container
         Map<String, String> contextMap;

@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.CsvController;
+import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.views.tablemodels.AmisTableModel;
 import biz.manex.andaman7.injector.views.tablemodels.AndamanUsersTableModel;
 import biz.manex.andaman7.injector.controllers.MainController;
@@ -520,18 +521,18 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      * @throws org.xml.sax.SAXException
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException {
+    public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
 
         DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<TAMI>();
         List<TamiGroup> tamiGroups = mainController.getTamiGroups();
-        
+
         tamiGroups.sort(new Comparator<TamiGroup>() {
 
             public int compare(TamiGroup group1, TamiGroup group2) {
                 return group1.getName().compareTo(group2.getName());
             }
         });
-        
+
         manageAmisPanel.setGroups(tamiGroups);
     }
 
@@ -555,7 +556,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 jTableRegistrars.setModel(model);
                 model.fireTableDataChanged();
                 
-            } catch(IOException e) {
+            } catch(Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -749,9 +750,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
             JOptionPane.showMessageDialog(this, "The data has been successfully sent !", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch(IOException e) {
-            
-            System.err.println(e.getMessage());
+        } catch(Exception e) {
             e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

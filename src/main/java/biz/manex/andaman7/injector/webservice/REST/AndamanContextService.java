@@ -1,5 +1,6 @@
 package biz.manex.andaman7.injector.webservice.REST;
 
+import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
 import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
@@ -77,9 +78,13 @@ public class AndamanContextService extends CustomRestService {
      *         of the authenticated registrar
      * @throws java.io.IOException if there was an error with the connection to the server
      */
-    public RegistrarDTO login() throws IOException {
+    public RegistrarDTO login() throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("registrars/login/", true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), RegistrarDTO.class);
     }
 
@@ -94,13 +99,16 @@ public class AndamanContextService extends CustomRestService {
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public Document getTamiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
+    public Document getTamiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
         HttpResponse response = restTemplate.get("tami-xml/next/" + currentXmlVersion, true);
 
-        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)
-            return null;
-        else
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
             return XmlHelper.getDocument(response.getEntity().getContent());
+        else
+            return null;
     }
 
     /**
@@ -114,13 +122,16 @@ public class AndamanContextService extends CustomRestService {
      * @throws org.xml.sax.SAXException if there was an error while parsing the XML document
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public Document getGuiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException {
+    public Document getGuiXml(int currentXmlVersion) throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
         HttpResponse response = restTemplate.get("gui-xml/last/" + currentXmlVersion, true);
 
-        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT)
-            return null;
-        else
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
             return XmlHelper.getDocument(response.getEntity().getContent());
+        else
+            return null;
     }
 
     /**
@@ -130,9 +141,13 @@ public class AndamanContextService extends CustomRestService {
      * @return a list of the devices of the logged registrar
      * @throws java.io.IOException if there was an error with the connection to the server
      */
-    public DeviceDTO[] getDevices() throws IOException {
+    public DeviceDTO[] getDevices() throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("devices/", true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), DeviceDTO[].class);
     }
 
@@ -144,9 +159,13 @@ public class AndamanContextService extends CustomRestService {
      *         found based on the keyword
      * @throws java.io.IOException if there was an error with the connection to the server
      */
-    public AndamanUserDTO[] searchUsers(String keyword) throws IOException {
+    public AndamanUserDTO[] searchUsers(String keyword) throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("andamanusers/search?keyword=" + keyword, true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), AndamanUserDTO[].class);
     }
     
@@ -159,10 +178,14 @@ public class AndamanContextService extends CustomRestService {
      * of the new community members
      * @throws java.io.IOException
      */
-    public RegistrarDTO[] sendCommunityRequest(String senderDeviceId, String[] newCommunityMembers) throws IOException {
+    public RegistrarDTO[] sendCommunityRequest(String senderDeviceId, String[] newCommunityMembers) throws IOException, AuthenticationException {
 
         String body = jsonMapper.writeValueAsString(newCommunityMembers);
         HttpResponse response = restTemplate.post("community/" + senderDeviceId, body);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), RegistrarDTO[].class);
     }
 
@@ -172,9 +195,13 @@ public class AndamanContextService extends CustomRestService {
      * @return the received invitations
      * @throws IOException if there was an error with the connection to the server
      */
-    public FriendshipRequest[] getInvitations() throws IOException {
+    public FriendshipRequest[] getInvitations() throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("invitations/", true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), FriendshipRequest[].class);
     }
 
@@ -185,8 +212,11 @@ public class AndamanContextService extends CustomRestService {
      * @param acceptance the acceptance level
      * @throws IOException if there was an error with the connection to the server
      */
-    public void setAcceptance(String otherRegistrarUuid, boolean acceptance) throws IOException {
-        restTemplate.post(String.format("/registrars/%s/acceptance/%s", otherRegistrarUuid, acceptance), "", true);
+    public void setAcceptance(String otherRegistrarUuid, boolean acceptance) throws IOException, AuthenticationException {
+        HttpResponse response = restTemplate.post(String.format("/registrars/%s/acceptance/%s", otherRegistrarUuid, acceptance), "", true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
     }
 
     /**
@@ -195,9 +225,13 @@ public class AndamanContextService extends CustomRestService {
      * @return the community members of the logged registrar
      * @throws java.io.IOException if there was an error with the connection to the server
      */
-    public RegistrarDTO[] getCommunityMembers() throws IOException {
+    public RegistrarDTO[] getCommunityMembers() throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("community/", true);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), RegistrarDTO[].class);
     }
 
@@ -210,9 +244,14 @@ public class AndamanContextService extends CustomRestService {
      * @throws java.io.IOException if there was an error with the connection to the server
      */
     public HttpResponse setCommunityAcceptance(String otherRegistrarId, boolean isAccepted)
-            throws IOException {
+            throws IOException, AuthenticationException {
 
-        return restTemplate.post("registrars/" + otherRegistrarId + "/acceptance/" + isAccepted, "");
+        HttpResponse response = restTemplate.post("registrars/" + otherRegistrarId + "/acceptance/" + isAccepted, "");
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
+        return response;
     }
 
     /**
@@ -221,9 +260,13 @@ public class AndamanContextService extends CustomRestService {
      * @return the translation strings used to translate the TAMIs and the GUI strings
      * @throws java.io.IOException if there was an error with the connection to the server
      */
-    public MessageDTO[] getTranslations() throws IOException {
+    public MessageDTO[] getTranslations() throws IOException, AuthenticationException {
 
         HttpResponse response = restTemplate.get("translations/");
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+
         return jsonMapper.readValue(response.getEntity().getContent(), MessageDTO[].class);
     }
 }
