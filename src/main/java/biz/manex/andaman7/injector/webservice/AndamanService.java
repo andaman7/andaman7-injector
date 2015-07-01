@@ -1,23 +1,23 @@
 package biz.manex.andaman7.injector.webservice;
 
-import biz.manex.andaman7.injector.dtos.devices.DeviceDTO;
-import biz.manex.andaman7.injector.dtos.invitations.InvitationDTO;
-import biz.manex.andaman7.injector.dtos.translations.TranslationDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDisplayDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserModificationDTO;
-import biz.manex.andaman7.injector.dtos.users.AuthenticatedUserDTO;
-import biz.manex.andaman7.injector.dtos.users.UserDTO;
-import biz.manex.andaman7.injector.dtos.users.ehrs.A7ItemDTO;
-import biz.manex.andaman7.injector.dtos.users.ehrs.A7ItemTypeEnum;
-import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
-import biz.manex.andaman7.injector.dtos.users.ehrs.SyncContentDTO;
+import biz.manex.andaman7.injector.dtos.A7ItemDTO;
+import biz.manex.andaman7.injector.dtos.A7ItemTypeEnum;
 import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.Qualifier;
 import biz.manex.andaman7.injector.utils.XmlHelper;
+import biz.manex.andaman7.server.api.pub.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.pub.dto.ehr.ResultSyncContentDTO;
+import biz.manex.andaman7.server.api.pub.dto.ehr.SyncContentDTO;
+import biz.manex.andaman7.server.api.pub.dto.invitations.InvitationDTO;
+import biz.manex.andaman7.server.api.pub.dto.translation.TranslationDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserCreationDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserModificationDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.AuthenticatedUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.UserDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -201,12 +201,12 @@ public class AndamanService extends CustomRestService {
      * of the new community members
      * @throws java.io.IOException
      */
-    public List<TrustedUserDisplayDTO> sendCommunityRequest(TrustedUserDTO trustedUserDTO) throws IOException, AndamanException {
+    public List<TrustedUserDTO> sendCommunityRequest(TrustedUserCreationDTO trustedUserDTO) throws IOException, AndamanException {
 
         String body = jsonMapper.writeValueAsString(trustedUserDTO);
         HttpResponse response = restTemplate.post("users/me/trusted-users?_envelope=false", body, true);
 
-        return jsonMapper.readValue(response.getEntity().getContent(), new TypeReference<List<TrustedUserDisplayDTO>>(){});
+        return jsonMapper.readValue(response.getEntity().getContent(), new TypeReference<List<TrustedUserDTO>>(){});
     }
 
     /**
@@ -254,10 +254,10 @@ public class AndamanService extends CustomRestService {
         if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
             throw new AuthenticationException("Wrong credentials.");
 
-        List<TrustedUserDisplayDTO> trustedUsers = jsonMapper.readValue(response.getEntity().getContent(), new TypeReference<List<TrustedUserDisplayDTO>>() {});
+        List<TrustedUserDTO> trustedUsers = jsonMapper.readValue(response.getEntity().getContent(), new TypeReference<List<TrustedUserDTO>>() {});
         List<UserDTO> userDTOs = new ArrayList<>();
 
-        for (TrustedUserDisplayDTO trustedUser : trustedUsers)
+        for (TrustedUserDTO trustedUser : trustedUsers)
             userDTOs.add(trustedUser.getUser());
 
         return userDTOs;
@@ -288,7 +288,12 @@ public class AndamanService extends CustomRestService {
      */
     public void sendAmiBasesToRegistrar(AuthenticatedUserDTO sourceUser, AMIContainer amiContainer, int tamiVersion) throws IOException, AndamanException {
 
-        String sourceDeviceId = sourceUser.getDevices().get(0).getId();
+        List<DeviceDTO> devices = getDevices();
+        
+        if(devices.isEmpty())
+            return;
+        
+        String sourceDeviceId = devices.get(0).getId();
         String sourceUserId = sourceUser.getId();
 
         Map<String, String> contextMap = amiContainer.getContextMap();
@@ -362,8 +367,11 @@ public class AndamanService extends CustomRestService {
         }
         
         String medicalRecords = jsonMapper.writeValueAsString(a7Items);
-        SyncContentDTO syncContentDTO = new SyncContentDTO(sourceDeviceId, sourceUser.getId(), medicalRecords, "[]"); // FIXME : support file map
-
+        SyncContentDTO syncContentDTO = new SyncContentDTO();
+        syncContentDTO.setSourceDeviceId(sourceDeviceId);
+        syncContentDTO.setSourceUserId(sourceUser.getId());
+        syncContentDTO.setA7Items(medicalRecords);
+        
         // Send the request to the server
         String body = jsonMapper.writeValueAsString(syncContentDTO);
         

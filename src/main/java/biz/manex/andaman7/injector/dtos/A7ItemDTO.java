@@ -1,4 +1,4 @@
-package biz.manex.andaman7.injector.dtos.users.ehrs;
+package biz.manex.andaman7.injector.dtos;
 
 import biz.manex.andaman7.injector.dtos.TrackingDTO;
 

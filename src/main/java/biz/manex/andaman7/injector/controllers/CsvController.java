@@ -1,6 +1,5 @@
 package biz.manex.andaman7.injector.controllers;
 
-import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
 import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
@@ -8,6 +7,7 @@ import biz.manex.andaman7.injector.models.Qualifier;
 import biz.manex.andaman7.injector.models.QualifierMapping;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.types.TAMI;
+import biz.manex.andaman7.server.api.pub.dto.ehr.ResultSyncContentDTO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;

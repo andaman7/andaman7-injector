@@ -1,15 +1,8 @@
 package biz.manex.andaman7.injector.controllers;
 
-import biz.manex.andaman7.injector.dtos.devices.DeviceDTO;
-import biz.manex.andaman7.injector.dtos.invitations.InvitationDTO;
-import biz.manex.andaman7.injector.dtos.translations.TranslationDTO;
-import biz.manex.andaman7.injector.dtos.translations.TranslationEntryDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDisplayDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserModificationDTO;
-import biz.manex.andaman7.injector.dtos.users.AuthenticatedUserDTO;
-import biz.manex.andaman7.injector.dtos.users.UserDTO;
-import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.AuthenticatedUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.UserDTO;
+import biz.manex.andaman7.server.api.pub.dto.ehr.ResultSyncContentDTO;
 import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
@@ -23,6 +16,13 @@ import biz.manex.andaman7.injector.views.EditAmiDialog;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
 import biz.manex.andaman7.injector.webservice.AndamanService;
+import biz.manex.andaman7.server.api.pub.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.pub.dto.invitations.InvitationDTO;
+import biz.manex.andaman7.server.api.pub.dto.translation.TranslationDTO;
+import biz.manex.andaman7.server.api.pub.dto.translation.TranslationEntryDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserCreationDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserModificationDTO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -71,6 +71,11 @@ public class MainController {
      * The current user that is logged in.
      */
     private AuthenticatedUserDTO currentUser;
+    
+    /**
+     * The device of the current user.
+     */
+    private DeviceDTO currentDevice;
 
     /**
      * The current version of the XML file where the TAMIs are described.
@@ -166,14 +171,13 @@ public class MainController {
             currentUser = andamanService.getAuthenticatedUser();
 
             if (currentUser != null) {
-                List<DeviceDTO> devices = currentUser.getDevices();
+                List<DeviceDTO> devices = andamanService.getDevices();
 
-                if (devices == null) {
-                    devices = andamanService.getDevices();
-                    currentUser.setDevices(devices);
-
-                } else if (!devices.isEmpty()) {
-                    mainFrame.setContextId(devices.get(0).getId());
+                if (!devices.isEmpty()) {
+                    currentDevice = devices.get(0);
+                    mainFrame.setContextId(currentDevice.getId());
+                } else {
+                    throw new AndamanException("The logged user must have at least one device.");
                 }
 
                 loginFrame.setVisible(false);
@@ -352,7 +356,7 @@ public class MainController {
      * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      *         of the added community members.
      */
-    private List<TrustedUserDisplayDTO> sendCommunityInvitation(TrustedUserDTO trustedUserDTO) throws IOException, AndamanException {
+    private List<TrustedUserDTO> sendCommunityInvitation(TrustedUserCreationDTO trustedUserDTO) throws IOException, AndamanException {
         return andamanService.sendCommunityRequest(trustedUserDTO);
     }
 
@@ -405,7 +409,10 @@ public class MainController {
             String[] newMembersIds = idsToSendInvitation.toArray(new String[idsToSendInvitation.size()]);
 
             for (String newMembersId : newMembersIds) {
-                TrustedUserDTO trustedUserDTO = new TrustedUserDTO(currentUser.getDevices().get(0).getId(), newMembersId);
+                TrustedUserCreationDTO trustedUserDTO = new TrustedUserCreationDTO();
+                trustedUserDTO.setSenderDeviceId(currentDevice.getId());
+                trustedUserDTO.setMemberId(newMembersId);
+                
                 andamanService.sendCommunityRequest(trustedUserDTO);
             }
     
@@ -445,5 +452,9 @@ public class MainController {
             return editAmiDialog.getEditedAmi();
         else
             return ami;
+    }
+
+    public DeviceDTO getCurrentDevice() {
+        return currentDevice;
     }
 }

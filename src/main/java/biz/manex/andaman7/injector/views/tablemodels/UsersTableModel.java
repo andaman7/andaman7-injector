@@ -1,7 +1,7 @@
 package biz.manex.andaman7.injector.views.tablemodels;
 
-import biz.manex.andaman7.injector.dtos.users.UserDTO;
 import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.UserDTO;
 
 /**
  *

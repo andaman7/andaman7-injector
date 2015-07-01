@@ -1,17 +1,14 @@
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.CsvController;
-import biz.manex.andaman7.injector.dtos.users.ehrs.A7ItemDTO;
+import biz.manex.andaman7.injector.dtos.A7ItemDTO;
 import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.views.tablemodels.AmisTableModel;
 import biz.manex.andaman7.injector.views.tablemodels.UsersTableModel;
 import biz.manex.andaman7.injector.controllers.MainController;
-import biz.manex.andaman7.injector.dtos.devices.DeviceDTO;
-import biz.manex.andaman7.injector.dtos.invitations.InvitationDTO;
-import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserModificationDTO;
-import biz.manex.andaman7.injector.dtos.users.AuthenticatedUserDTO;
-import biz.manex.andaman7.injector.dtos.users.UserDTO;
-import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.AuthenticatedUserDTO;
+import biz.manex.andaman7.server.api.pub.dto.user.UserDTO;
+import biz.manex.andaman7.server.api.pub.dto.ehr.ResultSyncContentDTO;
 import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
@@ -25,6 +22,9 @@ import biz.manex.andaman7.injector.models.SelectionListItem;
 import biz.manex.andaman7.injector.models.TamiGroup;
 import biz.manex.andaman7.injector.models.types.TAMI;
 import biz.manex.andaman7.injector.views.tablemodels.TableRowSelectionModel;
+import biz.manex.andaman7.server.api.pub.dto.device.DeviceDTO;
+import biz.manex.andaman7.server.api.pub.dto.invitations.InvitationDTO;
+import biz.manex.andaman7.server.api.pub.dto.trusteduser.TrustedUserModificationDTO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -657,10 +657,9 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             return false;
         }
 
-        List<DeviceDTO> devices = mainController.getCurrentUser().getDevices();
-        if(devices != null && devices.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "A device is required to inject data into an EHR.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        DeviceDTO device = mainController.getCurrentDevice();
+        if(device == null) {
+            JOptionPane.showMessageDialog(this, "A device is required to inject data into an EHR.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -931,7 +930,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             
             // Check for new data
             AuthenticatedUserDTO currentUser = mainController.getCurrentUser();
-            String deviceId = currentUser.getDevices().get(0).getId();
+            String deviceId = mainController.getCurrentDevice().getId();
             List<ResultSyncContentDTO> medicalRecords = mainController.getMedicalDataInQueue(currentUser.getId(), deviceId);
 
             if(medicalRecords.isEmpty())
@@ -942,7 +941,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
             for(ResultSyncContentDTO medicalRecord : medicalRecords) {
 
-                List<A7ItemDTO> amiContainerDTOs = Arrays.asList(mapper.readValue(medicalRecord.getMedicalRecords(), A7ItemDTO[].class));
+                List<A7ItemDTO> amiContainerDTOs = Arrays.asList(mapper.readValue(medicalRecord.getA7Items(), A7ItemDTO[].class));
                 JOptionPane.showMessageDialog(this, mapper.writeValueAsString(amiContainerDTOs));
 
                 int result = jFileChooserSaveCsv.showDialog(this, "Save");
