@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AmiDictionary version="9" minCompatVersion="9">
+    <SelectionLists>
+        <SelectionList id="sl.severity">
+            <Item id="li.fatal" />
+            <Item id="li.severe" />
+            <Item id="li.moderate" />
+            <Item id="li.mild" />
+        </SelectionList>
+        <SelectionList id="sl.doctorFunction">
+            <Item id="li.acupuncture" more="true" />
+            <Item id="li.allergyAndImmunology" more="true" />
+            <Item id="li.anatomicAndClinicalPathology" more="true" />
+            <Item id="li.anesthesiology" more="true" />
+            <Item id="li.audiology" more="true" />
+            <Item id="li.cardiology" more="true" />
+            <Item id="li.chiropracticMedicine" more="true" />
+            <Item id="li.criticalCareMedicine" more="true" />
+            <Item id="li.dentistry" />
+            <Item id="li.dermatology"/>
+            <Item id="li.dermatopathology" more="true" />
+            <Item id="li.emergencyMedicine" more="true" />
+            <Item id="li.endocrinology" more="true" />
+            <Item id="li.ethics" more="true" />
+            <Item id="li.exercisePhysiology" more="true" />
+            <Item id="li.familyMedicine" more="true" />
+            <Item id="li.forensicMedicine" more="true" />
+            <Item id="li.gastroenterology" more="true" />
+            <Item id="li.generalMedicine" />
+            <Item id="li.geriatricMedicine" more="true" />
+            <Item id="li.hematology" more="true" />
+            <Item id="li.hepatology" more="true" />
+            <Item id="li.infectiousDisease" more="true" />
+            <Item id="li.internalMedicine" more="true" />
+            <Item id="li.kinesiotherapy" more="true" />
+            <Item id="li.medicalAssistant" />
+            <Item id="li.medicalGenetics" more="true" />
+            <Item id="li.medicalToxicology" more="true" />
+            <Item id="li.neonatalPerinatalMedicine" more="true" />
+            <Item id="li.nephrology" more="true" />
+            <Item id="li.neurology" more="true"/>
+            <Item id="li.neurotology" more="true" />
+            <Item id="li.nuclearMedicine" more="true" />
+            <Item id="li.nurse" />
+            <Item id="li.nutritionAndDietetics" more="true" />
+            <Item id="li.obstetricsAndGynecology" />
+            <Item id="li.oncology" more="true" />
+            <Item id="li.ophthalmology" />
+            <Item id="li.optometry" more="true" />
+            <Item id="li.oralAndMaxillofacialSurgery" more="true" />
+            <Item id="li.orthopaedicSurgery" more="true" />
+            <Item id="li.orthoticsProsthetics" more="true" />
+            <Item id="li.ostheopathy" more="true" />
+            <Item id="li.otolaryngology" more="true" />
+            <Item id="li.painMedicine" more="true" />
+            <Item id="li.palliativeCare" more="true" />
+            <Item id="li.pathology" more="true" />
+            <Item id="li.pediatrics" />
+            <Item id="li.pharmacy" />
+            <Item id="li.physicalMedicineAndRehabilitation" more="true" />
+            <Item id="li.physicalTherapy" />
+            <Item id="li.plasticSurgery" more="true" />
+            <Item id="li.podiatry" more="true" />
+            <Item id="li.preventiveMedicine" more="true" />
+            <Item id="li.primaryCare" more="true" />
+            <Item id="li.psychiatry" more="true" />
+            <Item id="li.psychology" more="true" />
+            <Item id="li.publicHealth" more="true" />
+            <Item id="li.pulmonaryDisease" more="true" />
+            <Item id="li.radiology" more="true" />
+            <Item id="li.recreationalTherapy" more="true" />
+            <Item id="li.research" more="true" />
+            <Item id="li.respiratoryTherapy" more="true" />
+            <Item id="li.rheumatology" more="true" />
+            <Item id="li.socialWork" more="true" />
+            <Item id="li.speechlanguagePathology" />
+            <Item id="li.sportsMedicine" more="true"/>
+            <Item id="li.student" />
+            <Item id="li.surgery" more="true" />
+            <Item id="li.trauma" more="true" />
+            <Item id="li.urology" more="true" />
+            <Item id="li.vascularNeurology" more="true" />
+            <Item id="li.woundCareManagement" more="true" />
+        </SelectionList>
+        <SelectionList id="sl.unit.length">
+            <Item id="li.meter" ratio="1" system="metric" />
+            <Item id="li.centimeter" ratio="0.01" system="metric" default="true" />
+            <Item id="li.millimeter" ratio="0.001" system="metric" />
+            <Item id="li.yard" ratio="0.9144" system="us" />
+            <Item id="li.foot" ratio="0.3048" system="us" default="true" />
+            <Item id="li.inch" ratio="0.0254" system="us" />
+        </SelectionList>
+    </SelectionLists>
+
+    <Ami id="ami.doctorFunction" type="multiSelection" selectionListId="sl.doctorFunction" tags="tag.administrative" />
+
+    <Ami id="ami.doctor" type="string" tags="tag.contact" >
+        <Qualifier id="qualifier.speciality" type="oneSelection" selectionListId="sl.doctorFunction"/>
+        <Qualifier id="qualifier.address" type="string" />
+        <Qualifier id="qualifier.phone" type="string" />
+        <Qualifier id="qualifier.mobilePhone" type="string" />
+        <Qualifier id="qualifier.mail" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <Ami id="ami.allergy" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.result" type="oneSelection" selectionListId="sl.testResult" />
+        <Qualifier id="qualifier.severity" type="oneSelection" selectionListId="sl.severity" />
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.symptoms" type="string" />
+        <Qualifier id="qualifier.prescribedDrug" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.intolerance" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.result" type="oneSelection" selectionListId="sl.testResult" />
+        <Qualifier id="qualifier.severity" type="oneSelection" selectionListId="sl.severity" />
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.symptoms" type="string" />
+        <Qualifier id="qualifier.prescribedDrug" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <Ami id="ami.consultation" type="string" tags="tag.consultation">
+        <Qualifier id="qualifier.date" type="date" >
+            <DefaultValue>[currentDate]</DefaultValue>
+        </Qualifier>
+        <Qualifier id="qualifier.reason" type="string" />
+        <Qualifier id="qualifier.doctor" type="string" />
+        <Qualifier id="qualifier.question" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <Ami id="ami.condition" type="string" tags="tag.condition">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+        <Qualifier id="qualifier.evidence" type="string" />
+        <Qualifier id="qualifier.severity" type="oneSelection" selectionListId="sl.severity"/>
+        <Qualifier id="qualifier.dueTo" type="string" />
+        <Qualifier id="qualifier.stage" type="string"/>
+        <Qualifier id="qualifier.abatement" type="date"/>
+
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <Ami id="ami.prescription" type="string" tags="tag.drug">
+        <Qualifier id="qualifier.startDate" type="date">
+            <DefaultValue>[currentDate]</DefaultValue>
+        </Qualifier>
+        <Qualifier id="qualifier.endDate" type="date" />
+        <!-- dose = dose par prise et doseInstruction = prise en FR-->
+        <Qualifier id="qualifier.dose" type="string"/>
+        <Qualifier id="qualifier.doseInstruction" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <AmiSet id="amiset.consultation" type="date" tags="tag.consultation">
+        <DefaultValue>[currentDate]</DefaultValue>
+        <Qualifier id="qualifier.type" type="string"/>
+        <AmiRef id="amiref.doctor.executor" refId="ami.doctor" />
+
+        <AmiRef id="amiref.condition" refId="ami.condition">
+            <Marker id="marker.multi" />
+        </AmiRef>
+
+        <AmiRef id="amiref.weight" refId="ami.weight" />
+        <AmiRef id="amiref.height" refId="ami.height" />
+        <AmiRef id="amiref.fever" refId="ami.fever" />
+        <AmiRef id="amiref.tension" refId="ami.tension" />
+
+        <AmiRef id="amiref.document" refId="tag.document">
+            <Marker id="marker.multi" />
+        </AmiRef>
+        <AmiRef id="amiref.prescription" refId="ami.prescription" >
+            <Marker id="marker.multi" />
+        </AmiRef>
+
+        <Qualifier id="qualifier.private.note" type="note">
+            <Marker id="marker.deviceSyncOnly" />
+            <Marker id="marker.sharing.never" />
+        </Qualifier>
+
+        <Marker id="marker.multi" />
+    </AmiSet>
+</AmiDictionary>

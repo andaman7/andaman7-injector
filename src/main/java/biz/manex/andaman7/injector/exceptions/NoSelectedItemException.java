@@ -7,7 +7,7 @@ package biz.manex.andaman7.injector.exceptions;
  *         Copyright A7 Software (http://www.a7-software.com)<br/>
  *         Date : 07/03/2015.
  */
-public class NoSelectedItemException extends InjectorException {
+public class NoSelectedItemException extends AndamanException {
 
     public NoSelectedItemException() {
     }

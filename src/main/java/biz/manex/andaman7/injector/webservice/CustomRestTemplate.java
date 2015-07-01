@@ -1,7 +1,12 @@
-package biz.manex.andaman7.injector.webservice.REST;
+package biz.manex.andaman7.injector.webservice;
 
+import biz.manex.andaman7.injector.dtos.ErrorDTO;
+import biz.manex.andaman7.injector.exceptions.AndamanException;
+import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.utils.SecurityHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
@@ -9,6 +14,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.util.Base64;
+import org.apache.http.config.ConnectionConfig;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
 
 /**
  * Contains methods to interact with a RESTful server.
@@ -46,6 +53,8 @@ public class CustomRestTemplate {
     private final String password;
 
 
+    private final ObjectMapper jsonMapper;
+
     /**
      * Builds a connection to a REST web service.
      *
@@ -54,7 +63,7 @@ public class CustomRestTemplate {
      * @param login the login used for the authentication
      * @param password the password used for the authentication
      */
-    public CustomRestTemplate(String urlServer, String apiKey, String login, String password) {
+    public CustomRestTemplate(String urlServer, String apiKey, String login, String password, ObjectMapper jsonMapper) {
 
         this.urlServer = urlServer;
         this.apiKey = apiKey;
@@ -63,6 +72,8 @@ public class CustomRestTemplate {
 
         this.login = login;
         this.password = password;
+
+        this.jsonMapper = jsonMapper;
     }
 
     /**
@@ -72,7 +83,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse get(String path) throws IOException {
+    public HttpResponse get(String path) throws IOException, AndamanException {
         return get(path, false);
     }
 
@@ -84,7 +95,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse get(String path, boolean authenticationNeeded) throws IOException {
+    public HttpResponse get(String path, boolean authenticationNeeded) throws IOException, AndamanException {
 
         HttpGet request = new HttpGet(buildUrl(path));
         return executeRequest(request, authenticationNeeded);
@@ -98,7 +109,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse post(String path, String body) throws IOException {
+    public HttpResponse post(String path, String body) throws IOException, AndamanException {
         return post(path, body, false);
     }
 
@@ -111,7 +122,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse post(String path, String body, boolean authenticationNeeded) throws IOException {
+    public HttpResponse post(String path, String body, boolean authenticationNeeded) throws IOException, AndamanException {
 
         HttpPost request = new HttpPost(buildUrl(path));
         request.setHeader("Content-Type", "application/json");
@@ -127,7 +138,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse put(String path, String body) throws IOException {
+    public HttpResponse put(String path, String body) throws IOException, AndamanException {
         return put(path, body, false);
     }
 
@@ -140,7 +151,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse put(String path, String body, boolean authenticationNeeded) throws IOException {
+    public HttpResponse put(String path, String body, boolean authenticationNeeded) throws IOException, AndamanException {
 
         HttpPut request = new HttpPut(buildUrl(path));
         request.setHeader("Content-Type", "application/json");
@@ -155,7 +166,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse delete(String path) throws IOException {
+    public HttpResponse delete(String path) throws IOException, AndamanException {
         return delete(path, false);
     }
 
@@ -167,7 +178,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    public HttpResponse delete(String path, boolean authenticationNeeded) throws IOException {
+    public HttpResponse delete(String path, boolean authenticationNeeded) throws IOException, AndamanException {
 
         HttpDelete request = new HttpDelete(buildUrl(path));
         return executeRequest(request, authenticationNeeded);
@@ -224,7 +235,7 @@ public class CustomRestTemplate {
      * @return the HTTP response to the request
      * @throws IOException
      */
-    private HttpResponse executeRequest(HttpRequestBase request, boolean authenticationNeeded) throws IOException {
+    private HttpResponse executeRequest(HttpRequestBase request, boolean authenticationNeeded) throws IOException, AndamanException {
 
         request.addHeader("api-key", apiKey);
 
@@ -232,6 +243,18 @@ public class CustomRestTemplate {
             setAuthorizationHeader(request, login, password);
 
         System.err.println(String.format("Request : %s - %s", request.getMethod(), request.getURI()));
-        return httpClient.execute(request);
+        HttpResponse response = httpClient.execute(request);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN)
+            throw new AuthenticationException("Wrong credentials.");
+        else if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK &&
+                response.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED &&
+                response.getStatusLine().getStatusCode() != HttpStatus.SC_NO_CONTENT) {
+            ErrorDTO error = jsonMapper.readValue(response.getEntity().getContent(), ErrorDTO.class);
+            System.err.println(error.getDeveloperMessage());
+            throw new AndamanException(error.getMessage());
+        }
+
+        return response;
     }
 }

@@ -1,7 +1,7 @@
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.MainController;
-import biz.manex.andaman7.injector.exceptions.InjectorException;
+import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
 import biz.manex.andaman7.injector.models.AMI;
@@ -17,9 +17,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -212,23 +212,24 @@ public class EditAmiDialog extends javax.swing.JDialog {
         
         QualifierType type = (QualifierType) manageQualifiersPanel.getTypeComboBox().getSelectedItem();
         Qualifier qualifier;
+        String qualifierId = UUID.randomUUID().toString();
 
         if(type instanceof MultivaluedQualifierType) {
 
             MultivaluedQualifierType multiType = (MultivaluedQualifierType) type;
             SelectionListItem value = (SelectionListItem) manageQualifiersPanel.getValuesComboBox().getSelectedItem();
 
-            qualifier = new Qualifier(multiType, value.getKey());
+            qualifier = new Qualifier(qualifierId, multiType, value.getKey());
 
         } else {
             String value = manageQualifiersPanel.getValueTextField().getText();
-            qualifier = new Qualifier(type, value);
+            qualifier = new Qualifier(qualifierId, type, value);
         }
 
         try {
             manageQualifiersPanel.addItem(qualifier);
         
-        } catch(InjectorException e) {
+        } catch(AndamanException e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

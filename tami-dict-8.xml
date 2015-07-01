@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AmiDictionary version="8" minCompatVersion="8">
+
+    <!-- Qualifiers by default (exists for every Ami) -->
+    <DefaultQualifiers>
+        <DefaultQualifier type="string" id="default.note">
+            <Marker id="marker.note" />
+            <Marker id="marker.hidden" />
+        </DefaultQualifier>
+        <DefaultQualifier type="number" id="default.stars">
+            <Marker id="marker.stars" />
+            <Marker id="marker.deviceSyncOnly" />
+            <Marker id="marker.hidden" />
+        </DefaultQualifier>
+    </DefaultQualifiers>
+
+    <!-- Definition of selection lists -->
+    <SelectionLists>
+        <SelectionList id="sl.sex">
+            <Item id="li.man" />
+            <Item id="li.woman" />
+            <Item id="li.unknow" />
+        </SelectionList>
+        <SelectionList id="sl.language">
+            <Item id="li.french" />
+            <Item id="li.english" />
+            <Item id="li.german" />
+            <Item id="li.dutch" />
+            <Item id="li.italian" />
+            <Item id="li.spanish" />
+        </SelectionList>
+        <SelectionList id="sl.clinical">
+            <Item id="li.absent" />
+            <Item id="li.present" />
+            <Item id="li.missing" />
+        </SelectionList>
+        <SelectionList id="sl.language">
+            <Item id="li.dutch" />
+            <Item id="li.french" />
+            <Item id="li.german" />
+            <Item id="li.english" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.smokerFrequency">
+            <Item id="li.nonSmoker" />
+            <Item id="li.exSmoker" />
+            <Item id="li.smoker" />
+        </SelectionList>
+        <SelectionList id="sl.smokerType">
+            <Item id="li.cigarette" />
+            <Item id="li.cigare" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.drinkerType">
+            <Item id="li.abstainer" />
+            <Item id="li.exDrinker" />
+            <Item id="li.casual" />
+            <Item id="li.drinker" />
+        </SelectionList>
+        <SelectionList id="sl.drinkingFrequency">
+            <Item id="li.frequent" />
+            <Item id="li.notFrequent" />
+            <Item id="li.never" />
+        </SelectionList>
+        <SelectionList id="sl.drinkingQuantity">
+            <Item id="li.1-2g/day" />
+            <Item id="li.3-4g/day" />
+            <Item id="li.5-6g/day" />
+            <Item id="li.7-9g/day" />
+            <Item id="li.>9g/day" />
+        </SelectionList>
+        <SelectionList id="sl.drugAddiction">
+            <Item id="li.nonAddict" />
+            <Item id="li.exAddict" />
+            <Item id="li.addict" />
+        </SelectionList>
+        <SelectionList id="sl.drugType">
+            <Item id="li.cannabis" />
+            <Item id="li.cocaine" />
+            <Item id="li.amphetamine" />
+            <Item id="li.xtc" />
+            <Item id="li.ghb" />
+            <Item id="li.hallucinogen" />
+            <Item id="li.heroin" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.drugQuantity">
+            <Item id="li.1-2" />
+            <Item id="li.3-4" />
+            <Item id="li.5-6" />
+            <Item id="li.7-9" />
+            <Item id="li.>=10" />
+        </SelectionList>
+        <SelectionList id="sl.sportFrequency">
+            <Item id="li.recreation" />
+            <Item id="li.competition" />
+            <Item id="li.never" />
+        </SelectionList>
+        <SelectionList id="sl.sportType">
+            <Item id="li.bicycle" />
+            <Item id="li.football" />
+            <Item id="li.running" />
+            <Item id="li.swimming" />
+            <Item id="li.fishing" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.doctorFunction">
+            <Item id="li.generalist" />
+            <Item id="li.gyneco" />
+            <Item id="li.neurologue" />
+            <Item id="li.dentiste" />
+            <Item id="li.podologue" />
+            <Item id="li.pharmacien" />
+            <Item id="li.infirmier" />
+            <Item id="li.phsychologue" />
+            <Item id="li.physiotherapy" />
+            <Item id="li.ostheopathy" />
+            <Item id="li.dietitian" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.regime">
+            <Item id="li.worker" />
+            <Item id="li.patient" />
+            <Item id="li.student" />
+            <Item id="li.apprentice" />
+            <Item id="li.selfEmployed" />
+            <Item id="li.interim" />
+            <Item id="li.employee" />
+            <Item id="li.volunteer" />
+            <Item id="li.thirdParty" />
+            <Item id="li.civilServant" />
+        </SelectionList>
+        <SelectionList id="sl.maritalStatus">
+            <Item id="li.single" />
+            <Item id="li.married" />
+            <Item id="li.cohabitant" />
+            <Item id="li.divorced" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.pulse">
+            <Item id="li.regular" />
+            <Item id="li.irregular" />
+        </SelectionList>
+        <SelectionList id="sl.bloodGroup">
+            <Item id="li.O-" />
+            <Item id="li.O+" />
+            <Item id="li.A-" />
+            <Item id="li.A+" />
+            <Item id="li.B-" />
+            <Item id="li.B+" />
+            <Item id="li.AB-" />
+            <Item id="li.AB+" />
+        </SelectionList>
+        <SelectionList id="sl.relationship">
+            <Item id="li.father" />
+            <Item id="li.mother" />
+            <Item id="li.sister" />
+            <Item id="li.friend" />
+            <Item id="li.brother" />
+            <Item id="li.husband" />
+            <Item id="li.wife" />
+            <Item id="li.other" />
+        </SelectionList>
+        <SelectionList id="sl.testResult">
+            <Item id="li.positive" />
+            <Item id="li.negative" />
+            <Item id="li.undefined" />
+        </SelectionList>
+        <SelectionList id="sl.allergySeverity">
+            <Item id="li.serious" />
+            <Item id="li.soft" />
+            <Item id="li.verySerious" />
+            <Item id="li.average" />
+        </SelectionList>
+        <SelectionList id="sl.unitRange">
+            <Item id="li.m" />
+            <Item id="li.cm" />
+            <Item id="li.mm" />
+        </SelectionList>
+        <SelectionList id="sl.unitWeight">
+            <Item id="li.mg" />
+            <Item id="li.gr" />
+            <Item id="li.kg" />
+            <Item id="li.t" />
+        </SelectionList>
+        <SelectionList id="sl.administrativeDataSharing">
+            <Item id="li.toEveryone" />
+            <Item id="li.toCommunity" />
+            <Item id="li.toNobody" />
+        </SelectionList>
+        <SelectionList id="sl.unit.system">
+            <Item id="li.metric" />
+            <Item id="li.us" />
+            <Item id="li.custom" />
+        </SelectionList>
+        <SelectionList id="sl.unit.mass">
+            <Item id="li.kilogram" ratio="1" system="metric" default="true" />
+            <Item id="li.gram" ratio="0.001" system="metric" />
+            <Item id="li.milligram" ratio="0.000001" system="metric" />
+            <Item id="li.stone" ratio="6.35029" system="us" />
+            <Item id="li.pound" ratio="0.453592" system="us" default="true" />
+            <Item id="li.ounce" ratio="0.0283495" system="us" />
+            <Item id="li.dram" ratio="0.0017718452" system="us" />
+        </SelectionList>
+        <SelectionList id="sl.unit.length">
+            <Item id="li.meter" ratio="1" system="metric" default="true" />
+            <Item id="li.centimeter" ratio="0.01" system="metric" />
+            <Item id="li.millimeter" ratio="0.001" system="metric" />
+            <Item id="li.yard" ratio="0.9144" system="us" />
+            <Item id="li.foot" ratio="0.3048" system="us" default="true" />
+            <Item id="li.inch" ratio="0.0254" system="us" />
+        </SelectionList>
+        <SelectionList id="sl.unit.temperature">
+            <Item id="li.celsius" ratio="1" system="metric" default="true" />
+            <Item id="li.fahrenheit" ratio="1.8" shift="32" system="us" default="true" />
+        </SelectionList>
+        <SelectionList id="sl.unit.volume">
+            <Item id="li.liter" ratio="1" system="metric" default="true" />
+            <Item id="li.deciliter" ratio="0.1" system="metric" />
+            <Item id="li.centiliter" ratio="0.01" system="metric" />
+            <Item id="li.milliliter" ratio="0.001" system="metric" />
+            <Item id="li.us.gallon" ratio="3.78541" system="us" default="true" />
+            <Item id="li.us.fluidOunce" ratio="0.0295735" system="us" />
+        </SelectionList>
+        <SelectionList id="sl.yesno">
+            <Item id="li.yes" />
+            <Item id="li.no" />
+        </SelectionList>
+    </SelectionLists>
+
+
+<!-- Definition of Ami's -->
+
+    <!-- EHR AmiSet -->
+    <AmiSet id="amiSet.ehr" type="none" >
+        <Marker id="marker.amiContainer" />
+        <Marker id="marker.hidden" />
+        <Marker id="marker.multi" />
+    </AmiSet>
+    <Ami id="ami.namespaceEntry" type="string" >
+        <Qualifier id="qualifier.namespaceValue" type="string" />
+        <Marker id="marker.hidden"/>
+        <Marker id="marker.multi" />
+    </Ami>
+
+    <!-- Administrative Ami's -->
+    <Ami id="ami.lastName" type="string" tags="tag.administrative" />
+    <Ami id="ami.firstName" type="string" tags="tag.administrative" />
+    <Ami id="ami.callingName" type="string" tags="tag.administrative" />
+    <Ami id="ami.thirdName" type="string" tags="tag.administrative" />
+    <Ami id="ami.sex" type="oneSelection" selectionListId="sl.sex" tags="tag.administrative" />
+    <Ami id="ami.language" type="oneSelection" selectionListId="sl.language" tags="tag.administrative" />
+    <Ami id="ami.nationality" type="string" tags="tag.administrative">
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.picture" type="picture" tags="tag.administrative" />
+    <Ami id="ami.maritalStatus" type="oneSelection" selectionListId="sl.maritalStatus" tags="tag.administrative">
+        <Qualifier id="qualifier.startDate" type="string" />
+    </Ami>
+    <Ami id="ami.kids" type="number" tags="tag.administrative" />
+    <Ami id="ami.bloodGroup" type="oneSelection" selectionListId="sl.bloodGroup" tags="tag.administrative" />
+
+    <Ami id="ami.birthDate" type="date" tags="tag.administrative" />
+    <Ami id="ami.birthPlace" type="string" tags="tag.administrative" />
+    <Ami id="ami.deathDate" type="date" tags="tag.administrative" />
+    <Ami id="ami.deathPlace" type="string" tags="tag.administrative" />
+
+    <Ami id="ami.address" type="string" tags="tag.administrative" />
+    <Ami id="ami.addressNumber" type="number" tags="tag.administrative" />
+    <Ami id="ami.addressZip" type="number" tags="tag.administrative" />
+    <Ami id="ami.addressBox" type="string" tags="tag.administrative" />
+    <Ami id="ami.addressTown" type="string" tags="tag.administrative" />
+    <Ami id="ami.addressCountry" type="string" tags="tag.administrative" />
+
+    <Ami id="ami.phonePersonal" type="string" tags="tag.administrative" />
+    <Ami id="ami.phoneProfessional" type="string" tags="tag.administrative" />
+    <Ami id="ami.mailPersonal" type="string" tags="tag.administrative" />
+    <Ami id="ami.mailProfessional" type="string" tags="tag.administrative" />
+    <Ami id="ami.mobilePhone" type="string" tags="tag.administrative" />
+    <Ami id="ami.fax" type="string" tags="tag.administrative" />
+
+    <Ami id="ami.doctorFunction" type="multiSelection" selectionListId="sl.doctorFunction" tags="tag.administrative" />
+    <Ami id="ami.function" type="oneSelection" selectionListId="sl.regime" tags="tag.administrative" />
+    <Ami id="ami.employ" type="string" tags="tag.administrative" >
+        <Qualifier type="string" id="qualifier.employer" />
+        <Qualifier type="date" id="qualifier.startDate" />
+        <Qualifier type="date" id="qualifier.endDate" />
+    </Ami>
+    <!---->
+
+    <!-- Contacts Ami's-->
+    <Ami id="ami.doctor" type="string" tags="tag.contact" >
+        <Qualifier id="qualifier.speciality" type="string" />
+        <Qualifier id="qualifier.address" type="string" />
+        <Qualifier id="qualifier.phone" type="string" />
+        <Qualifier id="qualifier.mobilePhone" type="string" />
+        <Qualifier id="qualifier.mail" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.emergencyContact" type="string" tags="tag.contact">
+        <Qualifier id="qualifier.relation" type="oneSelection" selectionListId="sl.relationship" />
+        <Qualifier id="qualifier.phone" type="string" />
+        <Qualifier id="qualifier.phone2" type="string" />
+        <Qualifier id="qualifier.email" type="string" />
+        <Qualifier id="qualifier.address" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Insurances Ami's-->
+    <Ami id="ami.mutualFundation" type="string" tags="tag.insurance">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.insurance" type="string" tags="tag.insurance">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.complementaryInsurance" type="string" tags="tag.insurance">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Biometry Ami's-->
+    <Ami id="ami.height" type="number" tags="tag.biometry">
+        <Qualifier id="qualifier.unit" type="oneSelection" selectionListId="sl.unit.length" />
+    </Ami>
+    <Ami id="ami.weight" type="number" tags="tag.biometry">
+        <Qualifier id="qualifier.unit" type="oneSelection" selectionListId="sl.unit.mass" />
+    </Ami>
+    <Ami id="ami.bmi" type="number" tags="tag.biometry">
+        <Formula>
+            height = [ami.height];
+            return [ami.weight] / Math.pow(height,2);
+        </Formula>
+    </Ami>
+    <Ami id="ami.waist" type="number" tags="tag.biometry">
+        <Qualifier id="qualifier.unit" type="oneSelection" selectionListId="sl.unit.length" />
+    </Ami>
+    <Ami id="ami.hips" type="number" tags="tag.biometry">
+        <Qualifier id="qualifier.unit" type="oneSelection" selectionListId="sl.unit.length" />
+    </Ami>
+    <Ami id="ami.waistHipsRatio" type="number" tags="tag.biometry">
+        <Formula>
+            return [ami.waist] / [ami.hips];
+        </Formula>
+    </Ami>
+    <Ami id="ami.adiposity" type="number" tags="tag.biometry" />
+    <Ami id="ami.fever" type="number" tags="tag.biometry">
+        <Qualifier id="qualifier.unit" type="oneSelection" selectionListId="sl.unit.temperature"  />
+    </Ami>
+    <Ami id="ami.tension" type="string" tags="tag.biometry">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <!---->
+
+    <!-- Habits Ami's-->
+    <Ami id="ami.smokerFrequency" type="oneSelection" selectionListId="sl.smokerFrequency" tags="tag.habit">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.quantity" type="number" />
+        <Qualifier id="qualifier.type" type="oneSelection" selectionListId="sl.smokerType" />
+    </Ami>
+    <Ami id="ami.drinker" type="oneSelection" selectionListId="sl.drinkerType" tags="tag.habit">
+        <Qualifier id="qualifier.type" type="oneSelection" selectionListId="sl.drinkingFrequency" />
+        <Qualifier id="qualifier.quantity" type="oneSelection" selectionListId="sl.drinkingQuantity" />
+    </Ami>
+    <Ami id="ami.drug" type="oneSelection" selectionListId="sl.drugAddiction" tags="tag.habit">
+        <Qualifier id="qualifier.type" type="multiSelection" selectionListId="sl.drugType" />
+        <Qualifier id="qualifier.quantity" type="oneSelection" selectionListId="sl.drugQuantity" />
+    </Ami>
+    <Ami id="ami.sport" type="oneSelection" selectionListId="sl.sportFrequency" tags="tag.habit">
+        <Qualifier id="qualifier.type" type="multiSelection" selectionListId="sl.sportType" />
+        <Qualifier id="qualifier.startDate" type="date" />
+    </Ami>
+    <!---->
+
+    <!-- Documents Ami's -->
+    <Ami id="ami.document.testResult" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.prescription" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.note" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.xRay" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.report" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.picture" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.bloodAnalysis" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.document.draft" type="document" tags="tag.document">
+        <Qualifier id="qualifier.description" type="string" />
+        <Qualifier id="qualifier.filename" type="string" />
+        <Qualifier id="qualifier.mimetype" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Notes Ami's -->
+    <Ami id="ami.personalNote" type="note" tags="tag.note">
+        <Marker id="marker.cumulative" />
+    </Ami>
+    <Ami id="ami.privateNote" type="note" tags="tag.note">
+        <Marker id="marker.cumulative" />
+        <Marker id="marker.deviceSyncOnly" />
+        <Marker id="marker.sharing.never" />
+    </Ami>
+    <!---->
+
+    <!-- Consultation Ami's-->
+    <Ami id="ami.consultation" type="string" tags="tag.consultation" >
+        <Qualifier id="qualifier.date" type="date" >
+            <DefaultValue>[currentDate]</DefaultValue>
+        </Qualifier>
+        <Qualifier id="qualifier.reason" type="string" />
+        <Qualifier id="qualifier.doctor" type="string" />
+        <Qualifier id="qualifier.question" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Drugs Ami's -->
+    <Ami id="ami.vaccine" type="string" tags="tag.drug">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.type" type="string" />
+        <Qualifier id="qualifier.catchup" type="date" />
+        <Qualifier id="qualifier.quantity" type="string" />
+        <Qualifier id="qualifier.administrationType" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.medication" type="string" tags="tag.drug">
+        <Qualifier id="qualifier.dose" type="string" />
+        <Qualifier id="qualifier.frequency" type="string" />
+        <Qualifier id="qualifier.reason" type="string" />
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+        <Qualifier id="qualifier.sideEffect" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.prescription" type="string" tags="tag.drug">
+        <Qualifier id="qualifier.date" type="date">
+            <DefaultValue>[currentDate]</DefaultValue>
+        </Qualifier>
+        <Qualifier id="qualifier.rechargeAmount" type="string" >
+            <Marker id="marker.prescription.rechargeAmount" />
+        </Qualifier>
+        <Qualifier id="qualifier.registrationNumber" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Antecedents Ami's-->
+    <Ami id="ami.therapy" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.workAccident" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.familialAntecedent" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.medicalAntecedent" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.chirurgicalAntecedent" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.hospitalStay" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.reason" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+        <Qualifier id="qualifier.hospital" type="string" />
+        <Qualifier id="qualifier.duration" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.surgery" type="string" tags="tag.antecedent">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.result" type="string" />
+        <Qualifier id="qualifier.hospital" type="string" />
+        <Qualifier id="qualifier.doctor" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Diseases Ami's-->
+    <Ami id="ami.disease" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.startDate" type="date" />
+        <Qualifier id="qualifier.endDate" type="date" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.allergy" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.result" type="oneSelection" selectionListId="sl.testResult" />
+        <Qualifier id="qualifier.severity" type="oneSelection" selectionListId="sl.allergySeverity" />
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.symptoms" type="string" />
+        <Qualifier id="qualifier.prescribedDrug" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.familyAllergy" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.symptoms" type="string" />
+        <Qualifier id="qualifier.prescribedDrug" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <Ami id="ami.intolerance" type="string" tags="tag.disease">
+        <Qualifier id="qualifier.result" type="oneSelection" selectionListId="sl.testResult" />
+        <Qualifier id="qualifier.severity" type="oneSelection" selectionListId="sl.allergySeverity" />
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.symptoms" type="string" />
+        <Qualifier id="qualifier.prescribedDrug" type="string" />
+
+        <Marker id="marker.multi" />
+    </Ami>
+    <!---->
+
+    <!-- Blood Analysis Ami's-->
+    <Ami id="ami.cholesterol" type="string" tags="tag.bloodAnalysis">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.ldl" type="string" />
+        <Qualifier id="qualifier.hdl" type="string" />
+        <Qualifier id="qualifier.triglycerides" type="string" />
+    </Ami>
+    <Ami id="ami.glucose" type="string" tags="tag.bloodAnalysis">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.name" type="string" />
+        <Qualifier id="qualifier.type" type="string" />
+    </Ami>
+    <Ami id="ami.glycatedHemoglobin" type="string" tags="tag.bloodAnalysis">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.psa" type="string" tags="tag.bloodAnalysis">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <!---->
+
+    <!-- Medical imaging Ami's -->
+    <Ami id="ami.coloscopy" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.eeg" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.ecg" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.irm" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.tdm" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.tep" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.radiography" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier  id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.mammography" type="string" tags="tag.imaging">
+        <Qualifier  id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.echography" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <Ami id="ami.endoscopy" type="string" tags="tag.imaging">
+        <Qualifier id="qualifier.date" type="date" />
+        <Qualifier id="qualifier.monitoring" type="string" />
+        <Qualifier id="qualifier.result" type="string" />
+    </Ami>
+    <!---->
+
+    <!-- Internal Ami's -->
+    <Ami id="ami.isArchived" type="number" tags="tag.internal">
+        <Marker id="marker.hidden" />
+        <Marker id="marker.deviceSyncOnly" />
+    </Ami>
+</AmiDictionary>

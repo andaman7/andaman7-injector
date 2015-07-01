@@ -1,11 +1,18 @@
 package biz.manex.andaman7.injector.views;
 
 import biz.manex.andaman7.injector.controllers.CsvController;
+import biz.manex.andaman7.injector.dtos.users.ehrs.A7ItemDTO;
 import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.views.tablemodels.AmisTableModel;
-import biz.manex.andaman7.injector.views.tablemodels.AndamanUsersTableModel;
+import biz.manex.andaman7.injector.views.tablemodels.UsersTableModel;
 import biz.manex.andaman7.injector.controllers.MainController;
-import biz.manex.andaman7.injector.exceptions.InjectorException;
+import biz.manex.andaman7.injector.dtos.devices.DeviceDTO;
+import biz.manex.andaman7.injector.dtos.invitations.InvitationDTO;
+import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserModificationDTO;
+import biz.manex.andaman7.injector.dtos.users.AuthenticatedUserDTO;
+import biz.manex.andaman7.injector.dtos.users.UserDTO;
+import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
+import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.exceptions.NoSelectedItemException;
 import biz.manex.andaman7.injector.models.AMI;
@@ -18,11 +25,6 @@ import biz.manex.andaman7.injector.models.SelectionListItem;
 import biz.manex.andaman7.injector.models.TamiGroup;
 import biz.manex.andaman7.injector.models.types.TAMI;
 import biz.manex.andaman7.injector.views.tablemodels.TableRowSelectionModel;
-import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.RegistrarSyncContentDTO;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiContainerDTO;
-import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
-import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +40,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
-import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.xml.sax.SAXException;
 
@@ -237,7 +238,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             }
         });
 
-        jTableRegistrars.setModel(new AndamanUsersTableModel());
+        jTableRegistrars.setModel(new UsersTableModel());
         jTableRegistrars.setName("registrars"); // NOI18N
         jScrollPane1.setViewportView(jTableRegistrars);
 
@@ -476,7 +477,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                     mainController.showEditAmiDialog(selectedAMI);
                     manageAmisPanel.updateTable();
                     
-                } catch (InjectorException e) {
+                } catch (AndamanException e) {
                     System.err.println(e.getMessage());
                     e.printStackTrace(System.err);
                     JOptionPane.showMessageDialog(MainFrame.this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -520,14 +521,16 @@ public class MainFrame extends JFrame implements ListSelectionListener {
      * @throws IOException if there was an error with the connection to the server
      * @throws org.xml.sax.SAXException
      * @throws javax.xml.parsers.ParserConfigurationException
+     * @throws biz.manex.andaman7.injector.exceptions.AuthenticationException
      */
-    public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
+    public void setTamiGroupsList() throws IOException, SAXException, ParserConfigurationException, AndamanException {
 
-        DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<TAMI>();
+        DefaultComboBoxModel<TAMI> model = new DefaultComboBoxModel<>();
         List<TamiGroup> tamiGroups = mainController.getTamiGroups();
 
         tamiGroups.sort(new Comparator<TamiGroup>() {
 
+            @Override
             public int compare(TamiGroup group1, TamiGroup group2) {
                 return group1.getName().compareTo(group2.getName());
             }
@@ -545,12 +548,12 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 
         if(!keyword.isEmpty()) {
             try {
-                AndamanUserDTO[] users = mainController.searchUsers(keyword);
+                List<UserDTO> users = mainController.searchUsers(keyword);
 
-                AndamanUsersTableModel model = (AndamanUsersTableModel) jTableRegistrars.getModel();
+                UsersTableModel model = (UsersTableModel) jTableRegistrars.getModel();
                 model.clear();
 
-                for (AndamanUserDTO user : users)
+                for (UserDTO user : users)
                     model.addItem(user);
 
                 jTableRegistrars.setModel(model);
@@ -590,7 +593,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 AMI ami = new AMI(id, type, strValue, new Date());
                 manageAmisPanel.addItem(ami);
                 
-            } catch (InjectorException e) {
+            } catch (AndamanException e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -685,8 +688,8 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 amis.put(ami.getId(), ami);
             
             int patientIndex = jTableRegistrars.getSelectedRow();
-            AndamanUsersTableModel destinationUserModel = (AndamanUsersTableModel) jTableRegistrars.getModel();
-            AndamanUserDTO destinationUser = destinationUserModel.getValueAt(patientIndex);
+            UsersTableModel destinationUserModel = (UsersTableModel) jTableRegistrars.getModel();
+            UserDTO destinationUser = destinationUserModel.getValueAt(patientIndex);
             
             String contextId = jTextFieldContextId.getText();
             String amiContainerId = jTextFieldEhrId.getText();
@@ -695,7 +698,7 @@ public class MainFrame extends JFrame implements ListSelectionListener {
             contextMap.put(contextId, amiContainerId);
             
             List<String> destinationRegistrarsIds = new ArrayList<String>();
-            destinationRegistrarsIds.add(destinationUser.getUuid());
+            destinationRegistrarsIds.add(destinationUser.getId());
             
             List<AMIContainer> amiContainersToSync = new ArrayList<AMIContainer>();
             AMIContainer amiContainer = new AMIContainer(amiContainerId, amis, contextMap, destinationRegistrarsIds);
@@ -798,8 +801,8 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         jTextFieldEhrId.setText("");
         jButtonContextRegistrarsEHR.setEnabled(false);
        
-        AndamanUsersTableModel andamanUsersTableModel;
-        andamanUsersTableModel = (AndamanUsersTableModel) jTableRegistrars.getModel();
+        UsersTableModel andamanUsersTableModel;
+        andamanUsersTableModel = (UsersTableModel) jTableRegistrars.getModel();
         andamanUsersTableModel.clear();
         
         try {
@@ -881,9 +884,9 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         
         if(rowIndex != -1) {
             
-            AndamanUsersTableModel model = (AndamanUsersTableModel) jTableRegistrars.getModel();
-            AndamanUserDTO user = model.getValueAt(rowIndex);
-            jTextFieldEhrId.setText(user.getUuid());
+            UsersTableModel model = (UsersTableModel) jTableRegistrars.getModel();
+            UserDTO user = model.getValueAt(rowIndex);
+            jTextFieldEhrId.setText(user.getId());
         }
     }//GEN-LAST:event_jButtonContextRegistrarsEHRActionPerformed
 
@@ -899,15 +902,14 @@ public class MainFrame extends JFrame implements ListSelectionListener {
         
         try {
             // Check for new invitations
-            FriendshipRequest[] invitations = mainController.getCommunityInvitations();
+            List<InvitationDTO> invitations = mainController.getInvitations();
             
-            if(invitations.length > 0) {
-                for(FriendshipRequest invitation : invitations) {
-                    
-                    AndamanUserDTO user = invitation.getAndamanUser();
+            if(!invitations.isEmpty()) {
+                for(InvitationDTO invitation : invitations) {
+
                     int result = JOptionPane.showConfirmDialog(
                             this,
-                            String.format("Accept the invitation from %s %s (%s)", user.getFirstName(), user.getLastName(), user.getPatientAddressCountry()),
+                            String.format("Accept the invitation from %s %s (%s)", invitation.getFirstName(), invitation.getLastName(), invitation.getCountry()),
                             "New invitation",
                             JOptionPane.YES_NO_CANCEL_OPTION);
                     
@@ -923,24 +925,24 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                     }
                     
                     if(response != null)
-                        mainController.setCommunityInvitationAcceptance(user.getUuid(), response);
+                        mainController.setCommunityInvitationAcceptance(invitation.getId(), new TrustedUserModificationDTO(response));
                 }
             }
             
             // Check for new data
-            RegistrarDTO currentUser = mainController.getCurrentUser();
-            String deviceId = currentUser.getDevices().get(0).getUuid();
-            RegistrarSyncContentDTO[] medicalRecords = mainController.getMedicalDataInQueue(deviceId);
+            AuthenticatedUserDTO currentUser = mainController.getCurrentUser();
+            String deviceId = currentUser.getDevices().get(0).getId();
+            List<ResultSyncContentDTO> medicalRecords = mainController.getMedicalDataInQueue(currentUser.getId(), deviceId);
 
-            if(medicalRecords.length == 0)
+            if(medicalRecords.isEmpty())
                 JOptionPane.showMessageDialog(this, "No medical record in queue.");
 
             ObjectMapper mapper = new ObjectMapper();
-            List<String> medicalRecordIds  = new ArrayList<String>();
+            List<String> medicalRecordIds  = new ArrayList<>();
 
-            for(RegistrarSyncContentDTO medicalRecord : medicalRecords) {
+            for(ResultSyncContentDTO medicalRecord : medicalRecords) {
 
-                AmiContainerDTO[] amiContainerDTOs = mapper.readValue(medicalRecord.getMedicalRecords(), AmiContainerDTO[].class);
+                List<A7ItemDTO> amiContainerDTOs = Arrays.asList(mapper.readValue(medicalRecord.getMedicalRecords(), A7ItemDTO[].class));
                 JOptionPane.showMessageDialog(this, mapper.writeValueAsString(amiContainerDTOs));
 
                 int result = jFileChooserSaveCsv.showDialog(this, "Save");
@@ -948,12 +950,12 @@ public class MainFrame extends JFrame implements ListSelectionListener {
                 if(result == JFileChooser.APPROVE_OPTION && jFileChooserSaveCsv.getSelectedFile() != null) {
 
                     File selectedFile = jFileChooserSaveCsv.getSelectedFile();
-                    csvController.generateCsvFile(Arrays.asList(amiContainerDTOs), selectedFile);
+                    csvController.generateCsvFile(medicalRecord, selectedFile);
                     medicalRecordIds.add(medicalRecord.getMedicalRecordId());
                 }
             }
 
-            mainController.acknowledgeMedicalData(deviceId, medicalRecordIds.toArray(new String[medicalRecordIds.size()]));
+            mainController.acknowledgeMedicalData(medicalRecordIds.toArray(new String[medicalRecordIds.size()]));
             
         } catch (Exception e) {
             System.err.println(e.getMessage());

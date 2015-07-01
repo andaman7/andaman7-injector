@@ -1,6 +1,7 @@
 package biz.manex.andaman7.injector.models;
 
 import biz.manex.andaman7.injector.models.types.QualifierType;
+import java.util.UUID;
 
 /**
  * A qualifier.
@@ -10,6 +11,11 @@ import biz.manex.andaman7.injector.models.types.QualifierType;
  *         Date : 18/02/2015.
  */
 public class Qualifier {
+    
+    /**
+     * The identifier of the qualifier.
+     */
+    private String id;
     
     /**
      * The type of the qualifier.
@@ -22,9 +28,18 @@ public class Qualifier {
     private String value;
 
     
-    public Qualifier(QualifierType type, String value) {
+    public Qualifier(String id, QualifierType type, String value) {
+        this.id = id;
         this.type = type;
         this.value = value;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

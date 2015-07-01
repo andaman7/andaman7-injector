@@ -1,15 +1,13 @@
 package biz.manex.andaman7.injector.controllers;
 
-import biz.manex.andaman7.injector.exceptions.InjectorException;
+import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
+import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.models.AMI;
 import biz.manex.andaman7.injector.models.AMIContainer;
 import biz.manex.andaman7.injector.models.Qualifier;
 import biz.manex.andaman7.injector.models.QualifierMapping;
 import biz.manex.andaman7.injector.models.types.QualifierType;
 import biz.manex.andaman7.injector.models.types.TAMI;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiBaseDTO;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiContainerDTO;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.ehr.AmiQualDTO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -18,7 +16,6 @@ import org.apache.commons.csv.CSVRecord;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -51,10 +48,10 @@ public class CsvController {
      * @param file the CSV file
      * @return data to send to the destination registrar
      * @throws java.io.IOException if the CSV file is not found
-     * @throws InjectorException TODO
+     * @throws AndamanException TODO
      * @throws ParseException TODO
      */
-    public List<AMIContainer> getDataFromCsvFile(File file) throws IOException, InjectorException, ParseException {
+    public List<AMIContainer> getDataFromCsvFile(File file) throws IOException, AndamanException, ParseException {
 
         // Get the records from the CSV file
         Iterable<CSVRecord> records = getRecords(file);
@@ -70,12 +67,11 @@ public class CsvController {
         // Map all the qualifiers to their corresponding AMI
         mapQualifiers(qualifiersMappings);
 
-        return new ArrayList<AMIContainer>(amiContainersToSync.values());
+        return new ArrayList<>(amiContainersToSync.values());
     }
 
-    // TODO
     private void processRecord(CSVRecord record, String separator, Map<String,
-            AMIContainer> amiContainersToSync, List<QualifierMapping> qualifiersMappings) throws InjectorException, ParseException {
+            AMIContainer> amiContainersToSync, List<QualifierMapping> qualifiersMappings) throws AndamanException, ParseException {
 
         String recordEhrContextIds = record.get("ehrContextIds");
         String recordEhrIds = record.get("ehrIds");
@@ -84,7 +80,7 @@ public class CsvController {
         String[] ehrIds = recordEhrIds.split(separator);
 
         if(ehrContextIds.length != ehrIds.length)
-            throw new InjectorException("Mismatch between the number of EHR context ids and the number of EHR ids.");
+            throw new AndamanException("Mismatch between the number of EHR context ids and the number of EHR ids.");
 
         String recordDestinationRegistrarIds = record.get("destinationRegistrarIds");
         String[] destinationRegistrarIds = recordDestinationRegistrarIds.split(separator);
@@ -128,7 +124,7 @@ public class CsvController {
         } else {
 
             QualifierType qualifierType = new QualifierType(tamiId);
-            Qualifier qualifier = new Qualifier(qualifierType, value);
+            Qualifier qualifier = new Qualifier(UUID.randomUUID().toString(), qualifierType, value);
 
             QualifierMapping qualifierMapping = new QualifierMapping(qualifier, parentId, amiContainer);
             qualifiersMappings.add(qualifierMapping);
@@ -166,11 +162,10 @@ public class CsvController {
     /**
      * Write a flat representation of a list of AMI containers to the specified file.
      *
-     * @param amiContainers the list of AMI containers to serialize in CSV format
      * @param file the file in which to save the CSV representation of the AMI containers
      * @throws IOException if an error occured while manipulating the specified file.
      */
-    public void generateCsvFile(List<AmiContainerDTO> amiContainers, File file) throws IOException {
+    public void generateCsvFile(ResultSyncContentDTO resultSyncContentDTO, File file) throws IOException {
 
         FileWriter writer = new FileWriter(file);
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withDelimiter(';'));
@@ -187,7 +182,7 @@ public class CsvController {
                 "parentId"
         );
 
-        for(AmiContainerDTO amiContainer : amiContainers) {
+        /*for(AmiContainerDTO amiContainer : amiContainers) {
 
             StringBuilder ehrContextIds = new StringBuilder();
             StringBuilder ehrIds = new StringBuilder();
@@ -255,6 +250,6 @@ public class CsvController {
         }
 
         csvPrinter.flush();
-        csvPrinter.close();
+        csvPrinter.close();*/
     }
 }

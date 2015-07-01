@@ -1,17 +1,18 @@
 package biz.manex.andaman7.injector.views.tablemodels;
 
+import biz.manex.andaman7.injector.dtos.users.UserDTO;
 import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
 
 /**
  *
  * @author Pierre-Yves
  */
-public class AndamanUsersTableModel extends AbstractTableModel<AndamanUserDTO> {
+public class UsersTableModel extends AbstractTableModel<UserDTO> {
 
     /**
      * The columns of a qualifier.
      */
-    public enum AndamanUserColumn {
+    public enum UserColumn {
         /**
          * The first name of the user.
          */
@@ -37,7 +38,7 @@ public class AndamanUsersTableModel extends AbstractTableModel<AndamanUserDTO> {
          *
          * @param name the name of the column
          */
-        AndamanUserColumn(String name) {
+        UserColumn(String name) {
             this.name = name;
         }
 
@@ -55,9 +56,9 @@ public class AndamanUsersTableModel extends AbstractTableModel<AndamanUserDTO> {
      * The names of the columns.
      */
     private static final String[] COLUMN_NAMES = {
-            AndamanUserColumn.FIRST_NAME.getName(),
-            AndamanUserColumn.LAST_NAME.getName(),
-            AndamanUserColumn.COUNTRY.getName()
+            UserColumn.FIRST_NAME.getName(),
+            UserColumn.LAST_NAME.getName(),
+            UserColumn.COUNTRY.getName()
     };
     
     @Override
@@ -66,19 +67,19 @@ public class AndamanUsersTableModel extends AbstractTableModel<AndamanUserDTO> {
     }
 
     @Override
-    protected Object getValueInItem(AndamanUserDTO item, int columnIndex) {
+    protected Object getValueInItem(UserDTO item, int columnIndex) {
         
         String result;
 
         switch(columnIndex) {
             case 0:
-                result = item.getFirstName();
+                result = item.getAdministrative().getFirstName();
                 break;
             case 1:
-                result = item.getLastName();
+                result = item.getAdministrative().getLastName();
                 break;
             case 2:
-                result = item.getPatientAddressCountry();
+                result = item.getAdministrative().getAddress().getCountry();
                 break;
             default:
                 result = "";

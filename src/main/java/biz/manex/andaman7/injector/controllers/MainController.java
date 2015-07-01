@@ -1,5 +1,16 @@
 package biz.manex.andaman7.injector.controllers;
 
+import biz.manex.andaman7.injector.dtos.devices.DeviceDTO;
+import biz.manex.andaman7.injector.dtos.invitations.InvitationDTO;
+import biz.manex.andaman7.injector.dtos.translations.TranslationDTO;
+import biz.manex.andaman7.injector.dtos.translations.TranslationEntryDTO;
+import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDTO;
+import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserDisplayDTO;
+import biz.manex.andaman7.injector.dtos.trustedusers.TrustedUserModificationDTO;
+import biz.manex.andaman7.injector.dtos.users.AuthenticatedUserDTO;
+import biz.manex.andaman7.injector.dtos.users.UserDTO;
+import biz.manex.andaman7.injector.dtos.users.ehrs.ResultSyncContentDTO;
+import biz.manex.andaman7.injector.exceptions.AndamanException;
 import biz.manex.andaman7.injector.exceptions.AuthenticationException;
 import biz.manex.andaman7.injector.exceptions.MissingTableModelException;
 import biz.manex.andaman7.injector.models.*;
@@ -11,14 +22,7 @@ import biz.manex.andaman7.injector.utils.XmlHelper;
 import biz.manex.andaman7.injector.views.EditAmiDialog;
 import biz.manex.andaman7.injector.views.LoginFrame;
 import biz.manex.andaman7.injector.views.MainFrame;
-import biz.manex.andaman7.injector.webservice.REST.AndamanContextService;
-import biz.manex.andaman7.injector.webservice.REST.AndamanEhrService;
-import biz.manex.andaman7.server.api.dto.device.DeviceDTO;
-import biz.manex.andaman7.server.api.dto.ehrSynchro.RegistrarSyncContentDTO;
-import biz.manex.andaman7.server.api.dto.others.FriendshipRequest;
-import biz.manex.andaman7.server.api.dto.others.MessageDTO;
-import biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO;
-import biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO;
+import biz.manex.andaman7.injector.webservice.AndamanService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,12 +49,8 @@ public class MainController {
     /**
      * The context web service.
      */
-    private AndamanContextService contextService;
+    private AndamanService andamanService;
 
-    /**
-     * The EHR web service.
-     */
-    private AndamanEhrService ehrService;
 
     /**
      * The XML controller.
@@ -70,7 +70,7 @@ public class MainController {
     /**
      * The current user that is logged in.
      */
-    private RegistrarDTO currentUser;
+    private AuthenticatedUserDTO currentUser;
 
     /**
      * The current version of the XML file where the TAMIs are described.
@@ -91,7 +91,7 @@ public class MainController {
      *
      * @return the current user
      */
-    public RegistrarDTO getCurrentUser() {
+    public AuthenticatedUserDTO getCurrentUser() {
         return currentUser;
     }
 
@@ -116,18 +116,13 @@ public class MainController {
     public void setSettings(Settings settings) {
         
         String serverURL = buildServerURL(settings);
-        String contextServiceURL = serverURL + "context/v1/";
-        String ehrServiceURL = serverURL + "ehr/v1/";
+        String contextServiceURL = serverURL + "public/v1/";
         String apiKey = settings.getApiKey();
         
         String username = settings.getUsername();
         String password = settings.getPassword();
 
-        contextService = AndamanContextService.getInstance(
-                contextServiceURL, apiKey, username, password);
-
-        ehrService = AndamanEhrService.getInstance(ehrServiceURL, apiKey,
-                username, password);
+        andamanService = AndamanService.getInstance(contextServiceURL, apiKey, username, password);
     }
 
     /**
@@ -151,7 +146,7 @@ public class MainController {
                 !settings.getServerPort().equals("443"))
             url.append(":").append(settings.getServerPort());
         
-        url.append("/api/");
+        url.append("/");
         
         return url.toString();
     }
@@ -167,30 +162,25 @@ public class MainController {
         try {
 
             setSettings(settings);
-            mainFrame.setTamiGroupsList(); // TODO : Should build the main frame here
-            currentUser = contextService.login();
+            mainFrame.setTamiGroupsList();
+            currentUser = andamanService.getAuthenticatedUser();
 
             if (currentUser != null) {
                 List<DeviceDTO> devices = currentUser.getDevices();
 
                 if (devices == null) {
-                    devices = new ArrayList<DeviceDTO>();
-                    DeviceDTO[] devicesArray = contextService.getDevices();
-
-                    if (devicesArray != null) {
-                        devices.addAll(Arrays.asList(devicesArray));
-                        currentUser.setDevices(devices);
-                    }
+                    devices = andamanService.getDevices();
+                    currentUser.setDevices(devices);
 
                 } else if (!devices.isEmpty()) {
-                    mainFrame.setContextId(devices.get(0).getUuid());
+                    mainFrame.setContextId(devices.get(0).getId());
                 }
 
                 loginFrame.setVisible(false);
                 mainFrame.setVisible(true);
             }
 
-        } catch(Exception e) {
+        } catch(IOException | SAXException | ParserConfigurationException | AndamanException e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             JOptionPane.showMessageDialog(loginFrame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -216,7 +206,7 @@ public class MainController {
      * @throws SAXException TODO
      * @throws ParserConfigurationException TODO
      */
-    private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
+    private Document getTamiXml() throws IOException, SAXException, ParserConfigurationException, AndamanException {
 
         String filename = "tami-dict.xml";
         File file = FileHelper.getFileInCurrentDir(filename);
@@ -226,7 +216,7 @@ public class MainController {
         if (file.canRead()) {
             try {
                 doc = XmlHelper.getDocument(file);
-                XPathExpression expr = XmlHelper.getXPathExpression("//TamiDictionary/@version");
+                XPathExpression expr = XmlHelper.getXPathExpression("//AmiDictionary/@version");
                 NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
                 currentTamiVersion = Integer.parseInt(nodes.item(0).getNodeValue());
                 
@@ -236,7 +226,7 @@ public class MainController {
             }
         }
 
-        Document docFromServer = contextService.getTamiXml(currentTamiVersion);
+        Document docFromServer = andamanService.getTamiXml(currentTamiVersion);
 
         // If a new version is available, overwrite the file
         if(docFromServer != null) {
@@ -255,7 +245,7 @@ public class MainController {
      * @throws SAXException TODO
      * @throws ParserConfigurationException TODO
      */
-    private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
+    private Document getGuiXml() throws IOException, SAXException, ParserConfigurationException, AndamanException {
 
         String filename = "gui-dict.xml";
         int currentVersion = 0;
@@ -276,7 +266,7 @@ public class MainController {
             }
         }
 
-        Document docFromServer = contextService.getGuiXml(currentVersion);
+        Document docFromServer = andamanService.getGuiXml(currentVersion);
 
         // If a new version is available, overwrite the file
         if(docFromServer != null) {
@@ -294,53 +284,31 @@ public class MainController {
      * @throws java.io.IOException TODO
      * @throws org.xml.sax.SAXException TODO
      * @throws javax.xml.parsers.ParserConfigurationException TODO
+     * @throws biz.manex.andaman7.injector.exceptions.AuthenticationException
      */
-    public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException, AuthenticationException {
+    public List<TamiGroup> getTamiGroups() throws IOException, SAXException, ParserConfigurationException, AndamanException {
 
-        MessageDTO[] messages = contextService.getTranslations();
-        HashMap<String, String> translations = new HashMap<String, String>();
-        List<TamiGroup> tamiGroups = new ArrayList<TamiGroup>();
+        List<TranslationDTO> translations = andamanService.getTranslations();
+        HashMap<String, String> translationMap = new HashMap<>();
+        Map<String, TamiGroup> tamiGroups = new HashMap<>();
 
-        for(MessageDTO message : messages)
-            if(message.getLanguageCode().equals("EN"))
-                translations.put(message.getKey(), message.getValue());
+        for(TranslationDTO translation : translations)
+            for(TranslationEntryDTO translationEntry : translation.getTranslationEntries())
+            if(translationEntry.getLanguageCode().equals("EN"))
+                translationMap.put(translation.getKey(), translationEntry.getValue());
 
         Document doc = getTamiXml();
         getGuiXml();
 
-        try {
-            // Get the selection lists
-            Map<String, SelectionList> selectionLists = xmlController.getSelectionLists(doc, translations);
+        // Get the selection lists
+        Map<String, SelectionList> selectionLists = xmlController.getSelectionLists(doc, translationMap);
 
-            // Get the default qualifier types
-            List<QualifierType> defaultQualifierTypes = xmlController.getDefaultQualifierTypes(doc, translations);
+        // Get the default qualifier types
+        List<QualifierType> defaultQualifierTypes = xmlController.getDefaultQualifierTypes(doc, translationMap);
+        List<TAMI> tamis = xmlController.getAmis(doc, translationMap, defaultQualifierTypes, selectionLists, tamiGroups);
 
-            // Get the TAMI groups
-            XPathExpression expr = XmlHelper.getXPathExpression("//TamiGroup");
-            NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
-            for(int i = 0; i < nodes.getLength(); i++) {
-
-                Node tamiGroupNode = nodes.item(i);
-                String key = tamiGroupNode.getAttributes().getNamedItem("id").getNodeValue();
-                String name;
-
-                if(translations.containsKey(key))
-                    name = translations.get(key);
-                else
-                    name = key;
-
-                List<TAMI> tamis = xmlController.getTamis(translations, defaultQualifierTypes, selectionLists, tamiGroupNode);
-
-                TamiGroup tamiGroup = new TamiGroup(key, name, tamis);
-                tamiGroups.add(tamiGroup);
-            }
-
-            return tamiGroups;
-
-        } catch(XPathExpressionException e) {
-            return new ArrayList<TamiGroup>();
-        }
+        return new ArrayList<>(tamiGroups.values());
     }
 
     /**
@@ -352,36 +320,40 @@ public class MainController {
      * @param keyword the keyword on which the search is based
      * @return a list of found {@link biz.manex.andaman7.server.api.dto.registrar.AndamanUserDTO}
      * @throws java.io.IOException
+     * @throws biz.manex.andaman7.injector.exceptions.AuthenticationException
      */
-    public AndamanUserDTO[] searchUsers(String keyword) throws IOException, AuthenticationException {
+    public List<UserDTO> searchUsers(String keyword) throws IOException, AndamanException {
 
-        AndamanUserDTO[] results = contextService.searchUsers(keyword);
-        RegistrarDTO[] members = contextService.getCommunityMembers();
+        List<UserDTO> users = andamanService.searchUsers(keyword);
+        Map<String, UserDTO> usersMap = new HashMap<>();
 
-        // Add all user from search and add only the members that correspond to
+        for (UserDTO user : users)
+            usersMap.put(user.getId(), user);
+
+        usersMap.remove(currentUser.getId());
+
+        List<UserDTO> trustedUsers = andamanService.getTrustedUsers();
+
+        // Add only the members that correspond to
         // the specified keyword except ourselves
-        ArrayList<AndamanUserDTO> users = new ArrayList<AndamanUserDTO>();
-        users.addAll(Arrays.asList(results));
+        for (UserDTO trustedUser : trustedUsers)
+            if ((trustedUser.getAdministrative().getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
+                    trustedUser.getAdministrative().getLastName().toLowerCase().contains(keyword.toLowerCase())) &&
+                    !trustedUser.getId().equals(currentUser.getId()) &&
+                    !usersMap.containsKey(trustedUser.getId()))
+                usersMap.put(trustedUser.getId(), trustedUser);
 
-        for (RegistrarDTO member : members)
-            if ((member.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
-                    member.getLastName().toLowerCase().contains(keyword.toLowerCase())) &&
-                    !member.getUuid().equals(currentUser.getUuid()))
-                users.add(member);
-
-        return users.toArray(new AndamanUserDTO[users.size()]);
+        return new ArrayList<>(usersMap.values());
     }
 
     /**
      * Sends some community invitations.
      *
-     * @param senderDeviceId the UUID of the sender device
-     * @param newCommunityMembers the list of community members to add
      * @return the {@link biz.manex.andaman7.server.api.dto.registrar.RegistrarDTO}s
      *         of the added community members.
      */
-    private RegistrarDTO[] sendCommunityInvitation(String senderDeviceId, String[] newCommunityMembers) throws IOException, AuthenticationException {
-        return contextService.sendCommunityRequest(senderDeviceId, newCommunityMembers);
+    private List<TrustedUserDisplayDTO> sendCommunityInvitation(TrustedUserDTO trustedUserDTO) throws IOException, AndamanException {
+        return andamanService.sendCommunityRequest(trustedUserDTO);
     }
 
     /**
@@ -389,14 +361,15 @@ public class MainController {
      *
      * @return the received invitations
      * @throws IOException if there was an error with the connection to the server
+     * @throws biz.manex.andaman7.injector.exceptions.AuthenticationException
      */
-    public FriendshipRequest[] getCommunityInvitations() throws IOException, AuthenticationException {
-        return contextService.getInvitations();
+    public List<InvitationDTO> getInvitations() throws IOException, AndamanException {
+        return andamanService.getInvitations();
     }
 
     // TODO
-    public void setCommunityInvitationAcceptance(String otherRegistrarUuid, boolean acceptanceLevel) throws IOException, AuthenticationException {
-        contextService.setAcceptance(otherRegistrarUuid, acceptanceLevel);
+    public void setCommunityInvitationAcceptance(String otherRegistrarUuid, TrustedUserModificationDTO trustedUser) throws IOException, AndamanException {
+        andamanService.setAcceptance(otherRegistrarUuid, trustedUser);
     }
 
     /**
@@ -405,14 +378,15 @@ public class MainController {
      * @param amiContainersToSync the list of AMI containers to send
      * @return how many invitations were sent to registrars that weren't in the community of the sender.
      * @throws IOException TODO
+     * @throws biz.manex.andaman7.injector.exceptions.AuthenticationException
      */
-    public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException, AuthenticationException {
+    public int sendMedicalData(List<AMIContainer> amiContainersToSync) throws IOException, AndamanException {
 
-        Set<String> idsToSendInvitation = new HashSet<String>();
+        Set<String> idsToSendInvitation = new HashSet<>();
         
         for(AMIContainer amiContainerToSync : amiContainersToSync) {
 
-            RegistrarDTO[] members = contextService.getCommunityMembers();
+            List<UserDTO> trustedUsers = andamanService.getTrustedUsers();
             List<String> destinationRegistrarsIds = amiContainerToSync.getDestinationRegistrarsIds();
             
             for(String destinationRegistrarId : destinationRegistrarsIds) {
@@ -420,8 +394,8 @@ public class MainController {
                 boolean alreadyMember = false;
 
                 // Check if the destination registrar is already a community member
-                for (RegistrarDTO member : members)
-                    if (member.getUuid().equalsIgnoreCase(destinationRegistrarId))
+                for (UserDTO trustedUser : trustedUsers)
+                    if (trustedUser.getId().equalsIgnoreCase(destinationRegistrarId))
                         alreadyMember = true;
 
                 if(!alreadyMember)
@@ -429,24 +403,29 @@ public class MainController {
             }
             
             String[] newMembersIds = idsToSendInvitation.toArray(new String[idsToSendInvitation.size()]);
-            contextService.sendCommunityRequest(currentUser.getDevices().get(0).getUuid(), newMembersIds);
+
+            for (String newMembersId : newMembersIds) {
+                TrustedUserDTO trustedUserDTO = new TrustedUserDTO(currentUser.getDevices().get(0).getId(), newMembersId);
+                andamanService.sendCommunityRequest(trustedUserDTO);
+            }
+    
+            for(String destinationRegistrarId : destinationRegistrarsIds) {
+                // Send the data
+                andamanService.sendAmiBasesToRegistrar(currentUser, amiContainerToSync, currentTamiVersion);
+            }
         }
-
-        // Send the data
-        ehrService.sendAmiBasesToRegistrar(currentUser, amiContainersToSync, currentTamiVersion);
-
         
         return idsToSendInvitation.size();
     }
 
     // TODO
-    public RegistrarSyncContentDTO[] getMedicalDataInQueue(String deviceId) throws IOException {
-        return ehrService.getMedicalDataInQueue(deviceId);
+    public List<ResultSyncContentDTO> getMedicalDataInQueue(String userId, String deviceId) throws IOException, AndamanException {
+        return andamanService.getMedicalDataInQueue(userId, deviceId);
     }
 
     // TODO
-    public void acknowledgeMedicalData(String deviceId, String[] medicalRecordsId) throws IOException {
-        ehrService.acknowledgeMedicalData(deviceId, medicalRecordsId);
+    public void acknowledgeMedicalData(String[] medicalRecordsIds) throws IOException, AndamanException {
+        andamanService.acknowledgeMedicalData(medicalRecordsIds);
     }
 
     // TODO

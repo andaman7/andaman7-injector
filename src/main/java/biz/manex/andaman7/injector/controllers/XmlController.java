@@ -2,6 +2,7 @@ package biz.manex.andaman7.injector.controllers;
 
 import biz.manex.andaman7.injector.models.SelectionList;
 import biz.manex.andaman7.injector.models.SelectionListItem;
+import biz.manex.andaman7.injector.models.TamiGroup;
 import biz.manex.andaman7.injector.models.types.MultivaluedQualifierType;
 import biz.manex.andaman7.injector.models.types.MultivaluedTAMI;
 import biz.manex.andaman7.injector.models.types.QualifierType;
@@ -14,10 +15,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The controller that is used to parse the TAMI dictionary.
@@ -171,41 +169,78 @@ public class XmlController {
     }
 
     // TODO
-    public List<TAMI> getTamis(HashMap<String, String> translations, List<QualifierType> defaultQualifierTypes,
-            Map<String, SelectionList> selectionLists, Node tamiGroupNode) {
+    public List<TAMI> getAmis(Document doc, HashMap<String, String> translations, List<QualifierType> defaultQualifierTypes,
+                              Map<String, SelectionList> selectionLists, Map<String, TamiGroup> tamiGroups) {
 
-        List<TAMI> tamis = new ArrayList<TAMI>();
-        NodeList tamiNodes = tamiGroupNode.getChildNodes();
+        List<TAMI> tamis = new ArrayList<>();
 
-        for (int i = 0; i < tamiNodes.getLength(); i++) {
+        try {
+            XPathExpression amisExpr = XmlHelper.getXPathExpression("//Ami");
+            NodeList amisNodes = (NodeList) amisExpr.evaluate(doc, XPathConstants.NODESET);
 
-            Node node = tamiNodes.item(i);
+            for (int i = 0; i < amisNodes.getLength(); i++) {
 
-            if(!node.getNodeName().equals("Tami"))
-                continue;
+                Node node = amisNodes.item(i);
 
-            String key = node.getAttributes().getNamedItem("id").getNodeValue();
-            String type = node.getAttributes().getNamedItem("type").getNodeValue();
-            String name;
+                // Ignore nodes that are not AMIs and nodes that don't have a tags attribute
+                if (!node.getNodeName().equals("Ami") || node.getAttributes().getNamedItem("tags") == null)
+                    continue;
 
-            if(translations.containsKey(key))
-                name = translations.get(key);
-            else
-                name = key;
+                // Prepare the fields of the TAMI
+                String key = node.getAttributes().getNamedItem("id").getNodeValue();
+                String type = node.getAttributes().getNamedItem("type").getNodeValue();
+                List<String> tags = Arrays.asList(node.getAttributes().getNamedItem("tags").getNodeValue().split(","));
+                String tamiName;
 
-            List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
+                if (translations.containsKey(key))
+                    tamiName = translations.get(key);
+                else
+                    tamiName = key;
 
-            if(type.equals("oneSelection") ||type.equals("multiSelection")) {
-                String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
-                SelectionList selectionList = selectionLists.get(selectionListId);
+                List<QualifierType> qualifierTypes = getQualifierTypes(defaultQualifierTypes, translations, node, selectionLists);
 
-                MultivaluedTAMI tami = new MultivaluedTAMI(key, name, selectionList, qualifierTypes);
-                tamis.add(tami);
+                // Create the TAMI and add it to the list
+                TAMI tami;
 
-            } else {
-                TAMI tami = new TAMI(key, name, qualifierTypes);
-                tamis.add(tami);
+                if (type.equals("oneSelection") || type.equals("multiSelection")) {
+                    String selectionListId = node.getAttributes().getNamedItem("selectionListId").getNodeValue();
+                    SelectionList selectionList = selectionLists.get(selectionListId);
+
+                    MultivaluedTAMI multiTami = new MultivaluedTAMI(key, tamiName, selectionList, qualifierTypes);
+                    tamis.add(multiTami);
+                    tami = multiTami;
+
+                } else {
+                    tami = new TAMI(key, tamiName, qualifierTypes);
+                    tamis.add(tami);
+                }
+
+                // Add the TAMI to its groups and add the group to the map if needed
+                for (String tag : tags) {
+
+                    TamiGroup tamiGroup;
+
+                    if (tamiGroups.containsKey(tag)) {
+                        tamiGroup = tamiGroups.get(tag);
+                        tamiGroup.getTamis().add(tami);
+
+                    } else {
+                        String groupName;
+
+                        if (translations.containsKey(tag))
+                            groupName = translations.get(tag);
+                        else
+                            groupName = tag;
+
+                        tamiGroup = new TamiGroup(tag, groupName, new ArrayList<TAMI>());
+                        tamiGroup.getTamis().add(tami);
+                        tamiGroups.put(tag, tamiGroup);
+                    }
+                }
             }
+        } catch(XPathExpressionException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
 
         return tamis;

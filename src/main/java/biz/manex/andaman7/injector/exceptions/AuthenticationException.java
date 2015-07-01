@@ -5,7 +5,7 @@ package biz.manex.andaman7.injector.exceptions;
  *         Copyright A7 Software (http://a7-software.com)<br/>
  *         Date : 26/05/2015.
  */
-public class AuthenticationException extends InjectorException {
+public class AuthenticationException extends AndamanException {
 
     public AuthenticationException() {
         super();
