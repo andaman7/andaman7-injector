@@ -1,6 +1,6 @@
-biz.manex.andaman7.injector
-biz.manex.andaman7.injector.controllers
-biz.manex.andaman7.injector.models
-biz.manex.andaman7.injector.utils
-biz.manex.andaman7.injector.views
-biz.manex.andaman7.injector.webservice.REST
+com.andaman7.injector
+com.andaman7.injector.controllers
+com.andaman7.injector.models
+com.andaman7.injector.utils
+com.andaman7.injector.views
+com.andaman7.injector.webservice.REST
